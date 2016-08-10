@@ -19,7 +19,7 @@ public class ConnectionPool {
         String port = System.getenv("OPENSHIFT_MYSQL_DB_PORT");
         userName = System.getenv("OPENSHIFT_MYSQL_DB_USERNAME");    //LIVE SERVER
         password = System.getenv("OPENSHIFT_MYSQL_DB_PASSWORD");
-        url = "jdbc:mysql://"+host+":"+port+"/mpaldb";
+        url = "jdbc:mysql://"+host+":"+port+"/mpal";
         driver = "com.mysql.jdbc.Driver";
     }
 
