@@ -2,6 +2,15 @@ package com.mpal.rest.response.user;
 
 public class UpdateResponse {
 	private String message;
+	private  String messagetype;
+
+	public String getMessageType() {
+		return messagetype;
+	}
+
+	public void setMessageType(String messagetype) {
+		this.messagetype = messagetype;
+	}
 
 	public String getsMessage() {
 		return message;
@@ -13,7 +22,8 @@ public class UpdateResponse {
 
 	@Override
 	public String toString() {
-		return "UpdateResponse{" + "Message='" + message + '\''
+		return "UpdateResponse{" + "messageType='" + messagetype + '\''
+				+ "Message='" + message + '\''
 				+ '}';
 	}
 }

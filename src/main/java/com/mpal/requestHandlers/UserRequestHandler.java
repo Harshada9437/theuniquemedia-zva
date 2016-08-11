@@ -24,7 +24,7 @@ import com.mpal.validation.UsersValidation;
 
 public class UserRequestHandler {
 
-	public Boolean register(RegistrationRequestBO registrationRequestBO) {
+	public Integer register(RegistrationRequestBO registrationRequestBO) {
 
 		Boolean isProcessed = Boolean.TRUE;
 		Integer userId=null;
@@ -42,9 +42,34 @@ public class UserRequestHandler {
 			EmailService.sendNewUserEmail(registrationRequestBO.getEmail(), userId);
 		}
 
-		return isProcessed;
+		return userId;
 	}
 
+    public Boolean verifyEmail(String email) {
+
+        Boolean isProcessed = Boolean.FALSE;
+        UsersDAO usersDAO = new UsersDAO();
+        try {
+            isProcessed = usersDAO.getValidationForEmail(email);
+        } catch (SQLException sq) {
+            isProcessed = false;
+        }
+        return isProcessed;
+    }
+
+	public Boolean validUser(Integer userId) {
+
+		Boolean isProcessed = Boolean.FALSE;
+		UsersDAO usersDAO = new UsersDAO();
+		try {
+			UsersDTO userDTO = usersDAO.getUserById(userId);
+			if(userDTO.getId() > 0)
+			isProcessed = Boolean.TRUE;
+		} catch (SQLException sq) {
+			isProcessed = false;
+		}
+		return isProcessed;
+	}
 	public Boolean verifyUser(Integer userId) {
 
 		Boolean isProcessed = Boolean.FALSE;
@@ -151,6 +176,7 @@ public class UserRequestHandler {
 		try {
 			UsersDAO usersDAO = new UsersDAO();
 			isLoggedOut = usersDAO.updateSessionId(userId, null);
+
 		} catch (SQLException s) {
 			s.printStackTrace();
 		}

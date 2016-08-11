@@ -8,15 +8,25 @@ import javax.ws.rs.ext.Provider;
 @Provider
 public class LoginResponse {
 	private int userId;
-	private String message_type;
+	private String messagetype;
+	private String message;
+
+	public String getMessageType() {
+		return messagetype;
+	}
+
+	public void setMessageType(String messagetype) {
+		this.messagetype= messagetype;
+	}
 
 	public String getMessage() {
-		return message_type;
+		return message;
 	}
 
-	public void setMessage(String message_type) {
-		this.message_type= message_type;
+	public void setMessage(String message) {
+		this.message= message;
 	}
+
 
 
 	public int getUserId() {
@@ -30,8 +40,9 @@ public class LoginResponse {
 	@Override
 	public String toString() {
 		return "LoginResponse{" +
+				"messageType='" + messagetype + '\'' +
+				"message='" + message + '\'' +
 				"userId=" + userId +
-				", Message_type='" + message_type + '\'' +
 				'}';
 	}
 }

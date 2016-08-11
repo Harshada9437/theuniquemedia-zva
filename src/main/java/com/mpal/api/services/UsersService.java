@@ -16,6 +16,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.mpal.bo.request.user.*;
+import com.mpal.rest.response.user.*;
 import com.mpal.bo.response.LoginResponseBO;
 import com.mpal.exceptions.userServiceExceptions.UserNotFoundException;
 import com.mpal.requestHandlers.UserRequestHandler;
@@ -46,9 +47,14 @@ public class UsersService {
             LoginResponseBO loginResponseBO = userRequestHandler
                     .login(loginRequestBO);
             if (loginResponseBO.getValidUser()) {
+                loginResponse.setMessageType("SUCCESS");
                 loginResponse.setUserId(loginResponseBO.getId());
                 loginResponse.setMessage(String.valueOf(loginResponseBO
                         .getSessionId()));
+            }
+            else {
+                loginResponse.setMessageType("FAILURE");
+                loginResponse.setMessage("Invalid User.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -71,18 +77,26 @@ public class UsersService {
         registrationRequestBO.setPassword(registrationRequest.getPassword());
         registrationRequestBO.setClientDetailsId(registrationRequest.getClientDetailsId());
 
-
         UserRequestHandler userRequestHandler = new UserRequestHandler();
         RegistrationResponse registrationResponse = new RegistrationResponse();
-        if (userRequestHandler.register(registrationRequestBO)) {
-            registrationResponse.setMessage("SUCCESS");
+        if(!userRequestHandler.verifyEmail(registrationRequest.getEmail())){
+            if (userRequestHandler.register(registrationRequestBO)!=null) {
+                int userId=userRequestHandler.register(registrationRequestBO);
+                registrationResponse.setMessageType("SUCCESS");
+                registrationResponse.setMessage("Created user id:-" + userId );
+            } else {
+                registrationResponse.setMessageType("FAILURE");
+                registrationResponse.setMessage("Registration Failed");
+            }
         } else {
-            registrationResponse.setMessage("FAILURE");
+            registrationResponse.setMessageType("FAILURE");
+            registrationResponse.setMessage("Email exist");
         }
+
         return ResponseGenerator.generateResponse(registrationResponse);
     }
 
-  /*  @GET
+    @GET
     @Path("/confirm")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -95,7 +109,8 @@ public class UsersService {
             registrationResponse.setMessage("FAILURE");
         }
         return ResponseGenerator.generateResponse(registrationResponse);
-    }*/
+    }
+
 
     @POST
     @Path("/update")
@@ -112,9 +127,11 @@ public class UsersService {
             UserRequestHandler userRequestHandler = new UserRequestHandler();
             UpdateResponse updateResponse = new UpdateResponse();
             if (userRequestHandler.updateUser(updateRequestBO)) {
-                updateResponse.setMessage("SUCCESS");
+                updateResponse.setMessageType("SUCCESS");
+                updateResponse.setMessage("User updated successfully");
             } else {
-                updateResponse.setMessage("FAILURE");
+                updateResponse.setMessageType("FAILURE");
+                updateResponse.setMessage("Unable to update the user");
             }
             return ResponseGenerator.generateResponse(updateResponse);
         } /*else {
@@ -142,12 +159,17 @@ public class UsersService {
             UserRequestHandler userRequestHandler = new UserRequestHandler();
             Object response = null;
             try {
-                response = userRequestHandler.getUserById(id);
+                if(userRequestHandler.validUser(id)) {
+                    GetUserResponse userResponse = userRequestHandler.getUserById(id);
+                    userResponse.setMessageType("SUCCESS");
+                    return ResponseGenerator.generateResponse(userResponse);
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
             } catch (UserNotFoundException e) {
                 LoginResponse loginResponse = new LoginResponse();
-                loginResponse.setMessage(e.getMessage());
+                loginResponse.setMessageType("FAILURE");
+                loginResponse.setMessage("Invalid User");
                 return ResponseGenerator.generateResponse(loginResponse);
             }
             return ResponseGenerator.generateResponse(response);
@@ -168,10 +190,12 @@ public class UsersService {
                     .getUserId());
             LoginResponse loginResponse = new LoginResponse();
             if (isLoggedOut) {
-                loginResponse.setMessage("SUCCESS");
+                loginResponse.setMessageType("SUCCESS");
+                loginResponse.setMessage("Log out successfully.");
                 return ResponseGenerator.generateResponse(loginResponse);
             } else {
-                loginResponse.setMessage("FAILURE");
+                loginResponse.setMessageType("FAILURE");
+                loginResponse.setMessage("Unable to Log out current user.");
                 return ResponseGenerator.generateResponse(loginResponse);
             }
         /*} else {
@@ -221,10 +245,12 @@ public class UsersService {
         Boolean mailSent = userRequestHandler.forgotPassword(emailId);
         LoginResponse loginResponse = new LoginResponse();
         if (mailSent) {
-            loginResponse.setMessage("SUCCESS");
+            loginResponse.setMessageType("SUCCESS");
+            loginResponse.setMessage("Password sent to your registered email address.");
             return ResponseGenerator.generateResponse(loginResponse);
         } else {
-            loginResponse.setMessage("FAILURE");
+            loginResponse.setMessageType("FAILURE");
+            loginResponse.setMessage("Invalid email address.");
             return ResponseGenerator.generateResponse(loginResponse);
         }
     }
@@ -241,9 +267,11 @@ public class UsersService {
         UserRequestHandler userRequestHandler = new UserRequestHandler();
         UpdateResponse updateResponse = new UpdateResponse();
         if (userRequestHandler.changePassword(changePwdBO)) {
-            updateResponse.setMessage("Password Updated");
+            updateResponse.setMessageType("SUCCESS");
+            updateResponse.setMessage("Password Updated.");
         } else {
-            updateResponse.setMessage("FAILURE");
+            updateResponse.setMessageType("FAILURE");
+            updateResponse.setMessage("Password Updatation failed.");
         }
         return ResponseGenerator.generateResponse(updateResponse);
     }

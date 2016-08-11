@@ -70,6 +70,39 @@ public class UsersDAO {
         return null;
     }
 
+    public Boolean getValidationForEmail(String email) throws SQLException,
+            UserNotFoundException {
+        Connection connection = null;
+        Statement statement = null;
+        Boolean isProcessed = Boolean.FALSE;
+        try
+        {
+            connection = new ConnectionPool().getConnection();
+            statement = connection.createStatement();
+            StringBuilder query = new StringBuilder(
+                    "SELECT email FROM users where email = \"")
+                    .append(email).append("\"");
+            ResultSet resultSet = statement.executeQuery(query.toString());
+
+            while (resultSet.next()) {
+
+                isProcessed = true;
+
+            }
+        }catch (SQLException sqlException){
+            sqlException.printStackTrace();
+        }finally {
+            try {
+                statement.close();
+                connection.close();
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return isProcessed;
+    }
+
     public Boolean updateUser(UpdaterUserBO updateUserBO) throws SQLException,
             IOException {
         boolean isCreated = false;

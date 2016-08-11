@@ -7,6 +7,7 @@ public class GetUserResponse {
 	private String mobile;
 	private String email;
 	private int clientdetailsId;
+	private String messagetype;
 
 	public int getId() {
 		return id;
@@ -24,6 +25,14 @@ public class GetUserResponse {
 		this.clientdetailsId = clientdetailsId;
 	}
 
+	public String getMessageType() {
+		return messagetype;
+	}
+
+	public void setMessageType(String messagetype) {
+		this.messagetype = messagetype;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -31,6 +40,7 @@ public class GetUserResponse {
 	public void setName(String name) {
 		this.name = name;
 	}
+
 
 	public String getMobile() {
 		return mobile;
@@ -63,10 +73,11 @@ public class GetUserResponse {
 		return "GetUserResponse{" +
 				"id=" + id +
 				", type='" + type + '\'' +
-				", name=" + name + '\'' +
-				", mobile=" + mobile + '\'' +
+				", name='" + name + '\'' +
+				", mobile='" + mobile + '\'' +
 				", email='" + email + '\'' +
 				", clientdetailsId=" + clientdetailsId +
+				", messagaeType=" + messagetype + '\'' +
 				'}';
 	}
 }
