@@ -8,7 +8,6 @@ public class UsersDTO {
 	private String email;
 	private String password;
 	private int clientdetailsId;
-
 	private String isVerified;
 
 	public int getId() {
