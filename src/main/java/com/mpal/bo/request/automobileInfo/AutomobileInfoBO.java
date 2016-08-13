@@ -15,8 +15,8 @@ public class AutomobileInfoBO {
     private String state;
     private String log;
     private String lat;
-    private Time startTime;
-    private Time endTime;
+    private String openingTime;
+    private String closingTime;
     private  int automobileInfoId;
     private String status;
 
@@ -56,12 +56,12 @@ public class AutomobileInfoBO {
         return lat;
     }
 
-    public Time getStartTime() {
-        return startTime;
+    public String getOpeningTime() {
+        return openingTime;
     }
 
-    public Time getEndTime() {
-        return endTime;
+    public String getClosingTime() {
+        return closingTime;
     }
 
     public int getAutomobileInfoId() {
@@ -117,13 +117,13 @@ public class AutomobileInfoBO {
         return this;
     }
 
-    public AutomobileInfoBO setStartTime(Time startTime) {
-        this.startTime = startTime;
+    public AutomobileInfoBO setOpeningTime(String openingTime) {
+        this.openingTime = openingTime;
         return this;
     }
 
-    public AutomobileInfoBO setEndTime(Time endTime) {
-        this.endTime = endTime;
+    public AutomobileInfoBO setClosingTime(String closingTime) {
+        this.closingTime = closingTime;
         return this;
     }
 
@@ -137,3 +137,4 @@ public class AutomobileInfoBO {
         return this;
     }
 }
+

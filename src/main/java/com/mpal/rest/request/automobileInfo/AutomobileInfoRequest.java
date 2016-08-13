@@ -1,11 +1,11 @@
-package com.mpal.dto.automobileInfo;
+package com.mpal.rest.request.automobileInfo;
 
 import java.sql.Time;
 
 /**
- * Created by System1 on 8/12/2016.
+ * Created by System2 on 8/12/2016.
  */
-public class AutomobileInfoDTO {
+public class AutomobileInfoRequest {
 
     private  int id;
     private String name;
@@ -126,50 +126,10 @@ public class AutomobileInfoDTO {
         this.status = status;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof AutomobileInfoDTO)) return false;
-
-        AutomobileInfoDTO that = (AutomobileInfoDTO) o;
-
-        if (id != that.id) return false;
-        if (automobileInfoId != that.automobileInfoId) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (address != null ? !address.equals(that.address) : that.address != null) return false;
-        if (phoneNo != null ? !phoneNo.equals(that.phoneNo) : that.phoneNo != null) return false;
-        if (mobileNo != null ? !mobileNo.equals(that.mobileNo) : that.mobileNo != null) return false;
-        if (city != null ? !city.equals(that.city) : that.city != null) return false;
-        if (state != null ? !state.equals(that.state) : that.state != null) return false;
-        if (log != null ? !log.equals(that.log) : that.log != null) return false;
-        if (lat != null ? !lat.equals(that.lat) : that.lat != null) return false;
-        if (openingTime != null ? !openingTime.equals(that.openingTime) : that.openingTime != null) return false;
-        if (closingTime != null ? !closingTime.equals(that.closingTime) : that.closingTime != null) return false;
-        return status != null ? status.equals(that.status) : that.status == null;
-
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (address != null ? address.hashCode() : 0);
-        result = 31 * result + (phoneNo != null ? phoneNo.hashCode() : 0);
-        result = 31 * result + (mobileNo != null ? mobileNo.hashCode() : 0);
-        result = 31 * result + (city != null ? city.hashCode() : 0);
-        result = 31 * result + (state != null ? state.hashCode() : 0);
-        result = 31 * result + (log != null ? log.hashCode() : 0);
-        result = 31 * result + (lat != null ? lat.hashCode() : 0);
-        result = 31 * result + (openingTime != null ? openingTime.hashCode() : 0);
-        result = 31 * result + (closingTime != null ? closingTime.hashCode() : 0);
-        result = 31 * result + automobileInfoId;
-        result = 31 * result + (status != null ? status.hashCode() : 0);
-        return result;
-    }
 
     @Override
     public String toString() {
-        return "AutomobileInfoDTO{" +
+        return "AutomobileInfoRequest{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", address='" + address + '\'' +
@@ -185,4 +145,8 @@ public class AutomobileInfoDTO {
                 ", status='" + status + '\'' +
                 '}';
     }
+
+
+
+
 }
