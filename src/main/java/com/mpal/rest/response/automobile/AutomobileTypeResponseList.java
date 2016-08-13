@@ -7,21 +7,42 @@ import java.util.List;
  */
 public class AutomobileTypeResponseList {
 
-    List<AutomobileTypeResponseList> getAutomobileTypesResponseList;
+    List<AutomobileResponseList> automobileResponseLists;
+    private  String messageType;
+    private String message;
 
-    public List<AutomobileTypeResponseList> getGetAutomobileTypesResponseList(List<AutomobileResponseList> automobileByTypeId) {
-        return getAutomobileTypesResponseList;
+    public List<AutomobileResponseList> getAutomobileResponseLists() {
+        return automobileResponseLists;
     }
 
-    public List<AutomobileTypeResponseList> setGetAutomobileTypesResponseList(
-            List<AutomobileResponseList> getAutomobileTypesResponseList) {
-        this.getAutomobileTypesResponseList = getAutomobileTypesResponseList;
-        return null;
+    public void setAutomobileResponseLists(List<AutomobileResponseList> automobileResponseLists) {
+        this.automobileResponseLists = automobileResponseLists;
+    }
+
+
+    public String getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(String messageType) {
+        this.messageType = messageType;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     @Override
     public String toString() {
-        return "AutomobileTypeResponseList{" + "getAutomobileTypesResponseList="
-                + getAutomobileTypesResponseList + '}';
+        return "AutomobileTypeResponseList{" +
+                "automobileResponseLists=" + automobileResponseLists +
+                ", messageType='" + messageType + '\'' +
+                ", message='" + message + '\'' +
+                '}';
     }
+
 }

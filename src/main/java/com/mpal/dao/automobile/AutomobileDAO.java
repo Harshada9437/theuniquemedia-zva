@@ -58,7 +58,7 @@ public class AutomobileDAO {
             connection = new ConnectionPool().getConnection();
             statement = connection.createStatement();
             StringBuilder query = new StringBuilder(
-                    "SELECT * FROM automobile_details where automobileTypeId = ").append(automobileTypeId);
+                    "SELECT * FROM automobile_details where automobile_type_id = ").append(automobileTypeId);
             ResultSet resultSet = statement.executeQuery(query.toString()
                     .trim());
             int index = 1;
@@ -98,7 +98,7 @@ public class AutomobileDAO {
             connection = new ConnectionPool().getConnection();
             connection.setAutoCommit(false);
             preparedStatement = connection
-                    .prepareStatement("INSERT INTO automobile_details(company, model, builtYear, automobileTypeId) VALUES (?,?,?,?)");
+                    .prepareStatement("INSERT INTO automobile_details(company, model, built_year, automobile_type_id) VALUES (?,?,?,?)");
 
             preparedStatement.setString(parameterIndex++, automobileDTO.getCompany());
             preparedStatement.setString(parameterIndex++, automobileDTO.getModel());
@@ -147,7 +147,7 @@ public class AutomobileDAO {
             connection = new ConnectionPool().getConnection();
             connection.setAutoCommit(false);
             preparedStatement = connection
-                    .prepareStatement("UPDATE automobile_details SET model =? , company =? ,  builtYear =? WHERE id =?;");
+                    .prepareStatement("UPDATE automobile_details SET model =? , company =? ,  built_year =? WHERE id =?;");
 
             preparedStatement.setString(parameterIndex++, updateAutomobileBO.getModel());
 
@@ -156,7 +156,6 @@ public class AutomobileDAO {
             preparedStatement.setString(parameterIndex++, updateAutomobileBO.getBuiltYear());
 
             preparedStatement.setInt(parameterIndex++, updateAutomobileBO.getId());
-            System.out.println("query:::" + preparedStatement);
 
             int i = preparedStatement.executeUpdate();
             if (i > 0) {

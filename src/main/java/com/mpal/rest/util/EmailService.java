@@ -108,7 +108,7 @@ public class EmailService {
 
 			message.setSubject("Notification Email is send");
 
-			message.setText("Notification Email is send to following Recipents : \n"
+			message.setText("Notification Email is send to following Recipient : \n"
 					+ recipents.toString());
 
 			Transport.send(message);

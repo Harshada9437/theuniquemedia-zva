@@ -6,7 +6,6 @@ package com.mpal.api.services;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.List;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -17,9 +16,7 @@ import com.mpal.bo.request.automobile.AutomobilesBO;
 import com.mpal.bo.request.automobile.UpdateAutomobileBO;
 import com.mpal.exceptions.AutomobileServiceExceptions.AutomobileNotFoundException;
 import com.mpal.requestHandlers.AutomobileRequestHandler;
-import com.mpal.rest.response.automobile.AutomobileResponseList;
 import com.mpal.rest.response.automobile.AutomobileTypeResponseList;
-import com.mpal.rest.response.automobile.AutomobileResponse;
 import com.mpal.rest.request.automobile.AutomobileRequest;
 import com.mpal.rest.response.automobile.AutomobileCreationResponse;
 import com.mpal.rest.request.automobile.UpdateAutomobileRequest;
@@ -35,27 +32,24 @@ public class AutoMobilesService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAutomobileList(@PathParam("type") String type) throws SQLException, IOException {
         AutomobileRequestHandler automobileRequestHandler = new AutomobileRequestHandler();
-        List<AutomobileTypeResponseList> automobileResponseList = null;
         AutomobileTypesDAO automobileTypesDAO= new AutomobileTypesDAO();
         AutomobileTypeResponseList automobileResponseL= new AutomobileTypeResponseList();
         int automobileTypeId=automobileTypesDAO.getAutomobileIdByType(type);
         try {
-            //if(automobileRequestHandler.getAutomobileByTypeId(automobileTypeId)== null) {
-            automobileResponseL.setGetAutomobileTypesResponseList(automobileRequestHandler.getAutomobileByTypeId(automobileTypeId));
-          /* else{
-                AutomobileResponse automobileResponse = new AutomobileResponse();
-                automobileResponse.setMessageType("SUCCESS");
-                automobileResponse.setMessage("List is empty");
-            }*/
+            automobileResponseL.setAutomobileResponseLists(automobileRequestHandler.getAutomobileByTypeId(automobileTypeId));
+            if(automobileResponseL == null) {
+                automobileResponseL.setMessageType("SUCCESS");
+                automobileResponseL.setMessage("Automobiles are not available");
+            }
+            else {
+                automobileResponseL.setMessageType("SUCCESS");
+                automobileResponseL.setMessage("Automobiles are available");
+            }
         }catch (AutomobileNotFoundException e) {
-           AutomobileResponse automobileResponse= new AutomobileResponse();
-            automobileResponse.setMessageType("FAILURE");
             e.printStackTrace();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        System.out.println(":::: ::::" + automobileResponseL);
-        System.out.println("::::1::::" + automobileResponseList);
         return ResponseGenerator.generateResponse(automobileResponseL);
     }
 

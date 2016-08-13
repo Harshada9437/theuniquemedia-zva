@@ -23,15 +23,16 @@ public class AutomobileRequestHandler {
 
     public List<AutomobileResponseList> getAutomobileByTypeId(int automobileTypeId) throws SQLException,
             AutomobileNotFoundException{
-        List<AutomobileResponseList> automobileList = null;
+        AutomobileDAO automobileDAO = new AutomobileDAO();
+        List<AutomobileResponseList> automobileList = new ArrayList<AutomobileResponseList>();
         try {
-           AutomobileDAO automobileDAO = new AutomobileDAO();
             automobileList = getAutomobileResponseListFromDTOs(automobileDAO.getAutomobileByTypeId(automobileTypeId));
         } catch (SQLException s) {
             s.printStackTrace();
         } catch (AutomobileNotFoundException s) {
             s.printStackTrace();
         }
+        //System.out.println("::::::" + automobileList);
         return automobileList;
     }
 
