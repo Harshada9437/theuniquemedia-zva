@@ -32,7 +32,6 @@ public class AutomobileRequestHandler {
         } catch (AutomobileNotFoundException s) {
             s.printStackTrace();
         }
-        //System.out.println("::::::" + automobileList);
         return automobileList;
     }
 

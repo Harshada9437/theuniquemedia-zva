@@ -1,5 +1,6 @@
 package com.mpal.api.services;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -8,6 +9,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.mpal.bo.request.user.*;
+import com.mpal.exceptions.AutomobileServiceExceptions.AutomobileNotFoundException;
 import com.mpal.rest.response.user.*;
 import com.mpal.bo.response.LoginResponseBO;
 import com.mpal.exceptions.userServiceExceptions.UserNotFoundException;
@@ -136,8 +138,7 @@ public class UsersService {
     public Response getUserTypes() {
         UserRequestHandler userRequestHandler = new UserRequestHandler();
         UserTypesResponse userTypesResponse = new UserTypesResponse();
-        userTypesResponse.setGetTypesResponseList(userRequestHandler
-                .getUserTypes());
+        userTypesResponse.setGetTypesResponseList(userRequestHandler.getUserTypes());
         return ResponseGenerator.generateResponse(userTypesResponse);
     }
 
@@ -265,6 +266,25 @@ public class UsersService {
             updateResponse.setMessage("Password Updatation failed.");
         }
         return ResponseGenerator.generateResponse(updateResponse);
+    }
+
+    @GET
+    @Path("/list/{type}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getUserByTypeList(@PathParam("type") String type) throws SQLException, IOException {
+        UserRequestHandler userRequestHandler = new UserRequestHandler();
+        UserTypeResponseList userResponseL= new UserTypeResponseList();
+        try {
+            userResponseL.setGetTypeResponseList(userRequestHandler.getUserByType(type));
+            userResponseL.setMessageType("SUCCESS");
+            userResponseL.setMessage("Users are available");
+        }catch (AutomobileNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ResponseGenerator.generateResponse(userResponseL);
     }
 
 }

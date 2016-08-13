@@ -12,8 +12,10 @@ import java.util.List;
 import com.mpal.bo.request.user.ChangePasswordBO;
 import com.mpal.bo.request.user.UpdaterUserBO;
 import com.mpal.dao.UtilClasses.ConnectionPool;
+import com.mpal.dto.automobile.AutomobileDTO;
 import com.mpal.dto.user.LoginResponseDTO;
 import com.mpal.dto.user.UsersDTO;
+import com.mpal.exceptions.AutomobileServiceExceptions.AutomobileNotFoundException;
 import com.mpal.exceptions.userServiceExceptions.UserNotFoundException;
 import com.mpal.rest.response.user.UserLoggedInResponse;
 import com.mpal.rest.response.user.UserResponseList;
@@ -449,4 +451,44 @@ public class UsersDAO {
         }
         return sessionId;
     }
+
+    public List<UsersDTO> getUserByType(String type) throws SQLException, AutomobileNotFoundException
+        {
+            Connection connection = null;
+            Statement statement = null;
+            List<UsersDTO> automobileTypeResponseList=new ArrayList<UsersDTO>();
+            try {
+                connection = new ConnectionPool().getConnection();
+                statement = connection.createStatement();
+                StringBuilder query = new StringBuilder(
+                        "SELECT name, mobile, email FROM users where type = \"")
+                        .append(type).append("\"");
+                ResultSet resultSet = statement.executeQuery(query.toString()
+                        .trim());
+                int index = 1;
+                while (resultSet.next()) {
+                    UsersDTO usersDTO = new UsersDTO();
+                    usersDTO.setName(resultSet.getString("name"));
+                    usersDTO.setMobile(resultSet.getString("mobile"));
+                    usersDTO.setEmail(resultSet.getString("email"));
+                    index++;
+                    automobileTypeResponseList.add(usersDTO);
+                }
+                if (index == 1) {
+                    throw new AutomobileNotFoundException("Invalid user");
+                }
+
+            } catch (SQLException sqlException) {
+                sqlException.printStackTrace();
+            } finally {
+                try {
+                    statement.close();
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            return automobileTypeResponseList;
+        }
+
 }
