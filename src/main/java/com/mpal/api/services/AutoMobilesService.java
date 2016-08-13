@@ -37,14 +37,8 @@ public class AutoMobilesService {
         int automobileTypeId=automobileTypesDAO.getAutomobileIdByType(type);
         try {
             automobileResponseL.setAutomobileResponseLists(automobileRequestHandler.getAutomobileByTypeId(automobileTypeId));
-            if(automobileResponseL == null) {
-                automobileResponseL.setMessageType("SUCCESS");
-                automobileResponseL.setMessage("Automobiles are not available");
-            }
-            else {
                 automobileResponseL.setMessageType("SUCCESS");
                 automobileResponseL.setMessage("Automobiles are available");
-            }
         }catch (AutomobileNotFoundException e) {
             e.printStackTrace();
         } catch (SQLException e) {
