@@ -27,7 +27,7 @@ public class SendEmailService {
                 emailResponse.setMessage("Email Sending Successful");
 
             } else {
-                emailResponse.setMessageType("Failuer");
+                emailResponse.setMessageType("Failure");
                 emailResponse.setMessage("Email Sending Unsuccessful");
             }
             return ResponseGenerator
