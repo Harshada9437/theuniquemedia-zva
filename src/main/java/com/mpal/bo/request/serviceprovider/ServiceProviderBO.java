@@ -1,11 +1,9 @@
-package com.mpal.bo.request.automobileInfo;
-
-import java.sql.Time;
+package com.mpal.bo.request.serviceprovider;
 
 /**
  * Created by System1 on 8/12/2016.
  */
-public class AutomobileInfoBO {
+public class ServiceProviderBO {
     private  int id;
     private String name;
     private String address;
@@ -17,7 +15,7 @@ public class AutomobileInfoBO {
     private String lat;
     private String openingTime;
     private String closingTime;
-    private  int automobileInfoId;
+    private  int serviceProviderId;
     private String status;
 
     public int getId() {
@@ -64,75 +62,75 @@ public class AutomobileInfoBO {
         return closingTime;
     }
 
-    public int getAutomobileInfoId() {
-        return automobileInfoId;
+    public int getServiceProviderId() {
+        return serviceProviderId;
     }
 
     public String getStatus() {
         return status;
     }
 
-    public AutomobileInfoBO setId(int id) {
+    public ServiceProviderBO setId(int id) {
         this.id = id;
         return this;
     }
 
-    public AutomobileInfoBO setName(String name) {
+    public ServiceProviderBO setName(String name) {
         this.name = name;
         return this;
     }
 
-    public AutomobileInfoBO setAddress(String address) {
+    public ServiceProviderBO setAddress(String address) {
         this.address = address;
         return this;
     }
 
-    public AutomobileInfoBO setPhoneNo(String phoneNo) {
+    public ServiceProviderBO setPhoneNo(String phoneNo) {
         this.phoneNo = phoneNo;
         return this;
     }
 
-    public AutomobileInfoBO setMobileNo(String mobileNo) {
+    public ServiceProviderBO setMobileNo(String mobileNo) {
         this.mobileNo = mobileNo;
         return this;
     }
 
-    public AutomobileInfoBO setCity(String city) {
+    public ServiceProviderBO setCity(String city) {
         this.city = city;
         return this;
     }
 
-    public AutomobileInfoBO setState(String state) {
+    public ServiceProviderBO setState(String state) {
         this.state = state;
         return this;
     }
 
-    public AutomobileInfoBO setLog(String log) {
+    public ServiceProviderBO setLog(String log) {
         this.log = log;
         return this;
     }
 
-    public AutomobileInfoBO setLat(String lat) {
+    public ServiceProviderBO setLat(String lat) {
         this.lat = lat;
         return this;
     }
 
-    public AutomobileInfoBO setOpeningTime(String openingTime) {
+    public ServiceProviderBO setOpeningTime(String openingTime) {
         this.openingTime = openingTime;
         return this;
     }
 
-    public AutomobileInfoBO setClosingTime(String closingTime) {
+    public ServiceProviderBO setClosingTime(String closingTime) {
         this.closingTime = closingTime;
         return this;
     }
 
-    public AutomobileInfoBO setAutomobileInfoId(int automobileInfoId) {
-        this.automobileInfoId = automobileInfoId;
+    public ServiceProviderBO setServiceProviderId(int serviceProviderId) {
+        this.serviceProviderId = serviceProviderId;
         return this;
     }
 
-    public AutomobileInfoBO setStatus(String status) {
+    public ServiceProviderBO setStatus(String status) {
         this.status = status;
         return this;
     }

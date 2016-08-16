@@ -1,12 +1,12 @@
-package com.mpal.rest.response.automobileInfo;
+package com.mpal.rest.response.serviceprovider;
 
 /**
- * Created by System2 on 8/12/2016.
+ * Created by System1 on 8/13/2016.
  */
-public class AutomobileInfoCreationResponse {
+public class UpdateServiceProviderResponse {
 
-    private String messagetype;
     private String message;
+    private  String messagetype;
 
     public String getMessageType() {
         return messagetype;
@@ -16,7 +16,7 @@ public class AutomobileInfoCreationResponse {
         this.messagetype = messagetype;
     }
 
-    public String getMessage() {
+    public String getsMessage() {
         return message;
     }
 
@@ -26,7 +26,8 @@ public class AutomobileInfoCreationResponse {
 
     @Override
     public String toString() {
-        return "AutomobileInfoCreationResponse{" + "messagetype='" + messagetype
-                + '\'' + ", message='" + message + '\'' + '}';
+        return "UpdateResponse{" + "messageType='" + messagetype + '\''
+                + "Message='" + message + '\''
+                + '}';
     }
 }

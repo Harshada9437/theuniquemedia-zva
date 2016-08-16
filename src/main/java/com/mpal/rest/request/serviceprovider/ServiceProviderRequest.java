@@ -1,11 +1,11 @@
-package com.mpal.rest.request.automobileInfo;
+package com.mpal.rest.request.serviceprovider;
 
 /**
- * Created by System1 on 8/13/2016.
+ * Created by System2 on 8/12/2016.
  */
-public class UpdateAutomobileInfoRequest {
+public class ServiceProviderRequest {
 
-    private int id;
+    private  int id;
     private String name;
     private String address;
     private String phoneNo;
@@ -16,107 +16,119 @@ public class UpdateAutomobileInfoRequest {
     private String lat;
     private String openingTime;
     private String closingTime;
+    private  int serviceProviderId;
     private String status;
+
 
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getAddress() {
         return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
     }
 
     public String getPhoneNo() {
         return phoneNo;
     }
 
-    public void setPhoneNo(String phoneNo) {
-        this.phoneNo = phoneNo;
-    }
-
     public String getMobileNo() {
         return mobileNo;
-    }
-
-    public void setMobileNo(String mobileNo) {
-        this.mobileNo = mobileNo;
     }
 
     public String getCity() {
         return city;
     }
 
-    public void setCity(String city) {
-        this.city = city;
-    }
-
     public String getState() {
         return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
     }
 
     public String getLog() {
         return log;
     }
 
-    public void setLog(String log) {
-        this.log = log;
-    }
-
     public String getLat() {
         return lat;
-    }
-
-    public void setLat(String lat) {
-        this.lat = lat;
     }
 
     public String getOpeningTime() {
         return openingTime;
     }
 
-    public void setOpeningTime(String openingTime) {
-        this.openingTime = openingTime;
-    }
-
     public String getClosingTime() {
         return closingTime;
     }
 
-    public void setClosingTime(String closingTime) {
-        this.closingTime = closingTime;
+    public int getServiceProviderId() {
+        return serviceProviderId;
     }
 
     public String getStatus() {
         return status;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setPhoneNo(String phoneNo) {
+        this.phoneNo = phoneNo;
+    }
+
+    public void setMobileNo(String mobileNo) {
+        this.mobileNo = mobileNo;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public void setLog(String log) {
+        this.log = log;
+    }
+
+    public void setLat(String lat) {
+        this.lat = lat;
+    }
+
+    public void setOpeningTime(String openingTime) {
+        this.openingTime = openingTime;
+    }
+
+    public void setClosingTime(String closingTime) {
+        this.closingTime = closingTime;
+    }
+
+    public void setServiceProviderId(int serviceProviderId) {
+        this.serviceProviderId = serviceProviderId;
+    }
+
     public void setStatus(String status) {
         this.status = status;
     }
 
+
     @Override
     public String toString() {
-        return "UpdateAutomobileInfoRequest{" +
+        return "ServiceProviderRequest{" +
+                "id=" + id +
                 ", name='" + name + '\'' +
                 ", address='" + address + '\'' +
                 ", phoneNo='" + phoneNo + '\'' +
@@ -125,9 +137,14 @@ public class UpdateAutomobileInfoRequest {
                 ", state='" + state + '\'' +
                 ", log='" + log + '\'' +
                 ", lat='" + lat + '\'' +
-                ", openingTime='" + openingTime + '\'' +
-                ", closingTime='" + closingTime + '\'' +
+                ", openingTime=" + openingTime +
+                ", closingTime=" + closingTime +
+                ", serviceProviderId=" + serviceProviderId +
                 ", status='" + status + '\'' +
                 '}';
     }
+
+
+
+
 }

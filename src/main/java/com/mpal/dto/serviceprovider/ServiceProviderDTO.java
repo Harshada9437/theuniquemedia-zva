@@ -1,11 +1,11 @@
-package com.mpal.bo.request.automobileInfo;
+package com.mpal.dto.serviceprovider;
 
 /**
- * Created by System1 on 8/13/2016.
+ * Created by System1 on 8/12/2016.
  */
-public class UpdateAutomobileInfoBO {
+public class ServiceProviderDTO {
 
-    private int id;
+    private  int id;
     private String name;
     private String address;
     private String phoneNo;
@@ -16,98 +16,108 @@ public class UpdateAutomobileInfoBO {
     private String lat;
     private String openingTime;
     private String closingTime;
+    private  int serviceProviderId;
     private String status;
+
 
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getAddress() {
         return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
     }
 
     public String getPhoneNo() {
         return phoneNo;
     }
 
-    public void setPhoneNo(String phoneNo) {
-        this.phoneNo = phoneNo;
-    }
-
     public String getMobileNo() {
         return mobileNo;
-    }
-
-    public void setMobileNo(String mobileNo) {
-        this.mobileNo = mobileNo;
     }
 
     public String getCity() {
         return city;
     }
 
-    public void setCity(String city) {
-        this.city = city;
-    }
-
     public String getState() {
         return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
     }
 
     public String getLog() {
         return log;
     }
 
-    public void setLog(String log) {
-        this.log = log;
-    }
-
     public String getLat() {
         return lat;
-    }
-
-    public void setLat(String lat) {
-        this.lat = lat;
     }
 
     public String getOpeningTime() {
         return openingTime;
     }
 
-    public void setOpeningTime(String openingTime) {
-        this.openingTime = openingTime;
-    }
-
     public String getClosingTime() {
         return closingTime;
+    }
+
+    public int getServiceProviderId() {
+        return serviceProviderId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setPhoneNo(String phoneNo) {
+        this.phoneNo = phoneNo;
+    }
+
+    public void setMobileNo(String mobileNo) {
+        this.mobileNo = mobileNo;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public void setLog(String log) {
+        this.log = log;
+    }
+
+    public void setLat(String lat) {
+        this.lat = lat;
+    }
+
+    public void setOpeningTime(String openingTime) {
+        this.openingTime = openingTime;
     }
 
     public void setClosingTime(String closingTime) {
         this.closingTime = closingTime;
     }
 
-    public String getStatus() {
-        return status;
+    public void setServiceProviderId(int serviceProviderId) {
+        this.serviceProviderId = serviceProviderId;
     }
 
     public void setStatus(String status) {
@@ -117,10 +127,12 @@ public class UpdateAutomobileInfoBO {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof UpdateAutomobileInfoBO)) return false;
+        if (!(o instanceof ServiceProviderDTO)) return false;
 
-        UpdateAutomobileInfoBO that = (UpdateAutomobileInfoBO) o;
+        ServiceProviderDTO that = (ServiceProviderDTO) o;
 
+        if (id != that.id) return false;
+        if (serviceProviderId != that.serviceProviderId) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (address != null ? !address.equals(that.address) : that.address != null) return false;
         if (phoneNo != null ? !phoneNo.equals(that.phoneNo) : that.phoneNo != null) return false;
@@ -137,7 +149,8 @@ public class UpdateAutomobileInfoBO {
 
     @Override
     public int hashCode() {
-        int result = name != null ? name.hashCode() : 0;
+        int result = id;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (address != null ? address.hashCode() : 0);
         result = 31 * result + (phoneNo != null ? phoneNo.hashCode() : 0);
         result = 31 * result + (mobileNo != null ? mobileNo.hashCode() : 0);
@@ -147,14 +160,16 @@ public class UpdateAutomobileInfoBO {
         result = 31 * result + (lat != null ? lat.hashCode() : 0);
         result = 31 * result + (openingTime != null ? openingTime.hashCode() : 0);
         result = 31 * result + (closingTime != null ? closingTime.hashCode() : 0);
+        result = 31 * result + serviceProviderId;
         result = 31 * result + (status != null ? status.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
-        return "UpdateAutomobileInfoBO{" +
-                "name='" + name + '\'' +
+        return "ServiceProviderDTO{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
                 ", address='" + address + '\'' +
                 ", phoneNo='" + phoneNo + '\'' +
                 ", mobileNo='" + mobileNo + '\'' +
@@ -162,8 +177,9 @@ public class UpdateAutomobileInfoBO {
                 ", state='" + state + '\'' +
                 ", log='" + log + '\'' +
                 ", lat='" + lat + '\'' +
-                ", openingTime='" + openingTime + '\'' +
-                ", closingTime='" + closingTime + '\'' +
+                ", openingTime=" + openingTime +
+                ", closingTime=" + closingTime +
+                ", serviceProviderId=" + serviceProviderId +
                 ", status='" + status + '\'' +
                 '}';
     }
