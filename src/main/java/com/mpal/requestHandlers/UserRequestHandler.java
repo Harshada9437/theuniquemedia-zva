@@ -9,7 +9,6 @@ import java.util.List;
 
 import com.mpal.bo.request.user.*;
 import com.mpal.bo.response.LoginResponseBO;
-import com.mpal.dao.automobile.AutomobileDAO;
 import com.mpal.dao.user.UserTypesDAO;
 import com.mpal.dao.user.UsersDAO;
 import com.mpal.dto.user.LoginResponseDTO;
@@ -17,7 +16,6 @@ import com.mpal.dto.user.userTypesDTO;
 import com.mpal.dto.user.UsersDTO;
 import com.mpal.exceptions.AutomobileServiceExceptions.AutomobileNotFoundException;
 import com.mpal.exceptions.userServiceExceptions.UserNotFoundException;
-import com.mpal.rest.response.automobile.AutomobileResponseList;
 import com.mpal.rest.response.user.GetTypesResponse;
 import com.mpal.rest.response.user.GetUserResponse;
 import com.mpal.rest.response.user.UserLoggedInResponse;

@@ -3,22 +3,21 @@ package com.mpal.rest.response.automobile;
 import java.util.List;
 
 /**
- * Created by System1 on 8/8/2016.
+ * Created by System1 on 8/16/2016.
  */
 public class AutomobileTypeResponseList {
 
-    List<AutomobileResponseList> automobileResponseLists;
+    List<AutomobileTypeResponse> automobileTypeResponsesResponses;
     private  String messageType;
     private String message;
 
-    public List<AutomobileResponseList> getAutomobileResponseLists() {
-        return automobileResponseLists;
+    public List<AutomobileTypeResponse> getAutomobileTypeResponsesResponses() {
+        return automobileTypeResponsesResponses;
     }
 
-    public void setAutomobileResponseLists(List<AutomobileResponseList> automobileResponseLists) {
-        this.automobileResponseLists = automobileResponseLists;
+    public void setAutomobileTypeResponsesResponses(List<AutomobileTypeResponse> automobileTypeResponsesResponses) {
+        this.automobileTypeResponsesResponses = automobileTypeResponsesResponses;
     }
-
 
     public String getMessageType() {
         return messageType;
@@ -36,13 +35,13 @@ public class AutomobileTypeResponseList {
         this.message = message;
     }
 
+
     @Override
     public String toString() {
         return "AutomobileTypeResponseList{" +
-                "automobileResponseLists=" + automobileResponseLists +
+                "automobileTypeResponsesResponses=" + automobileTypeResponsesResponses +
                 ", messageType='" + messageType + '\'' +
                 ", message='" + message + '\'' +
                 '}';
     }
-
 }

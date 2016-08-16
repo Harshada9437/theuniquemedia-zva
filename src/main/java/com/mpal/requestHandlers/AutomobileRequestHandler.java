@@ -9,22 +9,23 @@ import java.util.List;
 import com.mpal.bo.request.automobile.AutomobilesBO;
 import com.mpal.bo.request.automobile.UpdateAutomobileBO;
 import com.mpal.dao.automobile.AutomobileDAO;
-import com.mpal.dao.user.UsersDAO;
+import com.mpal.dao.automobile.AutomobileTypesDAO;
 import com.mpal.dto.automobile.AutomobileDTO;
-import com.mpal.dto.user.UsersDTO;
-import com.mpal.rest.response.automobile.AutomobileResponseList;
+import com.mpal.dto.automobile.AutomobileTypesDTO;
+import com.mpal.rest.response.automobile.AutomobileResponse;
 import com.mpal.exceptions.AutomobileServiceExceptions.AutomobileNotFoundException;
-import com.mpal.rest.response.user.UserResponseList;
+import com.mpal.rest.response.automobile.AutomobileTypeResponse;
+
 
 /**
  * Created by System1 on 8/6/2016.
  */
 public class AutomobileRequestHandler {
 
-    public List<AutomobileResponseList> getAutomobileByTypeId(int automobileTypeId) throws SQLException,
+    public List<AutomobileResponse> getAutomobileByTypeId(int automobileTypeId) throws SQLException,
             AutomobileNotFoundException{
         AutomobileDAO automobileDAO = new AutomobileDAO();
-        List<AutomobileResponseList> automobileList = new ArrayList<AutomobileResponseList>();
+        List<AutomobileResponse> automobileList = new ArrayList<AutomobileResponse>();
         try {
             automobileList = getAutomobileResponseListFromDTOs(automobileDAO.getAutomobileByTypeId(automobileTypeId));
         } catch (SQLException s) {
@@ -35,8 +36,8 @@ public class AutomobileRequestHandler {
         return automobileList;
     }
 
-    public List<AutomobileResponseList> getAutomobilesList() {
-        List<AutomobileResponseList> automobileList = null;
+    public List<AutomobileResponse> getAutomobilesList() {
+        List<AutomobileResponse> automobileList = null;
         try {
             AutomobileDAO automobileDAO = new AutomobileDAO();
             automobileList = getAutomobileResponseListFromDTOs(automobileDAO.getAutomobilesList());
@@ -59,19 +60,19 @@ public class AutomobileRequestHandler {
         return automobileDTO;
     }
 
-    private List<AutomobileResponseList> getAutomobileResponseListFromDTOs(List<AutomobileDTO> atomobileDTOs) throws SQLException{
-        List<AutomobileResponseList> automobileResponseListResponse = new ArrayList<AutomobileResponseList>();
+    private List<AutomobileResponse> getAutomobileResponseListFromDTOs(List<AutomobileDTO> atomobileDTOs) throws SQLException{
+        List<AutomobileResponse> automobileResponseListResponse = new ArrayList<AutomobileResponse>();
         Iterator<AutomobileDTO> automobilesDTOIterator = atomobileDTOs.iterator();
         while(automobilesDTOIterator.hasNext()){
             AutomobileDTO automobileDTO = automobilesDTOIterator.next();
-            AutomobileResponseList automobileResponseList= null;
-            automobileResponseList = new AutomobileResponseList(
+            AutomobileResponse automobileResponse = null;
+            automobileResponse = new AutomobileResponse(
                     automobileDTO.getCompany(),
                     automobileDTO.getModel(),
                     automobileDTO.getBuiltYear(),
                     automobileDTO.getAutomobileTypeId(),
                     automobileDTO.getStatus());
-            automobileResponseListResponse.add(automobileResponseList);
+            automobileResponseListResponse.add(automobileResponse);
         }
         return automobileResponseListResponse;
     }
@@ -112,6 +113,26 @@ public class AutomobileRequestHandler {
         }
         //System.out.println("isProcessed:::" + isProcessed);
         return isProcessed;
+    }
+
+    public List<AutomobileTypeResponse> getAutomobileTypes() {
+        AutomobileTypesDAO automobileTypesDAO = new AutomobileTypesDAO();
+        List<AutomobileTypeResponse> getAutomobileTypesResponses = new ArrayList<AutomobileTypeResponse>();
+        try {
+            List<AutomobileTypesDTO> automobileTypesDTOList = automobileTypesDAO
+                    .getAllAutomobileTypes();
+
+            for (com.mpal.dto.automobile.AutomobileTypesDTO automobileTypesDTO : automobileTypesDTOList) {
+                AutomobileTypeResponse getAutomobileTypeResponse = new AutomobileTypeResponse();
+                getAutomobileTypeResponse.setId(automobileTypesDTO.getId());
+                getAutomobileTypeResponse.setType(automobileTypesDTO.getType());
+                getAutomobileTypesResponses.add(getAutomobileTypeResponse);
+            }
+        } catch (SQLException sq) {
+            sq.printStackTrace();
+        }
+
+        return getAutomobileTypesResponses;
     }
 
 }

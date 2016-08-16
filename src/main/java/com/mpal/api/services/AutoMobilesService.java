@@ -16,11 +16,12 @@ import com.mpal.bo.request.automobile.AutomobilesBO;
 import com.mpal.bo.request.automobile.UpdateAutomobileBO;
 import com.mpal.exceptions.AutomobileServiceExceptions.AutomobileNotFoundException;
 import com.mpal.requestHandlers.AutomobileRequestHandler;
-import com.mpal.rest.response.automobile.AutomobileTypeResponseList;
+import com.mpal.rest.response.automobile.AutomobileResponseList;
 import com.mpal.rest.request.automobile.AutomobileRequest;
 import com.mpal.rest.response.automobile.AutomobileCreationResponse;
 import com.mpal.rest.request.automobile.UpdateAutomobileRequest;
 import com.mpal.rest.response.automobile.UpdateAutomobileResponse;
+import com.mpal.rest.response.automobile.AutomobileTypeResponseList;
 import com.mpal.rest.util.ResponseGenerator;
 
 @Path("/automobile")
@@ -33,10 +34,10 @@ public class AutoMobilesService {
     public Response getAutomobileList(@PathParam("type") String type) throws SQLException, IOException {
         AutomobileRequestHandler automobileRequestHandler = new AutomobileRequestHandler();
         AutomobileTypesDAO automobileTypesDAO= new AutomobileTypesDAO();
-        AutomobileTypeResponseList automobileResponseL= new AutomobileTypeResponseList();
+        AutomobileResponseList automobileResponseL= new AutomobileResponseList();
         int automobileTypeId=automobileTypesDAO.getAutomobileIdByType(type);
         try {
-            automobileResponseL.setAutomobileResponseLists(automobileRequestHandler.getAutomobileByTypeId(automobileTypeId));
+            automobileResponseL.setAutomobileResponses(automobileRequestHandler.getAutomobileByTypeId(automobileTypeId));
                 automobileResponseL.setMessageType("SUCCESS");
                 automobileResponseL.setMessage("Automobiles are available");
         }catch (AutomobileNotFoundException e) {
@@ -108,6 +109,18 @@ public class AutoMobilesService {
         }
     }*/
 
+    @GET
+    @Path("/list")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAutomobile() {
+        AutomobileRequestHandler automobileRequestHandler = new AutomobileRequestHandler();
+        AutomobileTypeResponseList automobileTypeResponse = new AutomobileTypeResponseList();
+        automobileTypeResponse.setAutomobileTypeResponsesResponses(automobileRequestHandler.getAutomobileTypes());
+        automobileTypeResponse.setMessageType("SUCCESS");
+        automobileTypeResponse.setMessage("list of automobile types.");
+        return ResponseGenerator.generateResponse(automobileTypeResponse);
+    }
 
 
 

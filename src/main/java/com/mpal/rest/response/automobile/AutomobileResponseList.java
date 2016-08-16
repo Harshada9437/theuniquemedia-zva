@@ -1,64 +1,47 @@
 package com.mpal.rest.response.automobile;
 
+import java.util.List;
+
 /**
- * Created by System1 on 8/6/2016.
+ * Created by System1 on 8/8/2016.
  */
 public class AutomobileResponseList {
 
-    private String company;
-    private String model;
-    private String builtYear;
-    private int automobiletypeId;
-    private String status;
+    List<AutomobileResponse> automobileResponses;
+    private  String messageType;
+    private String message;
 
-    public AutomobileResponseList(String company, String model, String builtYear, int automobiletypeId, String status)
-    {
-        this.company=company;
-        this.model=model;
-        this.builtYear=builtYear;
-        this.automobiletypeId=automobiletypeId;
-        this.status=status;
+    public List<AutomobileResponse> getAutomobileResponses() {
+        return automobileResponses;
     }
 
-    public String getCompany() { return  company; }
-
-    public void setCompany(String company) {
-        this.company = company;
+    public void setAutomobileResponses(List<AutomobileResponse> automobileResponses) {
+        this.automobileResponses = automobileResponses;
     }
 
-    public String getModel() { return  model; }
 
-    public void setModel(String model) {
-        this.model = model;
+    public String getMessageType() {
+        return messageType;
     }
 
-    public String getBuiltYear() { return  builtYear; }
-
-    public void setBuiltYear(String builtYear) {
-        this.builtYear = builtYear;
+    public void setMessageType(String messageType) {
+        this.messageType = messageType;
     }
 
-    public String getStatus() { return  status; }
-
-    public void setStatus(final String status)
-    {
-        this.status=status;
+    public String getMessage() {
+        return message;
     }
 
-    public int getAutomobileTypeId() { return  automobiletypeId; }
-
-    public void setAutomobileTypeId(int automobiletypeId) {
-        this.automobiletypeId = automobiletypeId;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     @Override
     public String toString() {
         return "AutomobileResponseList{" +
-                "company='" + company + '\'' +
-                ", model='" + model + '\'' +
-                ", BuiltYear='" + builtYear + '\'' +
-                ", AutomobileTypeId=" + automobiletypeId +
-                ", status='" + status + '\'' +
+                "automobileResponses=" + automobileResponses +
+                ", messageType='" + messageType + '\'' +
+                ", message='" + message + '\'' +
                 '}';
     }
 

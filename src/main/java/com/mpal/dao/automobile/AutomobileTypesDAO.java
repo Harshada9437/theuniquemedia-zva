@@ -25,7 +25,7 @@ public class AutomobileTypesDAO implements IAutomobileTypesDAO {
         try {
             connection = new ConnectionPool().getConnection();
             statement = connection.createStatement();
-            StringBuilder query = new StringBuilder("SELECT * FROM automobile_type");
+            StringBuilder query = new StringBuilder("SELECT * FROM automobile_types");
             ResultSet resultSet = statement.executeQuery(query.toString());
             int index=1;
             while (resultSet.next()) {
