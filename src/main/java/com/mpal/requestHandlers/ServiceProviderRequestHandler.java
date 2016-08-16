@@ -1,12 +1,17 @@
 package com.mpal.requestHandlers;
 
 import com.mpal.bo.request.serviceprovider.ServiceProviderBO;
-import com.mpal.bo.request.serviceprovider.UpdateServiceProviderBO;
+import com.mpal.bo.request.serviceprovider.UpdateServiceProviderBO;;
 import com.mpal.dao.serviceprovider.ServiceProviderDAO;
+import com.mpal.dao.serviceprovider.ServiceProviderTypesDAO;
 import com.mpal.dto.serviceprovider.ServiceProviderDTO;
+import com.mpal.dto.serviceprovider.ServiceProviderTypesDTO;
+import com.mpal.rest.response.serviceprovider.ServiceTypeResponse;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by System2 on 8/12/2016.
@@ -69,6 +74,27 @@ public class ServiceProviderRequestHandler {
             isProcessed = false;
         }
         return isProcessed;
+    }
+
+    public List<ServiceTypeResponse> getServiceTypes() {
+
+        ServiceProviderTypesDAO serviceProviderTypesDAO = new ServiceProviderTypesDAO();
+        List<ServiceTypeResponse> getServiceTypesResponses = new ArrayList<ServiceTypeResponse>();
+        try {
+            List<ServiceProviderTypesDTO>  serviceProviderTypesDTOList = serviceProviderTypesDAO
+                    .getAllServiceTypes();
+
+            for (com.mpal.dto.serviceprovider.ServiceProviderTypesDTO serviceProviderTypesDTO : serviceProviderTypesDTOList) {
+                ServiceTypeResponse getServiceTypeResponse = new ServiceTypeResponse();
+                getServiceTypeResponse.setId(serviceProviderTypesDTO.getId());
+                getServiceTypeResponse.setType(serviceProviderTypesDTO.getType());
+                getServiceTypesResponses.add(getServiceTypeResponse);
+            }
+        } catch (SQLException sq) {
+            sq.printStackTrace();
+        }
+
+        return getServiceTypesResponses;
     }
 
 }

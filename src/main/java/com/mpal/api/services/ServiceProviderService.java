@@ -7,13 +7,11 @@ import com.mpal.requestHandlers.ServiceProviderRequestHandler;
 import com.mpal.rest.request.serviceprovider.UpdateServiceProviderRequest;
 import com.mpal.rest.request.serviceprovider.ServiceProviderRequest;
 import com.mpal.rest.response.serviceprovider.ServiceProviderCreationResponse;
+import com.mpal.rest.response.serviceprovider.ServiceTypeResponseList;
 import com.mpal.rest.response.serviceprovider.UpdateServiceProviderResponse;
 import com.mpal.rest.util.ResponseGenerator;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
@@ -23,7 +21,7 @@ import java.sql.SQLException;
  * Created by System2 on 8/12/2016.
  */
 
-@Path("/automobile_info")
+@Path("/services")
 
 public class ServiceProviderService {
 
@@ -108,5 +106,18 @@ public class ServiceProviderService {
             return ResponseGenerator.generateResponse(RequestValidation.getUnautheticatedResponse());
         }
     }*/
+
+    @GET
+    @Path("/list")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAutomobile() {
+        ServiceProviderRequestHandler serviceProviderRequestHandler = new ServiceProviderRequestHandler();
+        ServiceTypeResponseList serviceTypeResponse = new ServiceTypeResponseList();
+        serviceTypeResponse.setServiceTypeResponses(serviceProviderRequestHandler.getServiceTypes());
+        serviceTypeResponse.setMessageType("SUCCESS");
+        serviceTypeResponse.setMessage("list of service types.");
+        return ResponseGenerator.generateResponse(serviceTypeResponse);
+    }
 
 }
