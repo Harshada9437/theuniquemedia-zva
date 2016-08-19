@@ -22,12 +22,12 @@ import com.mpal.rest.response.automobile.AutomobileTypeResponse;
  */
 public class AutomobileRequestHandler {
 
-    public List<AutomobileResponse> getAutomobileByTypeId(int automobileTypeId) throws SQLException,
+    public List<AutomobileResponse> getAutomobileByTypeId(int automobile_type_id) throws SQLException,
             AutomobileNotFoundException{
         AutomobileDAO automobileDAO = new AutomobileDAO();
         List<AutomobileResponse> automobileList = new ArrayList<AutomobileResponse>();
         try {
-            automobileList = getAutomobileResponseListFromDTOs(automobileDAO.getAutomobileByTypeId(automobileTypeId));
+            automobileList = getAutomobileResponseListFromDTOs(automobileDAO.getAutomobileByTypeId(automobile_type_id));
         } catch (SQLException s) {
             s.printStackTrace();
         } catch (AutomobileNotFoundException s) {
@@ -67,6 +67,7 @@ public class AutomobileRequestHandler {
             AutomobileDTO automobileDTO = automobilesDTOIterator.next();
             AutomobileResponse automobileResponse = null;
             automobileResponse = new AutomobileResponse(
+                    automobileDTO.getId(),
                     automobileDTO.getCompany(),
                     automobileDTO.getModel(),
                     automobileDTO.getBuiltYear(),

@@ -5,6 +5,7 @@ public class UpdateUserRequest {
 	private String name;
 	private String mobile;
 	private String email;
+	private String status;
 
 	public int getId() {
 		return id;
@@ -38,10 +39,22 @@ public class UpdateUserRequest {
 		this.mobile = mobile;
 	}
 
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
 
 	@Override
 	public String toString() {
-		return "UpdateUserRequest [id=" + id + ", name=" + name +
-				", mobile=" + mobile + ", email=" + email + "]";
+		return "UpdateUserRequest{" +
+				"id=" + id +
+				", name='" + name + '\'' +
+				", mobile='" + mobile + '\'' +
+				", email='" + email + '\'' +
+				", status='" + status + '\'' +
+				'}';
 	}
 }

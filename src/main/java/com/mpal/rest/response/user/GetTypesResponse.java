@@ -1,6 +1,7 @@
 package com.mpal.rest.response.user;
 
 public class GetTypesResponse {
+	private int id;
 	private String type;
 	private String status;
 
@@ -20,9 +21,20 @@ public class GetTypesResponse {
 		this.status = status;
 	}
 
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	@Override
 	public String toString() {
-		return "GetTypesResponse{" + ", type='" + type
-				+ '\'' + ", status='" + status + '\'' + '}';
+		return "GetTypesResponse{" +
+				"id=" + id +
+				", type='" + type + '\'' +
+				", status='" + status + '\'' +
+				'}';
 	}
 }

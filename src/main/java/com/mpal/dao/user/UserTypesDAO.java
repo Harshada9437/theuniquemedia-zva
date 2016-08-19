@@ -8,24 +8,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mpal.dao.UtilClasses.ConnectionPool;
-import com.mpal.dto.user.UserTypesDTO;
+import com.mpal.dto.user.userTypesDTO;
 
 public class UserTypesDAO implements IUserTypesDAO {
-	public List<UserTypesDTO> getAllUserTypes() throws SQLException
+	public List<userTypesDTO> getAllUserTypes() throws SQLException
 			 {
-		List<UserTypesDTO> UserTypesDTOList = new ArrayList<UserTypesDTO>();
+		List<userTypesDTO> userTypesDTOList = new ArrayList<userTypesDTO>();
 		Connection connection = null;
 		Statement statement = null;
 		try {
 			connection = new ConnectionPool().getConnection();
 			statement = connection.createStatement();
-			StringBuilder query = new StringBuilder("SELECT * FROM user_type");
+			StringBuilder query = new StringBuilder("SELECT * FROM user_types");
 			ResultSet resultSet = statement.executeQuery(query.toString());
 			while (resultSet.next()) {
-				UserTypesDTO UserTypesDTO = new UserTypesDTO();
-				UserTypesDTO.setType(resultSet.getString(1));
-				UserTypesDTO.setStatus(resultSet.getString(2));
-				UserTypesDTOList.add(UserTypesDTO);
+				userTypesDTO userTypesDTO = new userTypesDTO();
+				userTypesDTO.setId(resultSet.getInt(1));
+				userTypesDTO.setType(resultSet.getString(2));
+				userTypesDTO.setStatus(resultSet.getString(3));
+				userTypesDTOList.add(userTypesDTO);
 			}
 		} catch (SQLException sqlException) {
 			sqlException.printStackTrace();
@@ -37,6 +38,6 @@ public class UserTypesDAO implements IUserTypesDAO {
 				e.printStackTrace();
 			}
 		}
-		return UserTypesDTOList;
+		return userTypesDTOList;
 	}
 }

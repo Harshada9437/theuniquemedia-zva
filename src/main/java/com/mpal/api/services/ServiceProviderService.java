@@ -21,7 +21,7 @@ import java.sql.SQLException;
  * Created by System2 on 8/12/2016.
  */
 
-@Path("/services")
+@Path("/service_provider")
 
 public class ServiceProviderService {
 

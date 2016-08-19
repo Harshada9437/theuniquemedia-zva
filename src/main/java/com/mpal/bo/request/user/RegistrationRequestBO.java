@@ -1,7 +1,7 @@
 package com.mpal.bo.request.user;
 
 public class RegistrationRequestBO {
-	private String type;
+	private int usertypeid;
 	private String name;
 	private String mobile;
 	private String email;
@@ -41,10 +41,10 @@ public class RegistrationRequestBO {
 		this.password = password;
 	}
 
-	public String getUserType() { return type; }
+	public int getUserTypeId() { return usertypeid; }
 
-	public void setUserType(String type) {
-		this.type = type;
+	public void setUserTypeId(int usertypeid) {
+		this.usertypeid = usertypeid;
 	}
 
 	public int getClientDetailsId() { return clientdetailsId; }
@@ -59,7 +59,7 @@ public class RegistrationRequestBO {
 		if (o == null || getClass() != o.getClass()) return false;
 
 		RegistrationRequestBO that = (RegistrationRequestBO) o;
-		if (type != null ? !type.equals(that.type) : that.type != null) return false;
+		if (usertypeid != that.usertypeid) return false;
 		if (name != null ? !name.equals(that.name) : that.name != null) return false;
 		if (mobile != null ? !mobile.equals(that.mobile) : that.mobile != null) return false;
 		if (email != null ? !email.equals(that.email) : that.email != null) return false;
@@ -70,7 +70,7 @@ public class RegistrationRequestBO {
 	@Override
 	public int hashCode() {
 		int result= 1;
-		result = 31 * result + (type != null ? type.hashCode() : 0);
+		result = 31 * result + usertypeid;
 		result = 31 * result + (name != null ? name.hashCode() : 0);
 		result = 31 * result + (mobile != null ? mobile.hashCode() : 0);
 		result = 31 * result + (email != null ? email.hashCode() : 0);
@@ -82,12 +82,12 @@ public class RegistrationRequestBO {
 	@Override
 	public String toString() {
 		return "RegistrationRequestBO{" +
-				"type='" + type + '\'' +
+				"userTypeId='" + usertypeid  +
 				", name='" + name + '\'' +
 				", mobile='" + mobile + '\'' +
 				", email='" + email + '\'' +
 				", password='" + password + '\'' +
-				", clientdetailsId=" + clientdetailsId +
+				", clientDetailsId=" + clientdetailsId +
 				'}';
 	}
 }

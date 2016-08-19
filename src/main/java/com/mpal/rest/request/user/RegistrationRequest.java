@@ -1,7 +1,7 @@
 package com.mpal.rest.request.user;
 
 public class RegistrationRequest {
-	private String type;
+	private int usertypeid;
 	private String name;
 	private String mobile;
 	private String email;
@@ -41,10 +41,10 @@ public class RegistrationRequest {
 		this.password = password;
 	}
 
-	public String getType() { return type; }
+	public int getUserTypeId() { return usertypeid; }
 
-	public void setType(String type) {
-		this.type = type;
+	public void setUserTypeId(int usertypeid) {
+		this.usertypeid = usertypeid;
 	}
 
 	public int getClientDetailsId() { return clientdetailsId; }
@@ -56,7 +56,7 @@ public class RegistrationRequest {
 	@Override
 	public String toString() {
 		return "RegistrationRequest{" +
-				"type='" + type + '\'' +
+				"userTypeId='" + usertypeid + '\'' +
 				", name='" + name + '\'' +
 				", mobile='" + mobile + '\'' +
 				", email='" + email + '\'' +

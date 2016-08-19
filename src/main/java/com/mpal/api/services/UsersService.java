@@ -9,7 +9,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.mpal.bo.request.user.*;
+import com.mpal.dao.user.UsersDAO;
+import com.mpal.dto.user.UsersDTO;
 import com.mpal.exceptions.AutomobileServiceExceptions.AutomobileNotFoundException;
+import com.mpal.rest.request.user.AssignAutomobilesRequest;
 import com.mpal.rest.response.user.*;
 import com.mpal.bo.response.LoginResponseBO;
 import com.mpal.exceptions.userServiceExceptions.UserNotFoundException;
@@ -39,13 +42,19 @@ public class UsersService {
         try {
             LoginResponseBO loginResponseBO = userRequestHandler
                     .login(loginRequestBO);
+            UsersDAO usersDAO=new UsersDAO();
+            UsersDTO usersDTO=usersDAO.getUserById(loginResponseBO.getId());
             if (loginResponseBO.getValidUser()) {
-                loginResponse.setMessageType("SUCCESS");
-                loginResponse.setUserId(loginResponseBO.getId());
-                loginResponse.setMessage(String.valueOf(loginResponseBO
-                        .getSessionId()));
-            }
-            else {
+                    if(usersDTO.getStatus().equals("A")) {
+                        loginResponse.setMessageType("SUCCESS");
+                        loginResponse.setUserId(loginResponseBO.getId());
+                        loginResponse.setMessage(String.valueOf(loginResponseBO
+                                .getSessionId()));
+                    } else{
+                        loginResponse.setMessageType("FAILURE");
+                        loginResponse.setMessage("Inactive User.");
+                    }
+            }else {
                 loginResponse.setMessageType("FAILURE");
                 loginResponse.setMessage("Invalid User.");
             }
@@ -63,7 +72,7 @@ public class UsersService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response registerUser(RegistrationRequest registrationRequest) {
         RegistrationRequestBO registrationRequestBO = new RegistrationRequestBO();
-        registrationRequestBO.setUserType(registrationRequest.getType());
+        registrationRequestBO.setUserTypeId(registrationRequest.getUserTypeId());
         registrationRequestBO.setName(registrationRequest.getName());
         registrationRequestBO.setMobile(registrationRequest.getMobile());
         registrationRequestBO.setEmail(registrationRequest.getEmail());
@@ -72,11 +81,11 @@ public class UsersService {
 
         UserRequestHandler userRequestHandler = new UserRequestHandler();
         RegistrationResponse registrationResponse = new RegistrationResponse();
-        if(!userRequestHandler.verifyEmail(registrationRequest.getEmail())){
-            if (userRequestHandler.register(registrationRequestBO)!=null) {
-                int userId=userRequestHandler.register(registrationRequestBO);
+        if (!userRequestHandler.verifyEmail(registrationRequest.getEmail())) {
+            int userId = userRequestHandler.register(registrationRequestBO);
+            if(userId != 0){
                 registrationResponse.setMessageType("SUCCESS");
-                registrationResponse.setMessage("Created user id:-" + userId );
+                registrationResponse.setMessage("Created user id:-" + userId);
             } else {
                 registrationResponse.setMessageType("FAILURE");
                 registrationResponse.setMessage("Registration Failed");
@@ -111,23 +120,24 @@ public class UsersService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateUser(UpdateUserRequest updateUser/*,@HeaderParam("sessionId") String sessionId*/) {
         //if (sessionId != null && RequestValidation.isRequestValid(sessionId)) {
-            UpdaterUserBO updateRequestBO = new UpdaterUserBO();
-            updateRequestBO.setId(updateUser.getId());
-            updateRequestBO.setName(updateUser.getName());
-            updateRequestBO.setMobile(updateUser.getMobile());
-            updateRequestBO.setEmail(updateUser.getEmail());
+        UpdaterUserBO updateRequestBO = new UpdaterUserBO();
+        updateRequestBO.setId(updateUser.getId());
+        updateRequestBO.setName(updateUser.getName());
+        updateRequestBO.setMobile(updateUser.getMobile());
+        updateRequestBO.setEmail(updateUser.getEmail());
+        updateRequestBO.setStatus(updateUser.getStatus());
 
-            UserRequestHandler userRequestHandler = new UserRequestHandler();
-            UpdateResponse updateResponse = new UpdateResponse();
-            if (userRequestHandler.updateUser(updateRequestBO)) {
-                updateResponse.setMessageType("SUCCESS");
-                updateResponse.setMessage("User updated successfully");
-            } else {
-                updateResponse.setMessageType("FAILURE");
-                updateResponse.setMessage("Unable to update the user");
-            }
-            return ResponseGenerator.generateResponse(updateResponse);
-        } /*else {
+        UserRequestHandler userRequestHandler = new UserRequestHandler();
+        UpdateResponse updateResponse = new UpdateResponse();
+        if (userRequestHandler.updateUser(updateRequestBO)) {
+            updateResponse.setMessageType("SUCCESS");
+            updateResponse.setMessage("User updated successfully");
+        } else {
+            updateResponse.setMessageType("FAILURE");
+            updateResponse.setMessage("Unable to update the user");
+        }
+        return ResponseGenerator.generateResponse(updateResponse);
+    } /*else {
             return ResponseGenerator.generateResponse(RequestValidation.getUnautheticatedResponse());
         }
     }*/
@@ -148,48 +158,48 @@ public class UsersService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUserById(@PathParam("id") int id/*, @HeaderParam("sessionId") String sessionId*/) {
         //if (sessionId != null && RequestValidation.isRequestValid(sessionId)) {
-            UserRequestHandler userRequestHandler = new UserRequestHandler();
-            Object response = null;
-            try {
-                if(userRequestHandler.validUser(id)) {
-                    GetUserResponse userResponse = userRequestHandler.getUserById(id);
-                    userResponse.setMessageType("SUCCESS");
-                    return ResponseGenerator.generateResponse(userResponse);
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            } catch (UserNotFoundException e) {
-                LoginResponse loginResponse = new LoginResponse();
-                loginResponse.setMessageType("FAILURE");
-                loginResponse.setMessage("Invalid User");
-                return ResponseGenerator.generateResponse(loginResponse);
+        UserRequestHandler userRequestHandler = new UserRequestHandler();
+        Object response = null;
+        try {
+            if (userRequestHandler.validUser(id)) {
+                GetUserResponse userResponse = userRequestHandler.getUserById(id);
+                userResponse.setMessageType("SUCCESS");
+                return ResponseGenerator.generateResponse(userResponse);
             }
-            return ResponseGenerator.generateResponse(response);
-        } /*else {
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (UserNotFoundException e) {
+            LoginResponse loginResponse = new LoginResponse();
+            loginResponse.setMessageType("FAILURE");
+            loginResponse.setMessage("Invalid User");
+            return ResponseGenerator.generateResponse(loginResponse);
+        }
+        return ResponseGenerator.generateResponse(response);
+    } /*else {
             return ResponseGenerator.generateResponse(RequestValidation.getUnautheticatedResponse());
         }*/
-   // }
+    // }
 
     @POST
     @Path("/logout")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response logout(LogoutRequest logoutRequest) //@HeaderParam("sessionId") String sessionId)
-                           {
-       // if (sessionId != null && RequestValidation.isRequestValid(sessionId)) {
-            UserRequestHandler userRequestHandler = new UserRequestHandler();
-            Boolean isLoggedOut = userRequestHandler.logout(logoutRequest
-                    .getUserId());
-            LoginResponse loginResponse = new LoginResponse();
-            if (isLoggedOut) {
-                loginResponse.setMessageType("SUCCESS");
-                loginResponse.setMessage("Log out successfully.");
-                return ResponseGenerator.generateResponse(loginResponse);
-            } else {
-                loginResponse.setMessageType("FAILURE");
-                loginResponse.setMessage("Unable to Log out current user.");
-                return ResponseGenerator.generateResponse(loginResponse);
-            }
+    {
+        // if (sessionId != null && RequestValidation.isRequestValid(sessionId)) {
+        UserRequestHandler userRequestHandler = new UserRequestHandler();
+        Boolean isLoggedOut = userRequestHandler.logout(logoutRequest
+                .getUserId());
+        LoginResponse loginResponse = new LoginResponse();
+        if (isLoggedOut) {
+            loginResponse.setMessageType("SUCCESS");
+            loginResponse.setMessage("Log out successfully.");
+            return ResponseGenerator.generateResponse(loginResponse);
+        } else {
+            loginResponse.setMessageType("FAILURE");
+            loginResponse.setMessage("Unable to Log out current user.");
+            return ResponseGenerator.generateResponse(loginResponse);
+        }
         /*} else {
             return ResponseGenerator.generateResponse(RequestValidation.getUnautheticatedResponse());
         }*/
@@ -269,22 +279,75 @@ public class UsersService {
     }
 
     @GET
-    @Path("/list/{type}")
+    @Path("/list/{user_type_id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getUserByTypeList(@PathParam("type") String type) throws SQLException, IOException {
+    public Response getUserByTypeList(@PathParam("user_type_id") int user_type_id) throws SQLException, IOException {
         UserRequestHandler userRequestHandler = new UserRequestHandler();
-        UserTypeResponseList userResponseL= new UserTypeResponseList();
+        UserTypeResponseList userResponseL = new UserTypeResponseList();
         try {
-            userResponseL.setGetTypeResponseList(userRequestHandler.getUserByType(type));
+            userResponseL.setGetTypeResponseList(userRequestHandler.getUserByType(user_type_id));
             userResponseL.setMessageType("SUCCESS");
             userResponseL.setMessage("Users are available");
-        }catch (AutomobileNotFoundException e) {
-            e.printStackTrace();
+        } catch (UserNotFoundException e) {
+            userResponseL.setMessageType("FAILURE");
+            userResponseL.setMessage("Users are not available");
+            /*e.printStackTrace();*/
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return ResponseGenerator.generateResponse(userResponseL);
     }
 
+    @POST
+    @Path("/{user_type_id}/assignAutomobiles")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response assignMechanicsForAutomobiles(AssignAutomobilesRequest assignAutomobilesRequest, @PathParam ("user_type_id") int user_type_id
+                                                  /*, @HeaderParam("sessionId") String sessionId*/) throws IOException, SQLException {
+           /* if (sessionId != null && RequestValidation.isRequestValid(sessionId)) {*/
+             UserRequestHandler userRequestHandler = new UserRequestHandler();
+             AssignAutomobilesRequestBO assignAutomobilesRequestBO = new AssignAutomobilesRequestBO();
+             assignAutomobilesRequestBO.setAutomobilesInfoList(assignAutomobilesRequest.getAutomobilesInfoList());
+             Boolean isCreated = userRequestHandler.assignAutomobile(assignAutomobilesRequestBO);
+             AssignAutomobilesResponse assignAutomobilesResponse = new AssignAutomobilesResponse();
+             if (isCreated) {
+                 assignAutomobilesResponse.setMessageType("SUCCESS");
+                 assignAutomobilesResponse.setMessage("automobiles are assigned.");
+             } else {
+                 assignAutomobilesResponse.setMessageType("FAILURE");
+                 assignAutomobilesResponse.setMessage("automobiles cann't be assigned.");
+             }
+
+             return ResponseGenerator.generateResponse(assignAutomobilesResponse);
+//            } else {
+//                return ResponseGenerator.generateResponse(RequestValidation.getUnautheticatedResponse());
+//            }
+        }
+
+    @POST
+    @Path("/{user_type_id}/assignServices")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public void assignMechanicsForServices(AssignServicesRequest assignServicesRequest, @PathParam ("user_type_id") int user_type_id
+                                                 /* , @HeaderParam("sessionId") String sessionId*/) {
+           /* if (sessionId != null && RequestValidation.isRequestValid(sessionId)) {*/
+        UserRequestHandler userRequestHandler = new UserRequestHandler();
+        AssignServicesRequestBO assignServicesRequestBO = new AssignServicesRequestBO();
+        assignServicesRequestBO.setServiceInfoList(assignServicesRequest.getServiceInfoList());
+        /*Boolean isCreated = userRequestHandler.assignServices(assignServicesRequestBO);
+        AssignServicesResponse assignServicesResponse = new AssignServicesResponse();
+        if (isCreated) {
+            assignServicesResponse.setMessageType("SUCCESS");
+            assignServicesResponse.setMessage("services are assigned.");
+        } else {
+            assignServicesResponse.setMessageType("FAILURE");
+            assignServicesResponse.setMessage("services cann't be assigned.");
+        }*/
+
+        //return ResponseGenerator.generateResponse(assignServicesResponse);
+           /* } else {
+               return ResponseGenerator.generateResponse(RequestValidation.getUnautheticatedResponse());
+           }*/
+    }
 }

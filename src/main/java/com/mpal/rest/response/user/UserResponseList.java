@@ -2,29 +2,31 @@ package com.mpal.rest.response.user;
 
 public class UserResponseList {
 	private int id;
-	private String type;
+	private int usertypeid;
 	private String name;
 	private String mobile;
 	private String email;
 	private int clientdetailsId;
 	private String isVerified;
+	private String status;
 
-	public UserResponseList(int id, String type, String name, String mobile, String email, int clientdetailsId, String isVerified) {
+	public UserResponseList(int id, int usertypeid, String name, String mobile, String email, int clientdetailsId, String isVerified, String status) {
 		this.id = id;
-		this.type = type;
+		this.usertypeid = usertypeid;
 		this.name=name;
 		this.mobile=mobile;
 		this.email = email;
 		this.clientdetailsId = clientdetailsId;
 		this.isVerified = isVerified;
+		this.status=status;
 	}
 
 	public String getIsVerified() {
 		return isVerified;
 	}
 
-	public String getUserType() {
-		return type;
+	public int getUserTypeId() {
+		return usertypeid;
 	}
 
 	public int getClientDetailsId() {
@@ -43,20 +45,21 @@ public class UserResponseList {
 		return email;
 	}
 
-	public int getId() {
-		return id;
-	}
+	public int getId() {return id;}
+
+	public String getStatus() {return status;}
 
 	@Override
 	public String toString() {
 		return "UserResponseList{" +
 				"id=" + id +
-				", type=" + type +
+				", userTypeId=" + usertypeid +
 				", name='" + name + '\'' +
 				", mobile='" + mobile + '\'' +
 				", email='" + email + '\'' +
 				", clientdetailsId=" + clientdetailsId +
 				", isVerified='" + isVerified + '\'' +
+				", status='" + status + '\'' +
 				'}';
 	}
 }

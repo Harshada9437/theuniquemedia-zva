@@ -6,6 +6,7 @@ public class UpdaterUserBO {
 	private  String name;
 	private String  mobile;
 	private String email;
+	private String status;
 
 	public int getId() { return id; }
 
@@ -37,48 +38,43 @@ public class UpdaterUserBO {
 		this.email = email;
 	}
 
+	public String getStatus() {
+		return status;
+	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((mobile == null) ? 0 : mobile.hashCode());
-		result = prime * result + ((email == null) ? 0 : email.hashCode());
-		return result;
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		UpdaterUserBO other = (UpdaterUserBO) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		if (mobile == null) {
-			if (other.mobile != null)
-				return false;
-		} else if (!mobile.equals(other.mobile))
-			return false;
-		if (email == null) {
-			if (other.email != null)
-				return false;
-		} else if (!email.equals(other.email))
-			return false;
-		return true;
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof UpdaterUserBO)) return false;
+
+		UpdaterUserBO that = (UpdaterUserBO) o;
+
+		if (id != that.id) return false;
+		if (name != null ? !name.equals(that.name) : that.name != null) return false;
+		if (mobile != null ? !mobile.equals(that.mobile) : that.mobile != null) return false;
+		if (email != null ? !email.equals(that.email) : that.email != null) return false;
+		return status != null ? status.equals(that.status) : that.status == null;
+
+	}
+
+	@Override
+	public int hashCode() {
+		int result = id;
+		result = 31 * result + (name != null ? name.hashCode() : 0);
+		result = 31 * result + (mobile != null ? mobile.hashCode() : 0);
+		result = 31 * result + (email != null ? email.hashCode() : 0);
+		result = 31 * result + (status != null ? status.hashCode() : 0);
+		return result;
 	}
 
 	@Override
 	public String toString() {
 		return "UpdaterUserBO [id=" + id + ", name=" + name +
-				 ", mobile=" + mobile + ", email=" + email + "]";
+				 ", mobile=" + mobile + ", email=" + email  + ", status=" + status + "]";
 	}
 
 }

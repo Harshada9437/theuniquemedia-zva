@@ -64,10 +64,11 @@ public class AutomobileDAO {
             int index = 1;
             while (resultSet.next()) {
                 AutomobileDTO automobileDTO = new AutomobileDTO();
+                automobileDTO.setId(resultSet.getInt("id"));
                 automobileDTO.setCompany(resultSet.getString("company"));
                 automobileDTO.setModel(resultSet.getString("model"));
-                automobileDTO.setBuiltYear(resultSet.getString("builtYear"));
-                automobileDTO.setAutomobileTypeId(resultSet.getInt("automobileTypeId"));
+                automobileDTO.setBuiltYear(resultSet.getString("built_year"));
+                automobileDTO.setAutomobileTypeId(resultSet.getInt("automobile_type_id"));
                 automobileDTO.setStatus(resultSet.getString("status"));
                 index++;
                 automobileTypeResponseList.add(automobileDTO);

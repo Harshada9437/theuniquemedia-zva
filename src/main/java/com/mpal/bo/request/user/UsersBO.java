@@ -7,7 +7,7 @@ public class UsersBO {
 	private  String mobile;
 	private String email;
 	private String password;
-	private String type;
+	private int usertypeid;
 	private int clientdetailsId;
 
 	public int getId() {
@@ -55,12 +55,12 @@ public class UsersBO {
 		return this;
 	}
 
-	public String getType() {
-		return type;
+	public int getUserTypeId() {
+		return usertypeid;
 	}
 
 	public UsersBO setType(final String type) {
-		this.type = type;
+		this.usertypeid = usertypeid;
 		return this;
 	}
 
@@ -76,7 +76,7 @@ public class UsersBO {
 
 	@Override
 	public String toString() {
-		return "UsersBO{" + "id=" + id + ", type='" + type + '\'' +
+		return "UsersBO{" + "id=" + id + ", userTypeId='" + usertypeid + '\'' +
 				", name='" + name + '\'' + ", mobile='" + mobile + '\'' +
 				", email='" + email + '\'' + ", password='" + password + '\'' +
 				", clientdetailsid=" + clientdetailsId +

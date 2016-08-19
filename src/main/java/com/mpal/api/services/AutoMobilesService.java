@@ -28,16 +28,14 @@ import com.mpal.rest.util.ResponseGenerator;
 public class AutoMobilesService {
 
     @GET
-    @Path("/list/{type}")
+    @Path("/list/{automobile_type_id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAutomobileList(@PathParam("type") String type) throws SQLException, IOException {
+    public Response getAutomobileList(@PathParam("automobile_type_id") int automobile_type_id) throws SQLException, IOException {
         AutomobileRequestHandler automobileRequestHandler = new AutomobileRequestHandler();
-        AutomobileTypesDAO automobileTypesDAO= new AutomobileTypesDAO();
         AutomobileResponseList automobileResponseL= new AutomobileResponseList();
-        int automobileTypeId=automobileTypesDAO.getAutomobileIdByType(type);
         try {
-            automobileResponseL.setAutomobileResponses(automobileRequestHandler.getAutomobileByTypeId(automobileTypeId));
+            automobileResponseL.setAutomobileResponses(automobileRequestHandler.getAutomobileByTypeId(automobile_type_id));
                 automobileResponseL.setMessageType("SUCCESS");
                 automobileResponseL.setMessage("Automobiles are available");
         }catch (AutomobileNotFoundException e) {
@@ -79,7 +77,7 @@ public class AutoMobilesService {
     }
 
     @POST
-    @Path("/update_automobile")
+    @Path("/update")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response UpdateAutomobile(UpdateAutomobileRequest updateAutomobile/*,@HeaderParam("sessionId") String sessionId*/) {

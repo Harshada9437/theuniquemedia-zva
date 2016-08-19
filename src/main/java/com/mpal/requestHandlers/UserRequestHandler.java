@@ -9,13 +9,17 @@ import java.util.List;
 
 import com.mpal.bo.request.user.*;
 import com.mpal.bo.response.LoginResponseBO;
+import com.mpal.dao.user.UserAutomobileMapDAO;
+import com.mpal.dao.user.UserServiceMapDAO;
 import com.mpal.dao.user.UserTypesDAO;
 import com.mpal.dao.user.UsersDAO;
 import com.mpal.dto.user.LoginResponseDTO;
-import com.mpal.dto.user.UserTypesDTO;
+import com.mpal.dto.user.userTypesDTO;
 import com.mpal.dto.user.UsersDTO;
 import com.mpal.exceptions.AutomobileServiceExceptions.AutomobileNotFoundException;
 import com.mpal.exceptions.userServiceExceptions.UserNotFoundException;
+import com.mpal.rest.request.user.AutomobilesInfo;
+import com.mpal.rest.request.user.ServiceInfo;
 import com.mpal.rest.response.user.GetTypesResponse;
 import com.mpal.rest.response.user.GetUserResponse;
 import com.mpal.rest.response.user.UserLoggedInResponse;
@@ -58,19 +62,34 @@ public class UserRequestHandler {
         return isProcessed;
     }
 
-	public Boolean validUser(Integer userId) {
+	public Boolean validUser(int userId) {
 
 		Boolean isProcessed = Boolean.FALSE;
 		UsersDAO usersDAO = new UsersDAO();
 		try {
 			UsersDTO userDTO = usersDAO.getUserById(userId);
-			if(userDTO.getId() > 0)
-			isProcessed = Boolean.TRUE;
+			if(userDTO.getId() > 0 )
+				isProcessed = Boolean.TRUE;
 		} catch (SQLException sq) {
 			isProcessed = false;
 		}
 		return isProcessed;
 	}
+
+	public Boolean activeUser(Integer userId) {
+
+		Boolean isProcessed = Boolean.FALSE;
+		UsersDAO usersDAO = new UsersDAO();
+		try {
+			UsersDTO userDTO = usersDAO.getUserById(userId);
+			if(userDTO.getStatus()=="A")
+				isProcessed = Boolean.TRUE;
+		} catch (SQLException sq) {
+			isProcessed = false;
+		}
+		return isProcessed;
+	}
+
 	public Boolean verifyUser(Integer userId) {
 
 		Boolean isProcessed = Boolean.FALSE;
@@ -121,7 +140,7 @@ public class UserRequestHandler {
 
 	private UsersDTO buildUsersDTOFromBO(RegistrationRequestBO requestBO) {
 		UsersDTO usersDTO = new UsersDTO();
-		usersDTO.setUserType(requestBO.getUserType());
+		usersDTO.setUserTypeId(requestBO.getUserTypeId());
 		usersDTO.setName(requestBO.getName());
 		usersDTO.setMobile(requestBO.getMobile());
 		usersDTO.setEmail(requestBO.getEmail());
@@ -133,11 +152,12 @@ public class UserRequestHandler {
 	private GetUserResponse buildUsersResponseFromDTO(UsersDTO usersDTO) {
 		GetUserResponse userResponse = new GetUserResponse();
 		userResponse.setId(usersDTO.getId());
-		userResponse.setUserType(usersDTO.getUserType());
+		userResponse.setUserTypeId(usersDTO.getUserTypeId());
 		userResponse.setName(usersDTO.getName());
 		userResponse.setMobile(usersDTO.getMobile());
 		userResponse.setEmail(usersDTO.getEmail());
 		userResponse.setClientDetailsId(usersDTO.getClientDetailsId());
+		userResponse.setStatus(usersDTO.getStatus());
 		return userResponse;
 	}
 
@@ -145,13 +165,14 @@ public class UserRequestHandler {
 		UserTypesDAO usersTypesDAO = new UserTypesDAO();
 		List<GetTypesResponse> getTypesResponses = new ArrayList<GetTypesResponse>();
 		try {
-			List<UserTypesDTO> UserTypesDTOList = usersTypesDAO
+			List<userTypesDTO> userTypesDTOList = usersTypesDAO
 					.getAllUserTypes();
 
-			for (com.mpal.dto.user.UserTypesDTO UserTypesDTO : UserTypesDTOList) {
+			for (com.mpal.dto.user.userTypesDTO userTypesDTO : userTypesDTOList) {
 				GetTypesResponse getTypesResponse = new GetTypesResponse();
-				getTypesResponse.setType(UserTypesDTO.getType());
-				getTypesResponse.setStatus(UserTypesDTO.getStatus());
+				getTypesResponse.setId(userTypesDTO.getId());
+				getTypesResponse.setType(userTypesDTO.getType());
+				getTypesResponse.setStatus(userTypesDTO.getStatus());
 				getTypesResponses.add(getTypesResponse);
 			}
 		} catch (SQLException sq) {
@@ -165,10 +186,8 @@ public class UserRequestHandler {
 	 public GetUserResponse getUserById(int id) throws SQLException,
 			UserNotFoundException {
 		UsersDAO usersDAO = new UsersDAO();
-		UserTypesDAO userTypesDAO = new UserTypesDAO();
 		GetUserResponse userResponse = buildUsersResponseFromDTO(usersDAO
 				.getUserById(id));
-		//userResponse.setUserType(userTypesDAO.getAllUserTypes());
 		return userResponse;
 	}
 
@@ -203,12 +222,13 @@ public class UserRequestHandler {
 		while(usersDTOIterator.hasNext()){
 			UsersDTO usersDTO = usersDTOIterator.next();
 			UserResponseList userResponseList = new UserResponseList(usersDTO.getId(),
-					usersDTO.getUserType(),
+					usersDTO.getUserTypeId(),
 					usersDTO.getName(),
 					usersDTO.getMobile(),
 					usersDTO.getEmail(),
 					usersDTO.getClientDetailsId(),
-					usersDTO.isVerified());
+					usersDTO.getIsVerified(),
+					usersDTO.getStatus());
 			userResponseListResponse.add(userResponseList);
 		}
 		return userResponseListResponse;
@@ -256,12 +276,12 @@ public class UserRequestHandler {
 		return isProcessed;
 	}
 
-    public List<UserResponseList> getUserByType(String type) throws SQLException,
+    public List<UserResponseList> getUserByType(int user_type_id) throws SQLException,
 				UserNotFoundException {
 			UsersDAO usersDAO = new UsersDAO();
 			List<UserResponseList> userList = new ArrayList<UserResponseList>();
 			try {
-				userList = getUserResponseListFromDTOs(usersDAO.getUserByType(type));
+				userList = getUserResponseListFromDTOs(usersDAO.getUserByTypeId(user_type_id));
 			} catch (SQLException s) {
 				s.printStackTrace();
 			} catch (AutomobileNotFoundException s) {
@@ -269,4 +289,67 @@ public class UserRequestHandler {
 			}
 			return userList;
 		}
+
+    public List<UserResponseList> getUserByService(String type, String company, String model)throws SQLException,
+			UserNotFoundException  {
+		UsersDAO usersDAO = new UsersDAO();
+		List<UserResponseList> userList = new ArrayList<UserResponseList>();
+		try {
+			userList = getUserResponseListFromDTOs(usersDAO.getUserByService(type,company,model));
+		} catch (SQLException s) {
+			s.printStackTrace();
+		} catch (AutomobileNotFoundException s) {
+			s.printStackTrace();
+		}
+		return userList;
+    }
+
+    public Boolean assignAutomobile(AssignAutomobilesRequestBO assignAutomobilesRequestBO) throws SQLException,IOException {
+
+		Boolean isCreated = Boolean.FALSE;
+		List<AutomobilesInfo> automobileInfoList = assignAutomobilesRequestBO.getAutomobilesInfoList();
+		Iterator<AutomobilesInfo> automobilesInfoIterator = automobileInfoList.iterator();
+		UserAutomobileMapDAO userAutomobileMapDAO = new UserAutomobileMapDAO();
+		try {
+			while (automobilesInfoIterator.hasNext()) {
+				AutomobilesInfo automobilesInfo = automobilesInfoIterator.next();
+				Integer userId = automobilesInfo.getUserId();
+				List<Integer> oldAssignedAutomobiles = userAutomobileMapDAO.getListOfUsers(userId);
+				List<Integer> newAssignedAutomobiles = automobilesInfo.getAutomobileDetailsIds();
+				Iterator<Integer> newAssignedAutomobilesIterator = newAssignedAutomobiles.iterator();
+				Iterator<Integer> oldAssignedAutomobilesIterator = oldAssignedAutomobiles.iterator();
+				while (newAssignedAutomobilesIterator.hasNext()){
+					Integer automobileDetailsId = newAssignedAutomobilesIterator.next();
+					if(oldAssignedAutomobiles.contains(automobileDetailsId)){
+						userAutomobileMapDAO.updateUserAutomobileMapping(automobileDetailsId, userId, "A");
+					}else{
+						userAutomobileMapDAO.insertUserAutomobileMapping(userId, automobileDetailsId);
+					}
+				}
+
+				while (oldAssignedAutomobilesIterator.hasNext()){
+					Integer automobileDetailsId = oldAssignedAutomobilesIterator.next();
+					if(!newAssignedAutomobiles.contains(automobileDetailsId)){
+						userAutomobileMapDAO.updateUserAutomobileMapping(automobileDetailsId, userId, "I");
+					}
+				}
+				isCreated = Boolean.TRUE;
+
+			}
+		} catch (SQLException s) {
+			s.printStackTrace();
+			isCreated = Boolean.FALSE;
+		} catch (IOException e) {
+			e.printStackTrace();
+			isCreated = Boolean.FALSE;
+		}
+		return isCreated;
+	}
+
+	/*public Boolean assignServices(AssignServicesRequestBO assignServicesRequestBO) throws SQLException, IOException {
+		Boolean isCreated = Boolean.FALSE;
+		List<ServiceInfo> serviceInfoList = assignServicesRequestBO.getServiceInfoList();
+		Iterator<ServiceInfo> serviceInfoIterator = serviceInfoList.iterator();
+		UserServiceMapDAO userServiceMapDAO = new UserServiceMapDAO();
+	}*/
 }

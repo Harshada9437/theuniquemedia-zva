@@ -4,12 +4,20 @@ package com.mpal.dto.automobile;
  * Created by System1 on 8/6/2016.
  */
 public class AutomobileDTO {
-
+    private int id;
     private String company;
     private String model;
     private String builtYear;
     private int automobiletypeId;
     private String status;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getCompany() { return  company; }
 
@@ -47,39 +55,42 @@ public class AutomobileDTO {
         this.automobiletypeId=automobiletypeId;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof AutomobileDTO)) return false;
 
-        AutomobileDTO automobilesDTO = (AutomobileDTO) o;
-        if (company != null ? !company.equals(automobilesDTO.company) : automobilesDTO.company != null) return false;
-        if (model != null ? !model.equals(automobilesDTO.model) : automobilesDTO.model != null) return false;
-        if (builtYear != null ? !builtYear.equals(automobilesDTO.builtYear) : automobilesDTO.builtYear != null) return false;
-        if (status != null ? !status.equals(automobilesDTO.status) : automobilesDTO.status != null) return false;
-        return (automobiletypeId != automobilesDTO.automobiletypeId);
+        AutomobileDTO that = (AutomobileDTO) o;
+
+        if (id != that.id) return false;
+        if (automobiletypeId != that.automobiletypeId) return false;
+        if (company != null ? !company.equals(that.company) : that.company != null) return false;
+        if (model != null ? !model.equals(that.model) : that.model != null) return false;
+        if (builtYear != null ? !builtYear.equals(that.builtYear) : that.builtYear != null) return false;
+        return status != null ? status.equals(that.status) : that.status == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + (company != null ? company.hashCode() : 0);
+        result = 31 * result + (model != null ? model.hashCode() : 0);
+        result = 31 * result + (builtYear != null ? builtYear.hashCode() : 0);
+        result = 31 * result + automobiletypeId;
+        result = 31 * result + (status != null ? status.hashCode() : 0);
+        return result;
     }
 
     @Override
     public String toString() {
         return "AutomobileDTO{" +
-                "company=" + company + '\'' +
-                "model=" + model + '\'' +
-                ", builtYear=" + builtYear + '\'' +
+                "id=" + id +
+                ", company='" + company + '\'' +
+                ", model='" + model + '\'' +
+                ", builtYear='" + builtYear + '\'' +
                 ", automobiletypeId=" + automobiletypeId +
-                ", status=" + status + '\'' +
+                ", status='" + status + '\'' +
                 '}';
-    }
-
-    @Override
-    public int hashCode() {
-        int result = 1;
-        result = 31 * result + (company != null ? company.hashCode() : 0);
-        result = 31 * result + (model != null ? model.hashCode() : 0);
-        result = 31 * result + (builtYear != null ? builtYear.hashCode() : 0);
-        result = 31 * result + (status != null ? status.hashCode() : 0);
-        result = 31 * result + automobiletypeId;
-        return result;
     }
 }
