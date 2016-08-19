@@ -1,6 +1,6 @@
 package com.mpal.dao.user;
 
-import com.mpal.dto.user.userTypesDTO;
+import com.mpal.dto.user.UserTypesDTO;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -9,5 +9,5 @@ import java.util.List;
  * Created by Hp on 07-02-2016.
  */
 public interface IUserTypesDAO {
-	List<userTypesDTO> getAllUserTypes() throws SQLException;
+	List<UserTypesDTO> getAllUserTypes() throws SQLException;
 }

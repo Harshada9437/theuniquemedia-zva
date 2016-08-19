@@ -12,7 +12,7 @@ import com.mpal.bo.response.LoginResponseBO;
 import com.mpal.dao.user.UserTypesDAO;
 import com.mpal.dao.user.UsersDAO;
 import com.mpal.dto.user.LoginResponseDTO;
-import com.mpal.dto.user.userTypesDTO;
+import com.mpal.dto.user.UserTypesDTO;
 import com.mpal.dto.user.UsersDTO;
 import com.mpal.exceptions.AutomobileServiceExceptions.AutomobileNotFoundException;
 import com.mpal.exceptions.userServiceExceptions.UserNotFoundException;
@@ -145,13 +145,13 @@ public class UserRequestHandler {
 		UserTypesDAO usersTypesDAO = new UserTypesDAO();
 		List<GetTypesResponse> getTypesResponses = new ArrayList<GetTypesResponse>();
 		try {
-			List<userTypesDTO> userTypesDTOList = usersTypesDAO
+			List<UserTypesDTO> UserTypesDTOList = usersTypesDAO
 					.getAllUserTypes();
 
-			for (com.mpal.dto.user.userTypesDTO userTypesDTO : userTypesDTOList) {
+			for (com.mpal.dto.user.UserTypesDTO UserTypesDTO : UserTypesDTOList) {
 				GetTypesResponse getTypesResponse = new GetTypesResponse();
-				getTypesResponse.setType(userTypesDTO.getType());
-				getTypesResponse.setStatus(userTypesDTO.getStatus());
+				getTypesResponse.setType(UserTypesDTO.getType());
+				getTypesResponse.setStatus(UserTypesDTO.getStatus());
 				getTypesResponses.add(getTypesResponse);
 			}
 		} catch (SQLException sq) {

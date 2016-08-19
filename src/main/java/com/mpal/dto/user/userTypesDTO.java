@@ -1,6 +1,6 @@
 package com.mpal.dto.user;
 
-public class userTypesDTO {
+public class UserTypesDTO {
     private String type;
     private String status;
 
@@ -28,25 +28,15 @@ public class userTypesDTO {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        userTypesDTO other = (userTypesDTO) obj;
-        if (type == null) {
-            if (other.type != null)
-                return false;
-        } else if (!type.equals(other.type))
-            return false;
-        if (status == null) {
-            if (other.status != null)
-                return false;
-        } else if (!status.equals(other.status))
-            return false;
-        return true;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        UserTypesDTO that = (UserTypesDTO) o;
+
+        if (type != null ? !type.equals(that.type) : that.type != null) return false;
+        return status != null ? status.equals(that.status) : that.status == null;
+
     }
 
     @Override
