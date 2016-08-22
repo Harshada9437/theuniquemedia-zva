@@ -11,7 +11,6 @@ import javax.ws.rs.core.Response;
 import com.mpal.bo.request.user.*;
 import com.mpal.dao.user.UsersDAO;
 import com.mpal.dto.user.UsersDTO;
-import com.mpal.exceptions.AutomobileServiceExceptions.AutomobileNotFoundException;
 import com.mpal.rest.request.user.AssignAutomobilesRequest;
 import com.mpal.rest.response.user.*;
 import com.mpal.bo.response.LoginResponseBO;
@@ -74,8 +73,13 @@ public class UsersService {
         RegistrationRequestBO registrationRequestBO = new RegistrationRequestBO();
         registrationRequestBO.setUserTypeId(registrationRequest.getUserTypeId());
         registrationRequestBO.setName(registrationRequest.getName());
+        registrationRequestBO.setAddress(registrationRequest.getAddress());
         registrationRequestBO.setMobile(registrationRequest.getMobile());
         registrationRequestBO.setEmail(registrationRequest.getEmail());
+        registrationRequestBO.setGender(registrationRequest.getGender());
+        registrationRequestBO.setDOB(registrationRequest.getDob());
+        registrationRequestBO.setLatitude(registrationRequest.getLatitude());
+        registrationRequestBO.setLongitude(registrationRequest.getLongitude());
         registrationRequestBO.setPassword(registrationRequest.getPassword());
         registrationRequestBO.setClientDetailsId(registrationRequest.getClientDetailsId());
 
@@ -123,8 +127,13 @@ public class UsersService {
         UpdaterUserBO updateRequestBO = new UpdaterUserBO();
         updateRequestBO.setId(updateUser.getId());
         updateRequestBO.setName(updateUser.getName());
+        updateRequestBO.setAddress(updateUser.getAddress());
         updateRequestBO.setMobile(updateUser.getMobile());
         updateRequestBO.setEmail(updateUser.getEmail());
+        updateRequestBO.setGender(updateUser.getGender());
+        updateRequestBO.setDOB(updateUser.getDOB());
+        updateRequestBO.setLatitude(updateUser.getLatitude());
+        updateRequestBO.setLongitude(updateUser.getLongitude());
         updateRequestBO.setStatus(updateUser.getStatus());
 
         UserRequestHandler userRequestHandler = new UserRequestHandler();
@@ -308,7 +317,7 @@ public class UsersService {
            /* if (sessionId != null && RequestValidation.isRequestValid(sessionId)) {*/
              UserRequestHandler userRequestHandler = new UserRequestHandler();
              AssignAutomobilesRequestBO assignAutomobilesRequestBO = new AssignAutomobilesRequestBO();
-             assignAutomobilesRequestBO.setAutomobilesInfoList(assignAutomobilesRequest.getAutomobilesInfoList());
+             assignAutomobilesRequestBO.setAutomobileInfoList(assignAutomobilesRequest.getAutomobilesInfoList());
              Boolean isCreated = userRequestHandler.assignAutomobile(assignAutomobilesRequestBO);
              AssignAutomobilesResponse assignAutomobilesResponse = new AssignAutomobilesResponse();
              if (isCreated) {
@@ -320,22 +329,21 @@ public class UsersService {
              }
 
              return ResponseGenerator.generateResponse(assignAutomobilesResponse);
-//            } else {
-//                return ResponseGenerator.generateResponse(RequestValidation.getUnautheticatedResponse());
-//            }
-        }
+           }/* else {
+              return ResponseGenerator.generateResponse(RequestValidation.getUnautheticatedResponse());
+           }*/
 
     @POST
     @Path("/{user_type_id}/assignServices")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public void assignMechanicsForServices(AssignServicesRequest assignServicesRequest, @PathParam ("user_type_id") int user_type_id
-                                                 /* , @HeaderParam("sessionId") String sessionId*/) {
+    public Response assignMechanicsForServices(AssignServicesRequest assignServicesRequest, @PathParam ("user_type_id") int user_type_id
+                                                  /* ,@HeaderParam("sessionId") String sessionId*/) throws IOException, SQLException {
            /* if (sessionId != null && RequestValidation.isRequestValid(sessionId)) {*/
         UserRequestHandler userRequestHandler = new UserRequestHandler();
         AssignServicesRequestBO assignServicesRequestBO = new AssignServicesRequestBO();
         assignServicesRequestBO.setServiceInfoList(assignServicesRequest.getServiceInfoList());
-        /*Boolean isCreated = userRequestHandler.assignServices(assignServicesRequestBO);
+        Boolean isCreated = userRequestHandler.assignServices(assignServicesRequestBO);
         AssignServicesResponse assignServicesResponse = new AssignServicesResponse();
         if (isCreated) {
             assignServicesResponse.setMessageType("SUCCESS");
@@ -343,11 +351,10 @@ public class UsersService {
         } else {
             assignServicesResponse.setMessageType("FAILURE");
             assignServicesResponse.setMessage("services cann't be assigned.");
-        }*/
+        }
 
-        //return ResponseGenerator.generateResponse(assignServicesResponse);
-           /* } else {
+        return ResponseGenerator.generateResponse(assignServicesResponse);
+            } /*else {
                return ResponseGenerator.generateResponse(RequestValidation.getUnautheticatedResponse());
            }*/
-    }
 }

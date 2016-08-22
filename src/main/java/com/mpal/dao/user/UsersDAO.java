@@ -31,11 +31,16 @@ public class UsersDAO {
             connection = new ConnectionPool().getConnection();
             connection.setAutoCommit(false);
             preparedStatement = connection
-                    .prepareStatement("INSERT INTO users(user_type_id, name, mobile, email, password, client_details_id) VALUES (?,?,?,?,?,?)");
+                    .prepareStatement("INSERT INTO users(user_type_id, address, name, mobile, email, gender, DOB, latitude, longitude, password, client_details_id) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
             preparedStatement.setInt(parameterIndex++, usersDTO.getUserTypeId());
             preparedStatement.setString(parameterIndex++, usersDTO.getName());
+            preparedStatement.setString(parameterIndex++, usersDTO.getAddress());
             preparedStatement.setString(parameterIndex++, usersDTO.getMobile());
             preparedStatement.setString(parameterIndex++, usersDTO.getEmail());
+            preparedStatement.setString(parameterIndex++, usersDTO.getGender());
+            preparedStatement.setString(parameterIndex++,(usersDTO.getDOB()));
+            preparedStatement.setString(parameterIndex++, usersDTO.getLatitude());
+            preparedStatement.setString(parameterIndex++, usersDTO.getLongitude());
             preparedStatement.setString(parameterIndex++,
                     usersDTO.getPassword());
             preparedStatement.setInt(parameterIndex++, usersDTO.getClientDetailsId());
@@ -115,7 +120,7 @@ public class UsersDAO {
             connection = new ConnectionPool().getConnection();
             connection.setAutoCommit(false);
             preparedStatement = connection
-                    .prepareStatement("UPDATE users SET name =? , mobile =? ,  email =? , status =? WHERE id =?;");
+                    .prepareStatement("UPDATE users SET name =? , mobile =? ,  email =? , status =? , address=? , latitude=? , longitude=? , gender=? , DOB=? WHERE id =?;");
 
             preparedStatement.setString(parameterIndex++, updateUserBO.getName());
 
@@ -125,9 +130,18 @@ public class UsersDAO {
 
             preparedStatement.setString(parameterIndex++, updateUserBO.getStatus());
 
+            preparedStatement.setString(parameterIndex++, updateUserBO.getAddress());
+
+            preparedStatement.setString(parameterIndex++, updateUserBO.getLatitude());
+
+            preparedStatement.setString(parameterIndex++, updateUserBO.getLongitude());
+
+            preparedStatement.setString(parameterIndex++, updateUserBO.getGender());
+
+            preparedStatement.setString(parameterIndex++, updateUserBO.getDOB());
+
             preparedStatement.setInt(parameterIndex++, updateUserBO.getId());
 
-    System.out.println("::::::" + preparedStatement);
             int i = preparedStatement.executeUpdate();
             if (i > 0) {
                 connection.commit();
@@ -270,8 +284,13 @@ public class UsersDAO {
                 usersDTO.setId(resultSet.getInt("id"));
                 usersDTO.setUserTypeId(resultSet.getInt("user_type_id"));
                 usersDTO.setName(resultSet.getString("name"));
+                usersDTO.setAddress(resultSet.getString("address"));
                 usersDTO.setMobile(resultSet.getString("mobile"));
                 usersDTO.setEmail(resultSet.getString("email"));
+                usersDTO.setGender(resultSet.getString("gender"));
+                usersDTO.setDOB(resultSet.getString("DOB"));
+                usersDTO.setLatitude(resultSet.getString("latitude"));
+                usersDTO.setLongitude(resultSet.getString("longitude"));
                 usersDTO.setPassword(resultSet.getString("password"));
                 usersDTO.setClientDetailsId(resultSet.getInt("client_details_id"));
                 usersDTO.setStatus(resultSet.getString("status"));
@@ -312,8 +331,13 @@ public class UsersDAO {
                 usersDTO.setId(resultSet.getInt("id"));
                 usersDTO.setUserTypeId(resultSet.getInt("user_type_id"));
                 usersDTO.setName( resultSet.getString("name"));
+                usersDTO.setAddress( resultSet.getString("address"));
                 usersDTO.setMobile( resultSet.getString("mobile"));
                 usersDTO.setEmail( resultSet.getString("email"));
+                usersDTO.setGender( resultSet.getString("gender"));
+                usersDTO.setDOB( resultSet.getString("DOB"));
+                usersDTO.setLatitude( resultSet.getString("latitude"));
+                usersDTO.setLongitude( resultSet.getString("longitude"));
                 usersDTO.setPassword(resultSet.getString("password"));
                 usersDTO.setClientDetailsId(resultSet.getInt("client_details_id"));
                 usersDTO.setStatus(resultSet.getString("status"));
@@ -476,8 +500,13 @@ public class UsersDAO {
                     UsersDTO usersDTO = new UsersDTO();
                     usersDTO.setId(resultSet.getInt("id"));
                     usersDTO.setName(resultSet.getString("name"));
+                    usersDTO.setAddress(resultSet.getString("address"));
                     usersDTO.setMobile(resultSet.getString("mobile"));
                     usersDTO.setEmail(resultSet.getString("email"));
+                    usersDTO.setGender(resultSet.getString("gender"));
+                    usersDTO.setDOB(resultSet.getString("DOB"));
+                    usersDTO.setLatitude(resultSet.getString("latitude"));
+                    usersDTO.setLongitude(resultSet.getString("longitude"));
                     usersDTO.setUserTypeId(resultSet.getInt("user_type_id"));
                     usersDTO.setClientDetailsId(resultSet.getInt("client_details_id"));
                     usersDTO.setStatus(resultSet.getString("status"));
@@ -502,85 +531,4 @@ public class UsersDAO {
             return userTypeResponseList;
         }
 
-    public List<UsersDTO> getUserByService(String type, String company, String model) throws SQLException,
-    UserNotFoundException{
-        Connection connection = null;
-        Statement statement = null;
-        List<UsersDTO> userResponseList=new ArrayList<UsersDTO>();
-        try {
-            connection = new ConnectionPool().getConnection();
-            statement = connection.createStatement();
-            StringBuilder query = new StringBuilder(
-                    "SELECT users.name, users.email, users.mobile, users.type FROM users INNER JOIN automobile_details_user_map ON users.id=automobile_details_user_map.user_id;");
-            ResultSet resultSet = statement.executeQuery(query.toString()
-                    .trim());
-            int index = 1;
-            while (resultSet.next()) {
-                UsersDTO usersDTO = new UsersDTO();
-                usersDTO.setName(resultSet.getString("name"));
-                usersDTO.setMobile(resultSet.getString("mobile"));
-                usersDTO.setEmail(resultSet.getString("email"));
-                index++;
-                userResponseList.add(usersDTO);
-            }
-            if (index == 1) {
-                throw new UserNotFoundException("Invalid user");
-            }
-
-        } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
-        } finally {
-            try {
-                statement.close();
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return userResponseList;
-    }
-
-    /*public UsersDTO getUserByStatus() throws SQLException, UserNotFoundException{
-        Connection connection = null;
-        Statement statement = null;
-        UsersDTO usersDTO = null;
-        try {
-            connection = new ConnectionPool().getConnection();
-            statement = connection.createStatement();
-            StringBuilder query = new StringBuilder(
-                    "SELECT * FROM users where id = ").append(id);
-            ResultSet resultSet = statement.executeQuery(query.toString()
-                    .trim());
-
-            usersDTO = new UsersDTO();
-            int index = 1;
-            while (resultSet.next()) {
-                usersDTO.setId(resultSet.getInt("id"));
-                usersDTO.setUserTypeId(resultSet.getInt("user_type_id"));
-                usersDTO.setName(resultSet.getString("name"));
-                usersDTO.setMobile(resultSet.getString("mobile"));
-                usersDTO.setEmail(resultSet.getString("email"));
-                usersDTO.setPassword(resultSet.getString("password"));
-                usersDTO.setClientDetailsId(resultSet.getInt("client_details_id"));
-                usersDTO.setStatus(resultSet.getString("status"));
-                index++;
-            }
-
-            if (index == 1) {
-                throw new UserNotFoundException("Invalid user");
-            }
-
-        } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
-        } finally {
-            try {
-                statement.close();
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return usersDTO;
-    }*/
 }

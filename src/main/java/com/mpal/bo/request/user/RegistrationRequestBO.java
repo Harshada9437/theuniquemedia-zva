@@ -1,12 +1,25 @@
 package com.mpal.bo.request.user;
 
 public class RegistrationRequestBO {
-	private int usertypeid;
 	private String name;
-	private String mobile;
+	private String address;
+	private  String mobile;
 	private String email;
+	private  String gender;
+	private String DOB;
+	private String latitude;
+	private String longitude;
 	private String password;
-	private int clientdetailsId;
+	private int usertypeid;
+	private int clientDetailsId;
+
+	public int getClientDetailsId() {
+		return clientDetailsId;
+	}
+
+	public void setClientDetailsId(int clientDetailsId) {
+		this.clientDetailsId = clientDetailsId;
+	}
 
 	public String getName() {
 		return name;
@@ -14,6 +27,14 @@ public class RegistrationRequestBO {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 	public String getMobile() {
@@ -24,13 +45,44 @@ public class RegistrationRequestBO {
 		this.mobile = mobile;
 	}
 
-
 	public String getEmail() {
 		return email;
 	}
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public String getDOB() {
+		return DOB;
+	}
+
+	public void setDOB(String DOB) {
+		this.DOB = DOB;
+	}
+
+	public String getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(String latitude) {
+		this.latitude = latitude;
+	}
+
+	public String getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(String longitude) {
+		this.longitude = longitude;
 	}
 
 	public String getPassword() {
@@ -41,53 +93,65 @@ public class RegistrationRequestBO {
 		this.password = password;
 	}
 
-	public int getUserTypeId() { return usertypeid; }
+	public int getUserTypeId() {
+		return usertypeid;
+	}
 
 	public void setUserTypeId(int usertypeid) {
 		this.usertypeid = usertypeid;
 	}
 
-	public int getClientDetailsId() { return clientdetailsId; }
-
-	public void setClientDetailsId(int clientdetailsId) {
-		this.clientdetailsId = clientdetailsId;
-	}
-
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
+		if (!(o instanceof RegistrationRequestBO)) return false;
 
 		RegistrationRequestBO that = (RegistrationRequestBO) o;
+
 		if (usertypeid != that.usertypeid) return false;
+		if (clientDetailsId != that.clientDetailsId) return false;
 		if (name != null ? !name.equals(that.name) : that.name != null) return false;
+		if (address != null ? !address.equals(that.address) : that.address != null) return false;
 		if (mobile != null ? !mobile.equals(that.mobile) : that.mobile != null) return false;
 		if (email != null ? !email.equals(that.email) : that.email != null) return false;
-		if (password != null ? !password.equals(that.password) : that.password != null) return false;
-		return (clientdetailsId != that.clientdetailsId);
+		if (gender != null ? !gender.equals(that.gender) : that.gender != null) return false;
+		if (DOB != null ? !DOB.equals(that.DOB) : that.DOB != null) return false;
+		if (latitude != null ? !latitude.equals(that.latitude) : that.latitude != null) return false;
+		if (longitude != null ? !longitude.equals(that.longitude) : that.longitude != null) return false;
+		return password != null ? password.equals(that.password) : that.password == null;
+
 	}
 
 	@Override
 	public int hashCode() {
-		int result= 1;
-		result = 31 * result + usertypeid;
-		result = 31 * result + (name != null ? name.hashCode() : 0);
+		int result = name != null ? name.hashCode() : 0;
+		result = 31 * result + (address != null ? address.hashCode() : 0);
 		result = 31 * result + (mobile != null ? mobile.hashCode() : 0);
 		result = 31 * result + (email != null ? email.hashCode() : 0);
+		result = 31 * result + (gender != null ? gender.hashCode() : 0);
+		result = 31 * result + (DOB != null ? DOB.hashCode() : 0);
+		result = 31 * result + (latitude != null ? latitude.hashCode() : 0);
+		result = 31 * result + (longitude != null ? longitude.hashCode() : 0);
 		result = 31 * result + (password != null ? password.hashCode() : 0);
-		result = 31 * result + clientdetailsId;
+		result = 31 * result + usertypeid;
+		result = 31 * result + clientDetailsId;
 		return result;
 	}
 
 	@Override
 	public String toString() {
 		return "RegistrationRequestBO{" +
-				"userTypeId='" + usertypeid  +
-				", name='" + name + '\'' +
+				"name='" + name + '\'' +
+				", address='" + address + '\'' +
 				", mobile='" + mobile + '\'' +
 				", email='" + email + '\'' +
+				", gender='" + gender + '\'' +
+				", DOB=" + DOB +
+				", latitude='" + latitude + '\'' +
+				", longitude='" + longitude + '\'' +
 				", password='" + password + '\'' +
-				", clientDetailsId=" + clientdetailsId +
+				", userTypeId=" + usertypeid +
+				", clientDetailsId=" + clientDetailsId +
 				'}';
 	}
 }

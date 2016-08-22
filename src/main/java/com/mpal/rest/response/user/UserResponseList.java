@@ -2,39 +2,45 @@ package com.mpal.rest.response.user;
 
 public class UserResponseList {
 	private int id;
-	private int usertypeid;
 	private String name;
-	private String mobile;
+	private String address;
+	private  String mobile;
 	private String email;
-	private int clientdetailsId;
-	private String isVerified;
+	private  String gender;
+	private String DOB;
+	private String latitude;
+	private String longitude;
+	private int usertypeid;
+	private int clientDetailsId;
+	private  String isVerified;
 	private String status;
 
-	public UserResponseList(int id, int usertypeid, String name, String mobile, String email, int clientdetailsId, String isVerified, String status) {
+	public UserResponseList(int id, String name, String address, String mobile, String email, String gender, String DOB, String latitude, String longitude, int usertypeid, int clientDetailsId,String isVerified,String status) {
 		this.id = id;
-		this.usertypeid = usertypeid;
-		this.name=name;
-		this.mobile=mobile;
+		this.name = name;
+		this.address = address;
+		this.mobile = mobile;
 		this.email = email;
-		this.clientdetailsId = clientdetailsId;
-		this.isVerified = isVerified;
+		this.gender = gender;
+		this.DOB = DOB;
+		this.latitude = latitude;
+		this.longitude = longitude;
+		this.usertypeid = usertypeid;
+		this.clientDetailsId = clientDetailsId;
+		this.isVerified=isVerified;
 		this.status=status;
 	}
 
-	public String getIsVerified() {
-		return isVerified;
-	}
-
-	public int getUserTypeId() {
-		return usertypeid;
-	}
-
-	public int getClientDetailsId() {
-		return clientdetailsId;
+	public int getId() {
+		return id;
 	}
 
 	public String getName() {
 		return name;
+	}
+
+	public String getAddress() {
+		return address;
 	}
 
 	public String getMobile() {
@@ -45,19 +51,52 @@ public class UserResponseList {
 		return email;
 	}
 
-	public int getId() {return id;}
+	public String getGender() {
+		return gender;
+	}
 
-	public String getStatus() {return status;}
+	public String getDOB() {
+		return DOB;
+	}
+
+	public String getLatitude() {
+		return latitude;
+	}
+
+	public String getLongitude() {
+		return longitude;
+	}
+
+	public int getUserTypeId() {
+		return usertypeid;
+	}
+
+	public int getClientDetailsId() {
+		return clientDetailsId;
+	}
+
+	public String getIsVerified() {
+		return isVerified;
+	}
+
+	public String getStatus() {
+		return status;
+	}
 
 	@Override
 	public String toString() {
 		return "UserResponseList{" +
 				"id=" + id +
-				", userTypeId=" + usertypeid +
 				", name='" + name + '\'' +
+				", address='" + address + '\'' +
 				", mobile='" + mobile + '\'' +
 				", email='" + email + '\'' +
-				", clientdetailsId=" + clientdetailsId +
+				", gender='" + gender + '\'' +
+				", DOB='" + DOB + '\'' +
+				", latitude='" + latitude + '\'' +
+				", longitude='" + longitude + '\'' +
+				", userTypeId=" + usertypeid +
+				", clientDetailsId=" + clientDetailsId +
 				", isVerified='" + isVerified + '\'' +
 				", status='" + status + '\'' +
 				'}';

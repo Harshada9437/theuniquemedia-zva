@@ -2,11 +2,16 @@ package com.mpal.rest.response.user;
 
 public class GetUserResponse {
 	private int id;
-	private int usertypeid;
 	private String name;
+	private String address;
 	private String mobile;
 	private String email;
-	private int clientdetailsId;
+	private String gender;
+	private String DOB;
+	private String latitude;
+	private String longitude;
+	private int usertypeid;
+	private int clientDetailsId;
 	private String status;
 	private String messagetype;
 
@@ -16,14 +21,6 @@ public class GetUserResponse {
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public int getClientDetailsId() {
-		return clientdetailsId;
-	}
-
-	public void setClientDetailsId(int clientdetailsId) {
-		this.clientdetailsId = clientdetailsId;
 	}
 
 	public String getMessageType() {
@@ -77,17 +74,70 @@ public class GetUserResponse {
 		this.status = status;
 	}
 
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public String getDOB() {
+		return DOB;
+	}
+
+	public void setDOB(String DOB) {
+		this.DOB = DOB;
+	}
+
+	public String getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(String latitude) {
+		this.latitude = latitude;
+	}
+
+	public String getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(String longitude) {
+		this.longitude = longitude;
+	}
+
+	public int getClientDetailsId() {
+		return clientDetailsId;
+	}
+
+	public void setClientDetailsId(int clientDetailsId) {
+		this.clientDetailsId = clientDetailsId;
+	}
+
 	@Override
 	public String toString() {
 		return "GetUserResponse{" +
 				"id=" + id +
-				", userTypeId='" + usertypeid + '\'' +
 				", name='" + name + '\'' +
+				", address='" + address + '\'' +
 				", mobile='" + mobile + '\'' +
 				", email='" + email + '\'' +
-				", clientdetailsId=" + clientdetailsId +
-				", status=" + status + '\'' +
-				", messagaeType=" + messagetype + '\'' +
+				", gender='" + gender + '\'' +
+				", DOB='" + DOB + '\'' +
+				", latitude='" + latitude + '\'' +
+				", longitude='" + longitude + '\'' +
+				", usertypeid=" + usertypeid +
+				", clientDetailsId=" + clientDetailsId +
+				", status='" + status + '\'' +
+				", messageType='" + messagetype + '\'' +
 				'}';
 	}
 }

@@ -1,10 +1,21 @@
 package com.mpal.dto.user;
 
 public class UserTypesDTO {
+    private int id;
     private String type;
     private String status;
 
-    public String getType() {return type;}
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getType() {
+        return type;
+    }
 
     public void setType(String type) {
         this.type = type;
@@ -19,29 +30,32 @@ public class UserTypesDTO {
     }
 
     @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((type == null) ? 0 : type.hashCode());
-        result = prime * result + ((status == null) ? 0 : status.hashCode());
-        return result;
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof UserTypesDTO)) return false;
 
         UserTypesDTO that = (UserTypesDTO) o;
 
+        if (id != that.id) return false;
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
         return status != null ? status.equals(that.status) : that.status == null;
 
     }
 
     @Override
-    public String toString() {
-        return "UserTypesDTO [type=" + type + '\'' + " status=" + status + '\'' + "]";
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (status != null ? status.hashCode() : 0);
+        return result;
     }
 
+    @Override
+    public String toString() {
+        return "UserTypesDTO{" +
+                "id=" + id +
+                ", type='" + type + '\'' +
+                ", status='" + status + '\'' +
+                '}';
+    }
 }

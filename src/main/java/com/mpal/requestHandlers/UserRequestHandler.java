@@ -14,7 +14,7 @@ import com.mpal.dao.user.UserServiceMapDAO;
 import com.mpal.dao.user.UserTypesDAO;
 import com.mpal.dao.user.UsersDAO;
 import com.mpal.dto.user.LoginResponseDTO;
-import com.mpal.dto.user.userTypesDTO;
+import com.mpal.dto.user.UserTypesDTO;
 import com.mpal.dto.user.UsersDTO;
 import com.mpal.exceptions.AutomobileServiceExceptions.AutomobileNotFoundException;
 import com.mpal.exceptions.userServiceExceptions.UserNotFoundException;
@@ -76,20 +76,6 @@ public class UserRequestHandler {
 		return isProcessed;
 	}
 
-	public Boolean activeUser(Integer userId) {
-
-		Boolean isProcessed = Boolean.FALSE;
-		UsersDAO usersDAO = new UsersDAO();
-		try {
-			UsersDTO userDTO = usersDAO.getUserById(userId);
-			if(userDTO.getStatus()=="A")
-				isProcessed = Boolean.TRUE;
-		} catch (SQLException sq) {
-			isProcessed = false;
-		}
-		return isProcessed;
-	}
-
 	public Boolean verifyUser(Integer userId) {
 
 		Boolean isProcessed = Boolean.FALSE;
@@ -142,8 +128,13 @@ public class UserRequestHandler {
 		UsersDTO usersDTO = new UsersDTO();
 		usersDTO.setUserTypeId(requestBO.getUserTypeId());
 		usersDTO.setName(requestBO.getName());
+		usersDTO.setAddress(requestBO.getAddress());
 		usersDTO.setMobile(requestBO.getMobile());
 		usersDTO.setEmail(requestBO.getEmail());
+		usersDTO.setGender(requestBO.getGender());
+		usersDTO.setDOB(requestBO.getDOB());
+		usersDTO.setLatitude(requestBO.getLatitude());
+		usersDTO.setLongitude(requestBO.getLongitude());
 		usersDTO.setPassword(requestBO.getPassword());
 		usersDTO.setClientDetailsId(requestBO.getClientDetailsId());
 		return usersDTO;
@@ -154,8 +145,13 @@ public class UserRequestHandler {
 		userResponse.setId(usersDTO.getId());
 		userResponse.setUserTypeId(usersDTO.getUserTypeId());
 		userResponse.setName(usersDTO.getName());
+		userResponse.setAddress(usersDTO.getAddress());
 		userResponse.setMobile(usersDTO.getMobile());
 		userResponse.setEmail(usersDTO.getEmail());
+		userResponse.setGender(usersDTO.getGender());
+		userResponse.setDOB(usersDTO.getDOB());
+		userResponse.setLatitude(usersDTO.getLatitude());
+		userResponse.setLongitude(usersDTO.getLongitude());
 		userResponse.setClientDetailsId(usersDTO.getClientDetailsId());
 		userResponse.setStatus(usersDTO.getStatus());
 		return userResponse;
@@ -165,10 +161,10 @@ public class UserRequestHandler {
 		UserTypesDAO usersTypesDAO = new UserTypesDAO();
 		List<GetTypesResponse> getTypesResponses = new ArrayList<GetTypesResponse>();
 		try {
-			List<userTypesDTO> userTypesDTOList = usersTypesDAO
+			List<UserTypesDTO> userTypesDTOList = usersTypesDAO
 					.getAllUserTypes();
 
-			for (com.mpal.dto.user.userTypesDTO userTypesDTO : userTypesDTOList) {
+			for (com.mpal.dto.user.UserTypesDTO userTypesDTO : userTypesDTOList) {
 				GetTypesResponse getTypesResponse = new GetTypesResponse();
 				getTypesResponse.setId(userTypesDTO.getId());
 				getTypesResponse.setType(userTypesDTO.getType());
@@ -222,10 +218,15 @@ public class UserRequestHandler {
 		while(usersDTOIterator.hasNext()){
 			UsersDTO usersDTO = usersDTOIterator.next();
 			UserResponseList userResponseList = new UserResponseList(usersDTO.getId(),
-					usersDTO.getUserTypeId(),
 					usersDTO.getName(),
+					usersDTO.getAddress(),
 					usersDTO.getMobile(),
 					usersDTO.getEmail(),
+					usersDTO.getGender(),
+					usersDTO.getDOB(),
+					usersDTO.getLatitude(),
+					usersDTO.getLongitude(),
+					usersDTO.getUserTypeId(),
 					usersDTO.getClientDetailsId(),
 					usersDTO.getIsVerified(),
 					usersDTO.getStatus());
@@ -290,31 +291,17 @@ public class UserRequestHandler {
 			return userList;
 		}
 
-    public List<UserResponseList> getUserByService(String type, String company, String model)throws SQLException,
-			UserNotFoundException  {
-		UsersDAO usersDAO = new UsersDAO();
-		List<UserResponseList> userList = new ArrayList<UserResponseList>();
-		try {
-			userList = getUserResponseListFromDTOs(usersDAO.getUserByService(type,company,model));
-		} catch (SQLException s) {
-			s.printStackTrace();
-		} catch (AutomobileNotFoundException s) {
-			s.printStackTrace();
-		}
-		return userList;
-    }
-
     public Boolean assignAutomobile(AssignAutomobilesRequestBO assignAutomobilesRequestBO) throws SQLException,IOException {
 
 		Boolean isCreated = Boolean.FALSE;
-		List<AutomobilesInfo> automobileInfoList = assignAutomobilesRequestBO.getAutomobilesInfoList();
+		List<AutomobilesInfo> automobileInfoList = assignAutomobilesRequestBO.getAutomobileInfoList();
 		Iterator<AutomobilesInfo> automobilesInfoIterator = automobileInfoList.iterator();
 		UserAutomobileMapDAO userAutomobileMapDAO = new UserAutomobileMapDAO();
 		try {
 			while (automobilesInfoIterator.hasNext()) {
 				AutomobilesInfo automobilesInfo = automobilesInfoIterator.next();
 				Integer userId = automobilesInfo.getUserId();
-				List<Integer> oldAssignedAutomobiles = userAutomobileMapDAO.getListOfUsers(userId);
+				List<Integer> oldAssignedAutomobiles = userAutomobileMapDAO.getListOfAutomobiles(userId,null);
 				List<Integer> newAssignedAutomobiles = automobilesInfo.getAutomobileDetailsIds();
 				Iterator<Integer> newAssignedAutomobilesIterator = newAssignedAutomobiles.iterator();
 				Iterator<Integer> oldAssignedAutomobilesIterator = oldAssignedAutomobiles.iterator();
@@ -323,7 +310,7 @@ public class UserRequestHandler {
 					if(oldAssignedAutomobiles.contains(automobileDetailsId)){
 						userAutomobileMapDAO.updateUserAutomobileMapping(automobileDetailsId, userId, "A");
 					}else{
-						userAutomobileMapDAO.insertUserAutomobileMapping(userId, automobileDetailsId);
+						userAutomobileMapDAO.insertUserAutomobileMapping(automobileDetailsId, userId);
 					}
 				}
 
@@ -346,10 +333,44 @@ public class UserRequestHandler {
 		return isCreated;
 	}
 
-	/*public Boolean assignServices(AssignServicesRequestBO assignServicesRequestBO) throws SQLException, IOException {
+	public Boolean assignServices(AssignServicesRequestBO assignServicesRequestBO) throws SQLException, IOException {
 		Boolean isCreated = Boolean.FALSE;
 		List<ServiceInfo> serviceInfoList = assignServicesRequestBO.getServiceInfoList();
 		Iterator<ServiceInfo> serviceInfoIterator = serviceInfoList.iterator();
 		UserServiceMapDAO userServiceMapDAO = new UserServiceMapDAO();
-	}*/
+		try {
+			while (serviceInfoIterator.hasNext()) {
+				ServiceInfo serviceInfo = serviceInfoIterator.next();
+				Integer userId = serviceInfo.getUserId();
+				List<Integer> oldAssignedService = UserServiceMapDAO.getListOfServices(userId,null);
+				List<Integer> newAssignedService = serviceInfo.getServiceIds();
+				Iterator<Integer> newAssignedServiceIterator = newAssignedService.iterator();
+				Iterator<Integer> oldAssignedServiceIterator = oldAssignedService.iterator();
+				while (newAssignedServiceIterator.hasNext()){
+					Integer serviceId = newAssignedServiceIterator.next();
+					if(oldAssignedService.contains(serviceId)){
+						userServiceMapDAO.updateUserServiceMapping(serviceId, userId, "A");
+					}else{
+						userServiceMapDAO.insertUserServiceMapping(serviceId, userId);
+					}
+				}
+
+				while (oldAssignedServiceIterator.hasNext()){
+					Integer serviceId = oldAssignedServiceIterator.next();
+					if(!newAssignedService.contains(serviceId)){
+						userServiceMapDAO.updateUserServiceMapping(serviceId, userId, "I");
+					}
+				}
+				isCreated = Boolean.TRUE;
+
+			}
+		} catch (SQLException s) {
+			s.printStackTrace();
+			isCreated = Boolean.FALSE;
+		} catch (IOException e) {
+			e.printStackTrace();
+			isCreated = Boolean.FALSE;
+		}
+		return isCreated;
+	}
 }
