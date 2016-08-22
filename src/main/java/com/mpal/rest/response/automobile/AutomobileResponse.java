@@ -8,16 +8,14 @@ public class AutomobileResponse {
     private  int id;
     private String company;
     private String model;
-    private String builtYear;
     private int automobiletypeId;
     private String status;
 
-    public AutomobileResponse(int id, String company, String model, String builtYear, int automobiletypeId, String status)
+    public AutomobileResponse(int id, String company, String model, int automobiletypeId, String status)
     {
         this.id=id;
         this.company=company;
         this.model=model;
-        this.builtYear=builtYear;
         this.automobiletypeId=automobiletypeId;
         this.status=status;
     }
@@ -42,12 +40,6 @@ public class AutomobileResponse {
         this.model = model;
     }
 
-    public String getBuiltYear() { return  builtYear; }
-
-    public void setBuiltYear(String builtYear) {
-        this.builtYear = builtYear;
-    }
-
     public String getStatus() { return  status; }
 
     public void setStatus(final String status)
@@ -67,7 +59,6 @@ public class AutomobileResponse {
                 "id=" + id +
                 ", company='" + company + '\'' +
                 ", model='" + model + '\'' +
-                ", builtYear='" + builtYear + '\'' +
                 ", automobiletypeId=" + automobiletypeId +
                 ", status='" + status + '\'' +
                 '}';

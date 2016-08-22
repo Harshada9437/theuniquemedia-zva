@@ -8,7 +8,6 @@ public class UpdateAutomobileBO {
     private int id;
     private String company;
     private String model;
-    private String builtYear;
     private int automobiletypeId;
 
 
@@ -32,13 +31,6 @@ public class UpdateAutomobileBO {
         this.model=model;
     }
 
-    public String getBuiltYear() { return  builtYear; }
-
-    public void setBuiltYear(final String builtYear)
-    {
-        this.builtYear=builtYear;
-    }
-
     public int getAutomobileTypeId() { return  automobiletypeId; }
 
     public void setAutomobileTypeId(final int automobiletypeId)
@@ -47,18 +39,11 @@ public class UpdateAutomobileBO {
     }
 
     @Override
-    public String toString() {
-        return "UpdateAutomobileBO [id=" + id + ",model=" + model + ", company=" + company +
-                ", builtYear=" + builtYear + ", automobileTypeId=" + automobiletypeId + "]";
-    }
-
-    @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((model == null) ? 0 : model.hashCode());
         result = prime * result + ((company == null) ? 0 : company.hashCode());
-        result = prime * result + ((builtYear == null) ? 0 : builtYear.hashCode());
         return result;
     }
 
@@ -81,15 +66,16 @@ public class UpdateAutomobileBO {
                 return false;
         } else if (!company.equals(other.company))
             return false;
-        if (builtYear == null) {
-            if (other.builtYear != null)
-                return false;
-        } else if (!builtYear.equals(other.builtYear))
-            return false;
-
-
         return true;
     }
 
-
+    @Override
+    public String toString() {
+        return "UpdateAutomobileBO{" +
+                "id=" + id +
+                ", company='" + company + '\'' +
+                ", model='" + model + '\'' +
+                ", automobileTypeId=" + automobiletypeId +
+                '}';
     }
+}

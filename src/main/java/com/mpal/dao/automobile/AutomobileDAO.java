@@ -30,7 +30,6 @@ public class AutomobileDAO {
                 AutomobileDTO automobileDTO = new AutomobileDTO();
                 automobileDTO.setCompany(resultSet.getString("company"));
                 automobileDTO.setModel(resultSet.getString("model"));
-                automobileDTO.setBuiltYear( resultSet.getString("builtYear"));
                 automobileDTO.setAutomobileTypeId( resultSet.getInt("automobileTypeId"));
                 automobileDTO.setStatus(resultSet.getString("status"));
                 automobileResponseList.add(automobileDTO);
@@ -67,7 +66,6 @@ public class AutomobileDAO {
                 automobileDTO.setId(resultSet.getInt("id"));
                 automobileDTO.setCompany(resultSet.getString("company"));
                 automobileDTO.setModel(resultSet.getString("model"));
-                automobileDTO.setBuiltYear(resultSet.getString("built_year"));
                 automobileDTO.setAutomobileTypeId(resultSet.getInt("automobile_type_id"));
                 automobileDTO.setStatus(resultSet.getString("status"));
                 index++;
@@ -99,11 +97,10 @@ public class AutomobileDAO {
             connection = new ConnectionPool().getConnection();
             connection.setAutoCommit(false);
             preparedStatement = connection
-                    .prepareStatement("INSERT INTO automobile_details(company, model, built_year, automobile_type_id) VALUES (?,?,?,?)");
+                    .prepareStatement("INSERT INTO automobile_details(company, model, automobile_type_id) VALUES (?,?,?,?)");
 
             preparedStatement.setString(parameterIndex++, automobileDTO.getCompany());
             preparedStatement.setString(parameterIndex++, automobileDTO.getModel());
-            preparedStatement.setString(parameterIndex++, automobileDTO.getBuiltYear());
             preparedStatement.setInt(parameterIndex++, automobileDTO.getAutomobileTypeId());
 
             int i = preparedStatement.executeUpdate();
@@ -148,13 +145,11 @@ public class AutomobileDAO {
             connection = new ConnectionPool().getConnection();
             connection.setAutoCommit(false);
             preparedStatement = connection
-                    .prepareStatement("UPDATE automobile_details SET model =? , company =? ,  built_year =? WHERE id =?;");
+                    .prepareStatement("UPDATE automobile_details SET model =? , company =?  WHERE id =?;");
 
             preparedStatement.setString(parameterIndex++, updateAutomobileBO.getModel());
 
             preparedStatement.setString(parameterIndex++, updateAutomobileBO.getCompany());
-
-            preparedStatement.setString(parameterIndex++, updateAutomobileBO.getBuiltYear());
 
             preparedStatement.setInt(parameterIndex++, updateAutomobileBO.getId());
 

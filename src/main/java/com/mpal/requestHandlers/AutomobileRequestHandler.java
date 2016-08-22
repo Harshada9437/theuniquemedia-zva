@@ -55,7 +55,6 @@ public class AutomobileRequestHandler {
         automobileDTO.setModel(requestBO.getModel());
         automobileDTO.setAutomobileTypeId(requestBO.getAutomobileTypeId());
         automobileDTO.setCompany(requestBO.getCompany());
-        automobileDTO.setBuiltYear(requestBO.getBuiltYear());
 
         return automobileDTO;
     }
@@ -70,7 +69,6 @@ public class AutomobileRequestHandler {
                     automobileDTO.getId(),
                     automobileDTO.getCompany(),
                     automobileDTO.getModel(),
-                    automobileDTO.getBuiltYear(),
                     automobileDTO.getAutomobileTypeId(),
                     automobileDTO.getStatus());
             automobileResponseListResponse.add(automobileResponse);

@@ -9,7 +9,6 @@ public class UpdateAutomobileRequest {
     private int id;
     private String company;
     private String model;
-    private String builtYear;
     private int automobiletypeId;
 
     public int getId() { return id; }
@@ -32,13 +31,6 @@ public class UpdateAutomobileRequest {
         this.model=model;
     }
 
-    public String getBuiltYear() { return  builtYear; }
-
-    public void setBuiltYear(final String builtYear)
-    {
-        this.builtYear=builtYear;
-    }
-
     public int getAutomobileTypeId() { return  automobiletypeId; }
 
     public void setAutomobileTypeId(final int automobiletypeId)
@@ -52,7 +44,6 @@ public class UpdateAutomobileRequest {
         return "AutomobileRequest{" +
                 "company=" + company + '\'' +
                 "model=" + model + '\'' +
-                ", builtYear=" + builtYear + '\'' +
                 ", automobiletypeId=" + automobiletypeId +
                 '}';
     }

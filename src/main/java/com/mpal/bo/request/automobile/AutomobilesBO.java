@@ -6,7 +6,6 @@ package com.mpal.bo.request.automobile;
 public class AutomobilesBO {
     private String company;
     private String model;
-    private String builtYear;
     private int automobiletypeId;
 
     public String getCompany() { return  company; }
@@ -25,14 +24,6 @@ public class AutomobilesBO {
         return this;
     }
 
-    public String getBuiltYear() { return  builtYear; }
-
-    public AutomobilesBO setBuiltYear(final String builtYear)
-    {
-        this.builtYear=builtYear;
-        return this;
-    }
-
     public int getAutomobileTypeId() { return  automobiletypeId; }
 
     public AutomobilesBO setAutomobileTypeId(final int automobiletypeId)
@@ -44,7 +35,7 @@ public class AutomobilesBO {
     @Override
     public String toString() {
         return "AutomobilesBO{" + "company=" + company + '\'' +
-                ", model='" + model + '\'' + ", builtYear='" + builtYear + '\'' +
+                ", model='" + model + '\'' +
                 ", automobileTypeId=" + automobiletypeId +
                 '}';
     }

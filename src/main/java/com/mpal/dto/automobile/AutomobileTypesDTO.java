@@ -1,6 +1,6 @@
-package com.mpal.dto.user;
+package com.mpal.dto.automobile;
 
-public class userTypesDTO {
+public class AutomobileTypesDTO {
     private int id;
     private String type;
     private String status;
@@ -30,9 +30,9 @@ public class userTypesDTO {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof userTypesDTO)) return false;
+        if (!(o instanceof AutomobileTypesDTO)) return false;
 
-        userTypesDTO that = (userTypesDTO) o;
+        AutomobileTypesDTO that = (AutomobileTypesDTO) o;
 
         if (id != that.id) return false;
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
@@ -50,7 +50,7 @@ public class userTypesDTO {
 
     @Override
     public String toString() {
-        return "UserTypesDTO [ id=" + id + ", type=" + type + '\'' + ", status=" + status + '\'' + "]";
+        return "AutomobileTypesDTO [ id=" + id + ", type=" + type + '\'' + ", status=" + status + '\'' + "]";
     }
 
 }

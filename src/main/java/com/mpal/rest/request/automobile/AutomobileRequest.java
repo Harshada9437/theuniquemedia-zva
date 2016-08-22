@@ -7,7 +7,6 @@ public class AutomobileRequest {
 
     private String company;
     private String model;
-    private String builtYear;
     private int automobileTypeId;
 
     public String getCompany() {
@@ -26,14 +25,6 @@ public class AutomobileRequest {
         this.model = model;
     }
 
-    public String getBuiltYear() {
-        return builtYear;
-    }
-
-    public void setBuiltYear(final String builtYear) {
-        this.builtYear = builtYear;
-    }
-
     public int getAutomobileTypeId() {
         return automobileTypeId;
     }
@@ -48,7 +39,6 @@ public class AutomobileRequest {
         return "AutomobileRequest{" +
                 "company=" + company + '\'' +
                 "model=" + model + '\'' +
-                ", builtYear=" + builtYear + '\'' +
                 ", automobileTypeId=" + automobileTypeId +
                 '}';
     }

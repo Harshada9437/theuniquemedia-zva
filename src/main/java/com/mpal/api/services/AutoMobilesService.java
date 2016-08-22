@@ -58,7 +58,6 @@ public class AutoMobilesService {
         automobilesBO.setModel(automobileRequest.getModel());
         automobilesBO.setCompany(automobileRequest.getCompany());
         automobilesBO.setAutomobileTypeId(automobileRequest.getAutomobileTypeId());
-        automobilesBO.setBuiltYear(automobileRequest.getBuiltYear());
 
         AutomobileRequestHandler automobileRequestHandler = new AutomobileRequestHandler();
         AutomobileCreationResponse automobilecreationResponse = new  AutomobileCreationResponse();
@@ -89,7 +88,6 @@ public class AutoMobilesService {
         updateautomobileRequestBO.setId(updateAutomobile.getId());
         updateautomobileRequestBO.setModel( updateAutomobile.getModel());
         updateautomobileRequestBO.setCompany( updateAutomobile.getCompany());
-        updateautomobileRequestBO.setBuiltYear( updateAutomobile.getBuiltYear());
         updateautomobileRequestBO.setAutomobileTypeId( updateAutomobile.getAutomobileTypeId());
 
         AutomobileRequestHandler automobileRequestHandler= new AutomobileRequestHandler();

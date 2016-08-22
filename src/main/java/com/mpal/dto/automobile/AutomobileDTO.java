@@ -7,7 +7,6 @@ public class AutomobileDTO {
     private int id;
     private String company;
     private String model;
-    private String builtYear;
     private int automobiletypeId;
     private String status;
 
@@ -41,13 +40,6 @@ public class AutomobileDTO {
         this.model=model;
     }
 
-    public String getBuiltYear() { return  builtYear; }
-
-    public void setBuiltYear(final String builtYear)
-    {
-        this.builtYear=builtYear;
-    }
-
     public int getAutomobileTypeId() { return  automobiletypeId; }
 
     public void setAutomobileTypeId(final int automobiletypeId)
@@ -66,7 +58,6 @@ public class AutomobileDTO {
         if (automobiletypeId != that.automobiletypeId) return false;
         if (company != null ? !company.equals(that.company) : that.company != null) return false;
         if (model != null ? !model.equals(that.model) : that.model != null) return false;
-        if (builtYear != null ? !builtYear.equals(that.builtYear) : that.builtYear != null) return false;
         return status != null ? status.equals(that.status) : that.status == null;
 
     }
@@ -76,7 +67,6 @@ public class AutomobileDTO {
         int result = id;
         result = 31 * result + (company != null ? company.hashCode() : 0);
         result = 31 * result + (model != null ? model.hashCode() : 0);
-        result = 31 * result + (builtYear != null ? builtYear.hashCode() : 0);
         result = 31 * result + automobiletypeId;
         result = 31 * result + (status != null ? status.hashCode() : 0);
         return result;
@@ -88,7 +78,6 @@ public class AutomobileDTO {
                 "id=" + id +
                 ", company='" + company + '\'' +
                 ", model='" + model + '\'' +
-                ", builtYear='" + builtYear + '\'' +
                 ", automobiletypeId=" + automobiletypeId +
                 ", status='" + status + '\'' +
                 '}';
