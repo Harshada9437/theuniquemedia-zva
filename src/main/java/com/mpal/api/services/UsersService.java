@@ -41,19 +41,19 @@ public class UsersService {
         try {
             LoginResponseBO loginResponseBO = userRequestHandler
                     .login(loginRequestBO);
-            UsersDAO usersDAO=new UsersDAO();
-            UsersDTO usersDTO=usersDAO.getUserById(loginResponseBO.getId());
+            UsersDAO usersDAO = new UsersDAO();
+            UsersDTO usersDTO = usersDAO.getUserById(loginResponseBO.getId());
             if (loginResponseBO.getValidUser()) {
-                    if(usersDTO.getStatus().equals("A")) {
-                        loginResponse.setMessageType("SUCCESS");
-                        loginResponse.setUserId(loginResponseBO.getId());
-                        loginResponse.setMessage(String.valueOf(loginResponseBO
-                                .getSessionId()));
-                    } else{
-                        loginResponse.setMessageType("FAILURE");
-                        loginResponse.setMessage("Inactive User.");
-                    }
-            }else {
+                if (usersDTO.getStatus().equals("A")) {
+                    loginResponse.setMessageType("SUCCESS");
+                    loginResponse.setUserId(loginResponseBO.getId());
+                    loginResponse.setMessage(String.valueOf(loginResponseBO
+                            .getSessionId()));
+                } else {
+                    loginResponse.setMessageType("FAILURE");
+                    loginResponse.setMessage("Inactive User.");
+                }
+            } else {
                 loginResponse.setMessageType("FAILURE");
                 loginResponse.setMessage("Invalid User.");
             }
@@ -87,9 +87,10 @@ public class UsersService {
         RegistrationResponse registrationResponse = new RegistrationResponse();
         if (!userRequestHandler.verifyEmail(registrationRequest.getEmail())) {
             int userId = userRequestHandler.register(registrationRequestBO);
-            if(userId != 0){
+            if (userId != 0) {
                 registrationResponse.setMessageType("SUCCESS");
-                registrationResponse.setMessage("Created user id:-" + userId);
+                registrationResponse.setMessage("Created user successfully");
+                registrationResponse.setUserId(userId);
             } else {
                 registrationResponse.setMessageType("FAILURE");
                 registrationResponse.setMessage("Registration Failed");
@@ -295,7 +296,7 @@ public class UsersService {
         UserRequestHandler userRequestHandler = new UserRequestHandler();
         UserTypeResponseList userResponseL = new UserTypeResponseList();
         try {
-            userResponseL.setGetTypeResponseList(userRequestHandler.getUserByType(user_type_id));
+            userResponseL.setUserResponseList(userRequestHandler.getUserByType(user_type_id));
             userResponseL.setMessageType("SUCCESS");
             userResponseL.setMessage("Users are available");
         } catch (UserNotFoundException e) {
@@ -312,24 +313,24 @@ public class UsersService {
     @Path("/{user_type_id}/assignAutomobiles")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response assignMechanicsForAutomobiles(AssignAutomobilesRequest assignAutomobilesRequest, @PathParam ("user_type_id") int user_type_id
-                                                  /*, @HeaderParam("sessionId") String sessionId*/) throws IOException, SQLException {
-           /* if (sessionId != null && RequestValidation.isRequestValid(sessionId)) {*/
-             UserRequestHandler userRequestHandler = new UserRequestHandler();
-             AssignAutomobilesRequestBO assignAutomobilesRequestBO = new AssignAutomobilesRequestBO();
-             assignAutomobilesRequestBO.setAutomobileInfoList(assignAutomobilesRequest.getAutomobilesInfoList());
-             Boolean isCreated = userRequestHandler.assignAutomobile(assignAutomobilesRequestBO);
-             AssignAutomobilesResponse assignAutomobilesResponse = new AssignAutomobilesResponse();
-             if (isCreated) {
-                 assignAutomobilesResponse.setMessageType("SUCCESS");
-                 assignAutomobilesResponse.setMessage("automobiles are assigned.");
-             } else {
-                 assignAutomobilesResponse.setMessageType("FAILURE");
-                 assignAutomobilesResponse.setMessage("automobiles cann't be assigned.");
-             }
+    public Response assignMechanicsForAutomobiles(AssignAutomobilesRequest assignAutomobilesRequest, @PathParam("user_type_id") int user_type_id
 
-             return ResponseGenerator.generateResponse(assignAutomobilesResponse);
-           }/* else {
+    /*, @HeaderParam("sessionId") String sessionId*/) throws IOException, SQLException {
+           /* if (sessionId != null && RequestValidation.isRequestValid(sessionId)) {*/
+        UserRequestHandler userRequestHandler = new UserRequestHandler();
+        AssignAutomobilesRequestBO assignAutomobilesRequestBO = new AssignAutomobilesRequestBO();
+        assignAutomobilesRequestBO.setAutomobileInfoList(assignAutomobilesRequest.getAutomobilesInfoList());
+        Boolean isCreated = userRequestHandler.assignAutomobile(assignAutomobilesRequestBO);
+        AssignAutomobilesResponse assignAutomobilesResponse = new AssignAutomobilesResponse();
+        if (isCreated) {
+            assignAutomobilesResponse.setMessageType("SUCCESS");
+            assignAutomobilesResponse.setMessage("automobiles are assigned.");
+        } else {
+            assignAutomobilesResponse.setMessageType("FAILURE");
+            assignAutomobilesResponse.setMessage("automobiles cann't be assigned.");
+        }
+        return ResponseGenerator.generateResponse(assignAutomobilesResponse);
+    }/* else {
               return ResponseGenerator.generateResponse(RequestValidation.getUnautheticatedResponse());
            }*/
 
@@ -337,7 +338,7 @@ public class UsersService {
     @Path("/{user_type_id}/assignServices")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response assignMechanicsForServices(AssignServicesRequest assignServicesRequest, @PathParam ("user_type_id") int user_type_id
+    public Response assignMechanicsForServices(AssignServicesRequest assignServicesRequest, @PathParam("user_type_id") int user_type_id
                                                   /* ,@HeaderParam("sessionId") String sessionId*/) throws IOException, SQLException {
            /* if (sessionId != null && RequestValidation.isRequestValid(sessionId)) {*/
         UserRequestHandler userRequestHandler = new UserRequestHandler();
@@ -354,7 +355,27 @@ public class UsersService {
         }
 
         return ResponseGenerator.generateResponse(assignServicesResponse);
-            } /*else {
+    } /*else {
                return ResponseGenerator.generateResponse(RequestValidation.getUnautheticatedResponse());
            }*/
+
+    @GET
+    @Path("/{user_type_id}/{service_id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getMechanicByByService(@PathParam("user_type_id") int user_type_id, @PathParam("service_id") int service_id,
+                                           @QueryParam("automobileid") int automobile_detail_id) throws SQLException, IOException {
+        UserRequestHandler userRequestHandler = new UserRequestHandler();
+        MechanicByServiceResponse mechanicByServiceResponse = new MechanicByServiceResponse();
+        try {
+            mechanicByServiceResponse.setMechanicsList(userRequestHandler.getMechanicsList(service_id, automobile_detail_id));
+            mechanicByServiceResponse.setMessageType("SUCCESS");
+            mechanicByServiceResponse.setMessage("Available mechanics.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return ResponseGenerator.generateResponse(mechanicByServiceResponse);
+    }
 }

@@ -14,6 +14,7 @@ import com.mpal.bo.request.user.UpdaterUserBO;
 import com.mpal.dao.UtilClasses.ConnectionPool;
 import com.mpal.dto.automobile.AutomobileDTO;
 import com.mpal.dto.user.LoginResponseDTO;
+import com.mpal.dto.user.MechanicDTO;
 import com.mpal.dto.user.UsersDTO;
 import com.mpal.exceptions.AutomobileServiceExceptions.AutomobileNotFoundException;
 import com.mpal.exceptions.userServiceExceptions.UserNotFoundException;
@@ -31,7 +32,7 @@ public class UsersDAO {
             connection = new ConnectionPool().getConnection();
             connection.setAutoCommit(false);
             preparedStatement = connection
-                    .prepareStatement("INSERT INTO users(user_type_id, address, name, mobile, email, gender, DOB, latitude, longitude, password, client_details_id) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
+                    .prepareStatement("INSERT INTO users(user_type_id, name, address, mobile, email, gender, DOB, latitude, longitude, password, client_details_id) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
             preparedStatement.setInt(parameterIndex++, usersDTO.getUserTypeId());
             preparedStatement.setString(parameterIndex++, usersDTO.getName());
             preparedStatement.setString(parameterIndex++, usersDTO.getAddress());
@@ -531,4 +532,49 @@ public class UsersDAO {
             return userTypeResponseList;
         }
 
+    public List<MechanicDTO> getMechanicByServiceId(int ReqServiceId, int ReqAutomobileId) throws SQLException, IOException {
+
+        Connection connection = null;
+        Statement statement = null;
+        List<MechanicDTO> mechanicResponseList=new ArrayList<MechanicDTO>();
+        try {
+            connection = new ConnectionPool().getConnection();
+            statement = connection.createStatement();
+            StringBuilder query = new StringBuilder(
+                    "select U.id, U.name, U.address, U.mobile, U.email, U.gender, U.latitude, U.longitude, U.status, (Select true from automobile_details_user_map as AD where AD.user_id = U.id and AD.automobile_details_id = " + ReqAutomobileId +
+                     ") as requestedAutomobile, (Select true from request as RD where RD.mechanic_id = U.id) as isHired from users as U " + "join service_user_map as S on  U.id=S.user_Id where S.service_id = " + ReqServiceId +";");
+            ResultSet resultSet = statement.executeQuery(query.toString()
+                    .trim());
+            int index = 1;
+            while (resultSet.next()) {
+                MechanicDTO mechanicDTO = new MechanicDTO();
+                mechanicDTO.setId(resultSet.getInt("id"));
+                mechanicDTO.setName(resultSet.getString("name"));
+                mechanicDTO.setAddress(resultSet.getString("address"));
+                mechanicDTO.setMobile(resultSet.getString("mobile"));
+                mechanicDTO.setEmail(resultSet.getString("email"));
+                mechanicDTO.setGender(resultSet.getString("gender"));
+                mechanicDTO.setLatitude(resultSet.getString("latitude"));
+                mechanicDTO.setLongitude(resultSet.getString("longitude"));
+                mechanicDTO.setStatus(resultSet.getString("status"));
+                mechanicDTO.setRequestedAutomobile(resultSet.getInt("requestedAutomobile"));
+                mechanicDTO.setIsHired(resultSet.getInt("isHired"));
+                index++;
+                mechanicResponseList.add(mechanicDTO);
+            }
+            if (index == 1) {
+                throw new UserNotFoundException("Invalid user");
+            }
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        } finally {
+            try {
+                statement.close();
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return mechanicResponseList;
+        }
 }

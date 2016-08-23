@@ -14,16 +14,14 @@ import com.mpal.dao.user.UserServiceMapDAO;
 import com.mpal.dao.user.UserTypesDAO;
 import com.mpal.dao.user.UsersDAO;
 import com.mpal.dto.user.LoginResponseDTO;
+import com.mpal.dto.user.MechanicDTO;
 import com.mpal.dto.user.UserTypesDTO;
 import com.mpal.dto.user.UsersDTO;
 import com.mpal.exceptions.AutomobileServiceExceptions.AutomobileNotFoundException;
 import com.mpal.exceptions.userServiceExceptions.UserNotFoundException;
 import com.mpal.rest.request.user.AutomobilesInfo;
 import com.mpal.rest.request.user.ServiceInfo;
-import com.mpal.rest.response.user.GetTypesResponse;
-import com.mpal.rest.response.user.GetUserResponse;
-import com.mpal.rest.response.user.UserLoggedInResponse;
-import com.mpal.rest.response.user.UserResponseList;
+import com.mpal.rest.response.user.*;
 import com.mpal.rest.util.EmailService;
 import com.mpal.validation.UsersValidation;
 
@@ -234,6 +232,26 @@ public class UserRequestHandler {
 		}
 		return userResponseListResponse;
 	}
+	private List<MechanicResponse> getMechanicResponseListFromDTOs(List<MechanicDTO> usersDTOs) throws SQLException{
+		List<MechanicResponse> mechanicResponseListResponse = new ArrayList<MechanicResponse>();
+		Iterator<MechanicDTO> usersDTOIterator = usersDTOs.iterator();
+		while(usersDTOIterator.hasNext()){
+			MechanicDTO usersDTO = usersDTOIterator.next();
+			MechanicResponse mechanicResponseList = new MechanicResponse(usersDTO.getId(),
+					usersDTO.getName(),
+					usersDTO.getAddress(),
+					usersDTO.getMobile(),
+					usersDTO.getEmail(),
+					usersDTO.getGender(),
+					usersDTO.getLatitude(),
+					usersDTO.getLongitude(),
+					usersDTO.getStatus(),
+					usersDTO.getRequestedAutomobile(),
+					usersDTO.getIsHired());
+			mechanicResponseListResponse.add(mechanicResponseList);
+		}
+		return mechanicResponseListResponse;
+	}
 
 	public Boolean forgotPassword(String emailId) {
 		Boolean isProcessed = Boolean.FALSE;
@@ -373,4 +391,17 @@ public class UserRequestHandler {
 		}
 		return isCreated;
 	}
+
+    public List<MechanicResponse> getMechanicsList(int service_id, int automobile_detail_id) throws SQLException, IOException {
+			UsersDAO usersDAO = new UsersDAO();
+			List<MechanicResponse> mechanicList = new ArrayList<MechanicResponse>();
+			try {
+				mechanicList = getMechanicResponseListFromDTOs(usersDAO.getMechanicByServiceId(service_id,automobile_detail_id));
+			} catch (SQLException s) {
+				s.printStackTrace();
+			} catch (IOException s) {
+				s.printStackTrace();
+			}
+			return mechanicList;
+		}
 }

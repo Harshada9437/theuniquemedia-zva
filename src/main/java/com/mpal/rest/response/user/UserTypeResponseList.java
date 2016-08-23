@@ -7,16 +7,16 @@ import java.util.List;
  */
 public class UserTypeResponseList {
 
-        List<UserResponseList> getTypeResponseList;
+        List<UserResponseList> userResponseList;
         private String message;
         private String messageType;
 
-        public List<UserResponseList> getGetTypeResponseList() {
-            return getTypeResponseList;
+        public List<UserResponseList> getUserResponseList() {
+            return userResponseList;
         }
 
-        public void setGetTypeResponseList(List<UserResponseList> getTypeResponseList) {
-            this.getTypeResponseList = getTypeResponseList;
+        public void setUserResponseList(List<UserResponseList> userResponseList) {
+            this.userResponseList = userResponseList;
         }
 
         public String getMessage() {
@@ -38,7 +38,7 @@ public class UserTypeResponseList {
         @Override
         public String toString() {
             return "UserTypesResponse{" +
-                    "getTypeResponseList=" + getTypeResponseList +
+                    "userResponseList=" + userResponseList +
                     ", message='" + message + '\'' +
                     ", messageType='" + messageType + '\'' +
                     '}';
