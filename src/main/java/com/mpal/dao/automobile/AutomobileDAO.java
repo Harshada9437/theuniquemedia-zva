@@ -97,7 +97,7 @@ public class AutomobileDAO {
             connection = new ConnectionPool().getConnection();
             connection.setAutoCommit(false);
             preparedStatement = connection
-                    .prepareStatement("INSERT INTO automobile_details(company, model, automobile_type_id) VALUES (?,?,?,?)");
+                    .prepareStatement("INSERT INTO automobile_details(company, model, automobile_type_id) VALUES (?,?,?)");
 
             preparedStatement.setString(parameterIndex++, automobileDTO.getCompany());
             preparedStatement.setString(parameterIndex++, automobileDTO.getModel());

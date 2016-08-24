@@ -378,4 +378,47 @@ public class UsersService {
         }
         return ResponseGenerator.generateResponse(mechanicByServiceResponse);
     }
+
+
+    @GET
+    @Path("/{user_type_id}/listAssignedAutomobiles/{user_id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getUserAutomobileMapList(@PathParam("user_type_id") int userTypeId,@PathParam("user_id") int userId) {
+        UserRequestHandler userRequestHandler = new UserRequestHandler();
+        List<UserAutomobileMapResponseList> response = null;
+        try {
+            response = userRequestHandler.getUserAutomobileMapList(userId);
+        } catch (UserNotFoundException e) {
+            LoginResponse loginResponse = new LoginResponse();
+            loginResponse.setMessage(e.getMessage());
+            return ResponseGenerator.generateResponse(loginResponse);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return ResponseGenerator.generateResponse(response);
+    }
+
+    @GET
+    @Path("/{user_type_id}/listAssignedServices/{user_id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getUserServiceMapList(@PathParam("user_type_id") int userTypeId,@PathParam("user_id") int userId) {
+        UserRequestHandler userRequestHandler = new UserRequestHandler();
+        List<UserServiceMapResponseList> response = null;
+        try {
+            response = userRequestHandler.getUserServiceMapList(userId);
+        } catch (UserNotFoundException e) {
+            LoginResponse loginResponse = new LoginResponse();
+            loginResponse.setMessage(e.getMessage());
+            return ResponseGenerator.generateResponse(loginResponse);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return ResponseGenerator.generateResponse(response);
+    }
 }

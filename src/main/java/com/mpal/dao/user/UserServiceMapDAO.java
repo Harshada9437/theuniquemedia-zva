@@ -1,6 +1,9 @@
 package com.mpal.dao.user;
 
 import com.mpal.dao.UtilClasses.ConnectionPool;
+import com.mpal.dto.user.UserAutomobileMapDTO;
+import com.mpal.dto.user.UserServiceMapDTO;
+import com.mpal.dto.user.UsersDTO;
 
 import java.io.IOException;
 import java.sql.*;
@@ -100,5 +103,39 @@ public class UserServiceMapDAO {
             }
         }
         return isInserted;
+    }
+
+    public List<UserServiceMapDTO> getUsersAutomobileMapList(int userId) throws SQLException,IOException {
+        Connection connection = null;
+        Statement statement = null;
+        List<UserServiceMapDTO> userAutomobileMapResponseList = new ArrayList<UserServiceMapDTO>();
+        try {
+            connection = new ConnectionPool().getConnection();
+            statement = connection.createStatement();
+            StringBuilder query = new StringBuilder("SELECT * FROM service_user_map where user_id = ")
+                    .append(userId);
+            ResultSet resultSet = statement.executeQuery(query.toString());
+
+            while (resultSet.next()) {
+                UserServiceMapDTO userServiceMapDTO = new UserServiceMapDTO();
+                userServiceMapDTO.setId(resultSet.getInt("id"));
+                userServiceMapDTO.setUserId(resultSet.getInt("user_id"));
+                userServiceMapDTO.setServiceId( resultSet.getInt("service_id"));
+                userServiceMapDTO.setStatus( resultSet.getString("status"));
+                userAutomobileMapResponseList.add(userServiceMapDTO);
+            }
+
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        } finally {
+            try {
+                statement.close();
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return userAutomobileMapResponseList;
     }
 }

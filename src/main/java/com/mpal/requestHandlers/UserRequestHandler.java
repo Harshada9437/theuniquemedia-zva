@@ -13,10 +13,7 @@ import com.mpal.dao.user.UserAutomobileMapDAO;
 import com.mpal.dao.user.UserServiceMapDAO;
 import com.mpal.dao.user.UserTypesDAO;
 import com.mpal.dao.user.UsersDAO;
-import com.mpal.dto.user.LoginResponseDTO;
-import com.mpal.dto.user.MechanicDTO;
-import com.mpal.dto.user.UserTypesDTO;
-import com.mpal.dto.user.UsersDTO;
+import com.mpal.dto.user.*;
 import com.mpal.exceptions.AutomobileServiceExceptions.AutomobileNotFoundException;
 import com.mpal.exceptions.userServiceExceptions.UserNotFoundException;
 import com.mpal.rest.request.user.AutomobilesInfo;
@@ -232,6 +229,7 @@ public class UserRequestHandler {
 		}
 		return userResponseListResponse;
 	}
+
 	private List<MechanicResponse> getMechanicResponseListFromDTOs(List<MechanicDTO> usersDTOs) throws SQLException{
 		List<MechanicResponse> mechanicResponseListResponse = new ArrayList<MechanicResponse>();
 		Iterator<MechanicDTO> usersDTOIterator = usersDTOs.iterator();
@@ -404,4 +402,61 @@ public class UserRequestHandler {
 			}
 			return mechanicList;
 		}
+
+    public List<UserAutomobileMapResponseList> getUserAutomobileMapList(int userId)  throws SQLException, IOException {
+		List<UserAutomobileMapResponseList> userList = null;
+		try {
+			UserAutomobileMapDAO userAutomobileMapDAO = new UserAutomobileMapDAO();
+			userList = getUserMapResponseListFromDTOs(userAutomobileMapDAO.getUsersAutomobileMapList(userId));
+		} catch (SQLException s) {
+			s.printStackTrace();
+		} catch (IOException s) {
+			s.printStackTrace();
+		}
+		return userList;
+	}
+
+	private List<UserAutomobileMapResponseList> getUserMapResponseListFromDTOs(List<UserAutomobileMapDTO> userDTOs) throws SQLException{
+			List<UserAutomobileMapResponseList> userResponseListResponse = new ArrayList<UserAutomobileMapResponseList>();
+			Iterator<UserAutomobileMapDTO> usersDTOIterator = userDTOs.iterator();
+			while(usersDTOIterator.hasNext()){
+				UserAutomobileMapDTO usersDTO = usersDTOIterator.next();
+				UserAutomobileMapResponseList userResponseList = new UserAutomobileMapResponseList(usersDTO.getId(),
+						usersDTO.getUserId(),
+						usersDTO.getAutomobileDetailsId(),
+						usersDTO.getStatus());
+				userResponseListResponse.add(userResponseList);
+			}
+			return userResponseListResponse;
+		}
+
+	public List<UserServiceMapResponseList> getUserServiceMapList(int userId) throws SQLException, IOException {
+			List<UserServiceMapResponseList> userList = null;
+			try {
+				UserServiceMapDAO userServiceMapDAO = new UserServiceMapDAO();
+				userList = getUserServiceMapResponseListFromDTOs(userServiceMapDAO.getUsersAutomobileMapList(userId));
+			} catch (SQLException s) {
+				s.printStackTrace();
+			} catch (IOException s) {
+				s.printStackTrace();
+			}
+			return userList;
+		}
+
+	private List<UserServiceMapResponseList> getUserServiceMapResponseListFromDTOs(List<UserServiceMapDTO> userDTOs) throws SQLException{
+			List<UserServiceMapResponseList> userResponseListResponse = new ArrayList<UserServiceMapResponseList>();
+			Iterator<UserServiceMapDTO> usersDTOIterator = userDTOs.iterator();
+			while(usersDTOIterator.hasNext()){
+				UserServiceMapDTO usersDTO = usersDTOIterator.next();
+				UserServiceMapResponseList userResponseList = new UserServiceMapResponseList(usersDTO.getId(),
+						usersDTO.getUserId(),
+						usersDTO.getServiceId(),
+						usersDTO.getStatus());
+				userResponseListResponse.add(userResponseList);
+			}
+			return userResponseListResponse;
+		}
 }
+
+
+
