@@ -1,14 +1,14 @@
 package com.mpal.dto.customer;
 
-import java.sql.Timestamp;
-
 public class CreateCustomerRequestDTO {
+    private int id;
     private int customerId;
     private int mechanicId;
     private int automobileDetailsId;
     private int serviceId;
-    private Timestamp createdDtm;
-    private Timestamp updatedDtm;
+    private String createdDtm;
+    private String updatedDtm;
+    private int updatedBy;
     private String token;
     private String status;
 
@@ -52,19 +52,19 @@ public class CreateCustomerRequestDTO {
         this.serviceId = serviceId;
     }
 
-    public Timestamp getCreatedDtm() {
+    public String getCreatedDtm() {
         return createdDtm;
     }
 
-    public void setCreatedDtm(Timestamp createdDtm) {
+    public void setCreatedDtm(String createdDtm) {
         this.createdDtm = createdDtm;
     }
 
-    public Timestamp getUpdatedDtm() {
+    public String getUpdatedDtm() {
         return updatedDtm;
     }
 
-    public void setUpdatedDtm(Timestamp updatedDtm) {
+    public void setUpdatedDtm(String updatedDtm) {
         this.updatedDtm = updatedDtm;
     }
 
@@ -76,6 +76,22 @@ public class CreateCustomerRequestDTO {
         this.status = status;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(int updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -83,10 +99,12 @@ public class CreateCustomerRequestDTO {
 
         CreateCustomerRequestDTO that = (CreateCustomerRequestDTO) o;
 
+        if (id != that.id) return false;
         if (customerId != that.customerId) return false;
         if (mechanicId != that.mechanicId) return false;
         if (automobileDetailsId != that.automobileDetailsId) return false;
         if (serviceId != that.serviceId) return false;
+        if (updatedBy != that.updatedBy) return false;
         if (createdDtm != null ? !createdDtm.equals(that.createdDtm) : that.createdDtm != null) return false;
         if (updatedDtm != null ? !updatedDtm.equals(that.updatedDtm) : that.updatedDtm != null) return false;
         if (token != null ? !token.equals(that.token) : that.token != null) return false;
@@ -96,12 +114,14 @@ public class CreateCustomerRequestDTO {
 
     @Override
     public int hashCode() {
-        int result = customerId;
+        int result = id;
+        result = 31 * result + customerId;
         result = 31 * result + mechanicId;
         result = 31 * result + automobileDetailsId;
         result = 31 * result + serviceId;
         result = 31 * result + (createdDtm != null ? createdDtm.hashCode() : 0);
         result = 31 * result + (updatedDtm != null ? updatedDtm.hashCode() : 0);
+        result = 31 * result + updatedBy;
         result = 31 * result + (token != null ? token.hashCode() : 0);
         result = 31 * result + (status != null ? status.hashCode() : 0);
         return result;
@@ -110,12 +130,14 @@ public class CreateCustomerRequestDTO {
     @Override
     public String toString() {
         return "CreateCustomerRequestDTO{" +
-                "customerId=" + customerId +
+                "id=" + id +
+                ", customerId=" + customerId +
                 ", mechanicId=" + mechanicId +
                 ", automobileDetailsId=" + automobileDetailsId +
                 ", serviceId=" + serviceId +
-                ", createdDtm=" + createdDtm +
-                ", updatedDtm=" + updatedDtm +
+                ", createdDtm='" + createdDtm + '\'' +
+                ", updatedDtm='" + updatedDtm + '\'' +
+                ", updatedBy=" + updatedBy +
                 ", token='" + token + '\'' +
                 ", status='" + status + '\'' +
                 '}';
