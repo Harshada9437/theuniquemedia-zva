@@ -4,6 +4,7 @@ import com.mpal.bo.request.automobile.UpdateAutomobileBO;
 import com.mpal.dao.UtilClasses.ConnectionPool;
 import com.mpal.dto.automobile.AutomobileDTO;
 import com.mpal.exceptions.AutomobileServiceExceptions.AutomobileNotFoundException;
+import com.mpal.exceptions.userServiceExceptions.UserNotFoundException;
 
 import java.io.IOException;
 import java.sql.*;
@@ -134,6 +135,81 @@ public class AutomobileDAO {
         }
         return null;
     }
+
+
+    public String getValidationForModel(String model) throws SQLException,
+            UserNotFoundException {
+        Connection connection = null;
+        Statement statement = null;
+        String modelUsed = null;
+
+
+        try {
+
+            connection = new ConnectionPool().getConnection();
+            statement = connection.createStatement();
+            StringBuilder query1 = new StringBuilder(
+                    "SELECT model FROM automobile_details where model = \"")
+                    .append(model).append("\"");
+            ResultSet resultSet = statement.executeQuery(query1.toString().toUpperCase());
+
+
+            while (resultSet.next()) {
+
+                modelUsed = resultSet.getString("model");
+            }
+
+        }catch (SQLException sqlException){
+            sqlException.printStackTrace();
+        }finally {
+            try {
+                statement.close();
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return modelUsed;
+    }
+
+    public String getValidationForCompany(String company) throws SQLException,
+            UserNotFoundException {
+        Connection connection = null;
+        Statement statement = null;
+
+        String companyUsed = null;
+
+        try {
+
+            connection = new ConnectionPool().getConnection();
+            statement = connection.createStatement();
+
+            StringBuilder query = new StringBuilder(
+                    "SELECT company FROM automobile_details where company = \"")
+                    .append(company).append("\"");
+            ResultSet resultSet = statement.executeQuery(query.toString().toUpperCase());
+
+
+            while (resultSet.next()) {
+
+                companyUsed=resultSet.getString("company");
+
+            }
+
+        }catch (SQLException sqlException){
+            sqlException.printStackTrace();
+        }finally {
+            try {
+                statement.close();
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return companyUsed;
+    }
+
+
 
     public Boolean updateAutomobile(UpdateAutomobileBO updateAutomobileBO) throws SQLException,
             IOException {

@@ -1,20 +1,20 @@
 package com.mpal.requestHandlers;
 
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import com.mpal.bo.request.automobile.AutomobilesBO;
 import com.mpal.bo.request.automobile.UpdateAutomobileBO;
 import com.mpal.dao.automobile.AutomobileDAO;
 import com.mpal.dao.automobile.AutomobileTypesDAO;
 import com.mpal.dto.automobile.AutomobileDTO;
 import com.mpal.dto.automobile.AutomobileTypesDTO;
-import com.mpal.rest.response.automobile.AutomobileResponse;
 import com.mpal.exceptions.AutomobileServiceExceptions.AutomobileNotFoundException;
+import com.mpal.rest.response.automobile.AutomobileResponse;
 import com.mpal.rest.response.automobile.AutomobileTypeResponse;
+
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 
 /**
@@ -76,14 +76,52 @@ public class AutomobileRequestHandler {
         return automobileResponseListResponse;
     }
 
+
+    public String create(AutomobilesBO automobileBO) {
+
+
+        String msg="created";
+        AutomobileDAO automobileDAO = new AutomobileDAO();
+        try {
+            if (automobileDAO.getValidationForModel(automobileBO.getModel()) == null && automobileDAO.getValidationForCompany(automobileBO.getModel()) == null)
+
+                automobileDAO.insertAutomobile(buildAutomobilesDTOFromBO(automobileBO));
+
+            else
+                msg="model and company already exist";
+
+        } catch (SQLException sq) {
+           msg="Error While Inserting data";
+        } catch (IOException sqlException) {
+            msg="Error While Inserting data";
+        }
+
+       /* if ("created".equals(msg) && automobileId != null) {
+
+            System.out.println("******");
+            //EmailService.sendNewUserEmail(registrationRequestBO.getEmail(), userId);
+        }*/
+
+        return msg;
+    }
+
+
+    /*
     public boolean create(AutomobilesBO automobileBO) {
 
         Boolean isProcessed = Boolean.TRUE;
-        String msg="notcreated";
-        Integer automobileId=null;
         AutomobileDAO automobileDAO = new AutomobileDAO();
         try {
-            automobileDAO.insertAutomobile(buildAutomobilesDTOFromBO(automobileBO));
+            if (automobileDAO.getValidationForModel(automobileBO.getModel()) == null)
+                if(automobileDAO.getValidationForCompany(automobileBO.getModel()) == null)
+
+                automobileDAO.insertAutomobile(buildAutomobilesDTOFromBO(automobileBO));
+
+                else
+                isProcessed = false;
+            else
+                isProcessed = false;
+
         } catch (SQLException sq) {
             isProcessed = false;
         } catch (IOException sqlException) {
@@ -92,13 +130,13 @@ public class AutomobileRequestHandler {
 
         if (isProcessed=false) {
 
-            System.out.println(msg);
+            System.out.println("******");
             //EmailService.sendNewUserEmail(registrationRequestBO.getEmail(), userId);
         }
 
         return isProcessed;
     }
-
+*/
     public Boolean updateAutomobile(UpdateAutomobileBO updateRequestBO) {
 
         Boolean isProcessed = Boolean.FALSE;

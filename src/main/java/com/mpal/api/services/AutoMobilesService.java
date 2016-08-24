@@ -4,25 +4,23 @@ package com.mpal.api.services;
  * Created by System1 on 8/6/2016.
  */
 
-import java.io.IOException;
-import java.sql.SQLException;
-
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
-import com.mpal.dao.automobile.AutomobileTypesDAO;
 import com.mpal.bo.request.automobile.AutomobilesBO;
 import com.mpal.bo.request.automobile.UpdateAutomobileBO;
 import com.mpal.exceptions.AutomobileServiceExceptions.AutomobileNotFoundException;
 import com.mpal.requestHandlers.AutomobileRequestHandler;
-import com.mpal.rest.response.automobile.AutomobileResponseList;
 import com.mpal.rest.request.automobile.AutomobileRequest;
-import com.mpal.rest.response.automobile.AutomobileCreationResponse;
 import com.mpal.rest.request.automobile.UpdateAutomobileRequest;
-import com.mpal.rest.response.automobile.UpdateAutomobileResponse;
+import com.mpal.rest.response.automobile.AutomobileCreationResponse;
+import com.mpal.rest.response.automobile.AutomobileResponseList;
 import com.mpal.rest.response.automobile.AutomobileTypeResponseList;
+import com.mpal.rest.response.automobile.UpdateAutomobileResponse;
 import com.mpal.rest.util.ResponseGenerator;
+
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.io.IOException;
+import java.sql.SQLException;
 
 @Path("/automobile")
 public class AutoMobilesService {
@@ -61,7 +59,15 @@ public class AutoMobilesService {
 
         AutomobileRequestHandler automobileRequestHandler = new AutomobileRequestHandler();
         AutomobileCreationResponse automobilecreationResponse = new  AutomobileCreationResponse();
-
+        String msg=automobileRequestHandler.create(automobilesBO);
+        if (msg.equals("created")) {
+            automobilecreationResponse.setMessageType("SUCCESS");
+            automobilecreationResponse.setMessage("Created sucessfuly");
+        } else {
+            automobilecreationResponse.setMessageType(msg);
+            automobilecreationResponse.setMessage("AutomobileCreation Failed");
+        }
+/*
         if (automobileRequestHandler.create(automobilesBO)!=false) {
             automobilecreationResponse.setMessageType("FAILURE");
             automobilecreationResponse.setMessage("AutomobileCreation Failed");
@@ -71,7 +77,7 @@ public class AutoMobilesService {
             automobilecreationResponse.setMessage("Created sucessfuly");
 
         }
-
+*/
         return ResponseGenerator.generateResponse(automobilecreationResponse);
     }
 

@@ -85,17 +85,28 @@ public class UsersService {
 
         UserRequestHandler userRequestHandler = new UserRequestHandler();
         RegistrationResponse registrationResponse = new RegistrationResponse();
+
+        userRequestHandler.verifyPhoneNumber(registrationRequest.getMobile());
+
         if (!userRequestHandler.verifyEmail(registrationRequest.getEmail())) {
-            int userId = userRequestHandler.register(registrationRequestBO);
-            if (userId != 0) {
-                registrationResponse.setMessageType("SUCCESS");
-                registrationResponse.setMessage("Created user successfully");
-                registrationResponse.setUserId(userId);
+
+            if (!userRequestHandler.verifyPhoneNumber(registrationRequest.getMobile())) {
+
+                int userId = userRequestHandler.register(registrationRequestBO);
+                if (userId != 0) {
+                    registrationResponse.setMessageType("SUCCESS");
+                    registrationResponse.setMessage("Created user successfully");
+                    registrationResponse.setUserId(userId);
+                } else {
+                    registrationResponse.setMessageType("FAILURE");
+                    registrationResponse.setMessage("Registration Failed");
+                }
+
             } else {
-                registrationResponse.setMessageType("FAILURE");
-                registrationResponse.setMessage("Registration Failed");
+                registrationResponse.setMessage("Mobile_number exist");
             }
-        } else {
+        }
+        else {
             registrationResponse.setMessageType("FAILURE");
             registrationResponse.setMessage("Email exist");
         }

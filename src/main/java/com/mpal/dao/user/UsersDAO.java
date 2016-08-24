@@ -78,6 +78,42 @@ public class UsersDAO {
         return null;
     }
 
+    public Boolean getValidationForPhoneNumber(String mobile) throws SQLException,
+            UserNotFoundException {
+        Connection connection = null;
+        Statement statement = null;
+        Boolean isProcessed = Boolean.FALSE;
+        //String numberUsed = null;
+        try {
+
+            connection = new ConnectionPool().getConnection();
+            statement = connection.createStatement();
+            StringBuilder query = new StringBuilder(
+                    "SELECT mobile FROM users where mobile = \"")
+                    .append(mobile).append("\"");
+            ResultSet resultSet = statement.executeQuery(query.toString());
+
+            while (resultSet.next()) {
+
+                isProcessed = true;
+                //numberUsed = resultSet.getString("mobile");
+
+            }
+        }catch (SQLException sqlException){
+            sqlException.printStackTrace();
+        }finally {
+            try {
+                statement.close();
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return isProcessed;
+    }
+
+
+
     public Boolean getValidationForEmail(String email) throws SQLException,
             UserNotFoundException {
         Connection connection = null;

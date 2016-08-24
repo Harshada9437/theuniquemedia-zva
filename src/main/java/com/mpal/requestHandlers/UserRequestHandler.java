@@ -45,6 +45,20 @@ public class UserRequestHandler {
 		return userId;
 	}
 
+	public Boolean verifyPhoneNumber(String mobile) {
+
+		Boolean isProcessed = Boolean.FALSE;
+		UsersDAO usersDAO = new UsersDAO();
+		//String msg="unique";
+		try {
+			isProcessed = usersDAO.getValidationForPhoneNumber(mobile);
+		} catch (SQLException sq) {
+			isProcessed = false;
+			//msg="mobile Number is already used";
+		}
+		return isProcessed;
+	}
+
     public Boolean verifyEmail(String email) {
 
         Boolean isProcessed = Boolean.FALSE;
