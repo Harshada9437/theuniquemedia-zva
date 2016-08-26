@@ -225,15 +225,15 @@ public class UsersService {
         UserRequestHandler userRequestHandler = new UserRequestHandler();
         Boolean isLoggedOut = userRequestHandler.logout(logoutRequest
                 .getUserId());
-        LoginResponse loginResponse = new LoginResponse();
+        LogoutResponse logoutResponse = new LogoutResponse();
         if (isLoggedOut) {
-            loginResponse.setMessageType("SUCCESS");
-            loginResponse.setMessage("Log out successfully.");
-            return ResponseGenerator.generateResponse(loginResponse);
+            logoutResponse.setMessageType("SUCCESS");
+            logoutResponse.setMessage("Log out successfully.");
+            return ResponseGenerator.generateResponse(logoutResponse);
         } else {
-            loginResponse.setMessageType("FAILURE");
-            loginResponse.setMessage("Unable to Log out current user.");
-            return ResponseGenerator.generateResponse(loginResponse);
+            logoutResponse.setMessageType("FAILURE");
+            logoutResponse.setMessage("Unable to Log out current user.");
+            return ResponseGenerator.generateResponse(logoutResponse);
         }
         /*} else {
             return ResponseGenerator.generateResponse(RequestValidation.getUnautheticatedResponse());
