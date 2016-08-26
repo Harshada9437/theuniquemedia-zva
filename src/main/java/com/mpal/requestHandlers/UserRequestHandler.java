@@ -127,6 +127,21 @@ public class UserRequestHandler {
 			Long sessionId = new Date().getTime();
 			usersDAO.updateSessionId(loginResponseDTO.getId(), sessionId);
 			loginResponseBO.setSessionId(sessionId+"@"+loginResponseDTO.getId());
+			loginResponseBO.setValidUser(isValidUser);
+			loginResponseBO.setId(loginResponseDTO.getId());
+			loginResponseBO.setName(loginResponseDTO.getName());
+			loginResponseBO.setAddress(loginResponseDTO.getAddress());
+			loginResponseBO.setMobile(loginResponseDTO.getMobile());
+			loginResponseBO.setDOB(loginResponseDTO.getDOB());
+			loginResponseBO.setGender(loginResponseDTO.getGender());
+			loginResponseBO.setEmail(loginResponseDTO.getEmail());
+			loginResponseBO.setMobile(loginResponseDTO.getMobile());
+			loginResponseBO.setClientDetailsId(loginResponseDTO.getClientDetailsId());
+			loginResponseBO.setLongitude(loginResponseDTO.getLongitude());
+			loginResponseBO.setLatitude(loginResponseDTO.getLatitude());
+			loginResponseBO.setIsVerified(loginResponseDTO.getIsVerified());
+			loginResponseBO.setStatus(loginResponseDTO.getStatus());
+			loginResponseBO.setUserTypeId(loginResponseDTO.getUserTypeId());
 		}
 		loginResponseBO.setValidUser(isValidUser);
 		loginResponseBO.setId(loginResponseDTO.getId());

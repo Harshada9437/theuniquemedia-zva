@@ -275,7 +275,7 @@ public class UsersDAO {
             connection = new ConnectionPool().getConnection();
             statement = connection.createStatement();
             StringBuilder query = new StringBuilder(
-                    "SELECT id, password FROM users where email = \"")
+                    "SELECT * FROM users where email = \"")
                     .append(email).append("\"");
             ResultSet resultSet = statement.executeQuery(query.toString());
             int rowCount = 0;
@@ -284,6 +284,19 @@ public class UsersDAO {
                 loginResponseDTO.setEmail(email);
                 loginResponseDTO.setId(resultSet.getInt("id"));
                 loginResponseDTO.setPassword(resultSet.getString("password"));
+                loginResponseDTO.setName(resultSet.getString("name"));
+                loginResponseDTO.setAddress(resultSet.getString("address"));
+                loginResponseDTO.setMobile(resultSet.getString("mobile"));
+                loginResponseDTO.setEmail(resultSet.getString("email"));
+                loginResponseDTO.setGender(resultSet.getString("gender"));
+                loginResponseDTO.setDOB(resultSet.getString("DOB"));
+                loginResponseDTO.setLatitude(resultSet.getString("latitude"));
+                loginResponseDTO.setLongitude(resultSet.getString("longitude"));
+                loginResponseDTO.setIsVerified(resultSet.getString("IsVerified"));
+                loginResponseDTO.setSessionId(resultSet.getString("sessionId"));
+                loginResponseDTO.setUserTypeId(resultSet.getInt("user_type_id"));
+                loginResponseDTO.setClientDetailsId(resultSet.getInt("client_details_id"));
+                loginResponseDTO.setStatus(resultSet.getString("status"));
                 rowCount++;
             }
             if (rowCount == 0) {

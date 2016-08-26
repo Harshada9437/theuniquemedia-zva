@@ -35,6 +35,7 @@ public class UsersService {
     public Response login(LoginRequest loginRequest) {
         LoginRequestBO loginRequestBO = new LoginRequestBO();
         loginRequestBO.setEmail(loginRequest.getEmail());
+
         loginRequestBO.setPassword(loginRequest.getPassword());
         UserRequestHandler userRequestHandler = new UserRequestHandler();
         LoginResponse loginResponse = new LoginResponse();
@@ -43,10 +44,23 @@ public class UsersService {
                     .login(loginRequestBO);
             UsersDAO usersDAO = new UsersDAO();
             UsersDTO usersDTO = usersDAO.getUserById(loginResponseBO.getId());
+
             if (loginResponseBO.getValidUser()) {
                 if (usersDTO.getStatus().equals("A")) {
                     loginResponse.setMessageType("SUCCESS");
                     loginResponse.setUserId(loginResponseBO.getId());
+                    loginResponse.setName(loginResponseBO.getName());
+                    loginResponse.setAddress(loginResponseBO.getAddress());
+                    loginResponse.setMobile(loginResponseBO.getMobile());
+                    loginResponse.setEmail(loginResponseBO.getEmail());
+                    loginResponse.setGender(loginResponseBO.getGender());
+                    loginResponse.setDOB(loginResponseBO.getDOB());
+                    loginResponse.setLatitude(loginResponseBO.getLatitude());
+                    loginResponse.setLongitude(loginResponseBO.getLongitude());
+                    loginResponse.setClientDetailsId(loginResponseBO.getClientDetailsId());
+                    loginResponse.setStatus(loginResponseBO.getStatus());
+                    loginResponse.setUserTypeId(loginResponseBO.getUserTypeId());
+                    loginResponse.setIsVerified(loginResponseBO.getIsVerified());
                     loginResponse.setMessage(String.valueOf(loginResponseBO
                             .getSessionId()));
                 } else {
