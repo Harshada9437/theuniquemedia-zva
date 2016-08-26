@@ -7,6 +7,7 @@ public class ServiceTypeResponse {
 
     private int id;
     private String type;
+    private String status;
 
     public int getId() {
         return id;
@@ -24,11 +25,21 @@ public class ServiceTypeResponse {
         this.type = type;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+
     @Override
     public String toString() {
         return "ServiceTypeResponse{" +
                 "id=" + id +
                 ", type='" + type + '\'' +
+                ", status='" + status + '\'' +
                 '}';
     }
 }

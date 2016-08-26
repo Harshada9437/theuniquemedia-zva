@@ -32,6 +32,7 @@ public class ServiceProviderTypesDAO implements IServiceProviderTypesDAO {
                 ServiceProviderTypesDTO serviceProviderTypesDTO = new ServiceProviderTypesDTO();
                 serviceProviderTypesDTO.setId(resultSet.getInt("id"));
                 serviceProviderTypesDTO.setType(resultSet.getString("type"));
+                serviceProviderTypesDTO.setStatus(resultSet.getString("status"));
                 index++;
                 serviceProviderTypesDTOList.add(serviceProviderTypesDTO);
             }

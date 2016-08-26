@@ -21,7 +21,7 @@ public class EmailService {
 	private static final String FROM = "support@theuniquemedia.in";
 	private static final Session session = getSession();
 
-	public static boolean sendNewUserEmail(String to, int userId) {
+	/*public static boolean sendNewUserEmail(String to, int userId) {
 		Boolean isProcessed = Boolean.FALSE;
 		try {
 			Message message = new MimeMessage(session);
@@ -43,7 +43,7 @@ public class EmailService {
 			throw new RuntimeException(e);
 		}
 		return isProcessed;
-	}
+	}*/
 
 	public static Boolean sendForgotPasswordEmail(String to, String UserPassword) {
 		Boolean isProcessed = Boolean.FALSE;

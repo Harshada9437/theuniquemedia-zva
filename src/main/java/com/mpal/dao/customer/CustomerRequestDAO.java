@@ -66,12 +66,18 @@ public class CustomerRequestDAO {
             connection = new ConnectionPool().getConnection();
             connection.setAutoCommit(false);
             preparedStatement = connection
-                    .prepareStatement("UPDATE request SET status =?, updated_by =? WHERE token =?;");
+                    .prepareStatement("UPDATE request SET status =?, updated_by =?, updated_dtm =? WHERE token =?;");
 
 
             preparedStatement.setString(parameterIndex++, updateCustomerRequestBO.getStatus());
 
             preparedStatement.setInt(parameterIndex++, updateCustomerRequestBO.getUpdatedBy());
+
+            java.util.Date date = new java.util.Date();
+            Timestamp t1=new Timestamp(date.getTime());
+            String updated_date=DateUtil.getDateStringFromTimeStamp(t1);
+
+            preparedStatement.setString(parameterIndex++, updated_date);
 
             preparedStatement.setString(parameterIndex++, token);
 

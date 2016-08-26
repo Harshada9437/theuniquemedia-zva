@@ -7,6 +7,7 @@ import com.mpal.requestHandlers.ServiceProviderRequestHandler;
 import com.mpal.rest.request.serviceprovider.UpdateServiceProviderRequest;
 import com.mpal.rest.request.serviceprovider.ServiceProviderRequest;
 import com.mpal.rest.response.serviceprovider.ServiceProviderCreationResponse;
+import com.mpal.rest.response.serviceprovider.ServiceProviderResponseList;
 import com.mpal.rest.response.serviceprovider.ServiceTypeResponseList;
 import com.mpal.rest.response.serviceprovider.UpdateServiceProviderResponse;
 import com.mpal.rest.util.ResponseGenerator;
@@ -21,12 +22,12 @@ import java.sql.SQLException;
  * Created by System2 on 8/12/2016.
  */
 
-@Path("/service_provider")
+@Path("/serviceProvider")
 
 public class ServiceProviderService {
 
     @POST
-    @Path("/create_service_provider")
+    @Path("/create")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response CreateServiceProvider(ServiceProviderRequest serviceRequest) {
@@ -54,7 +55,7 @@ public class ServiceProviderService {
 
         ServiceProviderCreationResponse serviceProvidercreationResponse = new ServiceProviderCreationResponse();
 
-        if (serviceproviderRequestHandler.create_service_provider(serviceProviderBO)!=false) {
+        if (serviceproviderRequestHandler.createServiceProvider(serviceProviderBO)!=false) {
 
             serviceProvidercreationResponse.setMessageType("FAILURE");
             serviceProvidercreationResponse.setMessage("ServiceproviderCreation Failed");
@@ -69,7 +70,7 @@ public class ServiceProviderService {
     }
 
     @POST
-    @Path("/update_service_provider")
+    @Path("/update")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
 
@@ -108,10 +109,10 @@ public class ServiceProviderService {
     }*/
 
     @GET
-    @Path("/list")
+    @Path("/types")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAutomobile() {
+    public Response getServiceTypes() {
         ServiceProviderRequestHandler serviceProviderRequestHandler = new ServiceProviderRequestHandler();
         ServiceTypeResponseList serviceTypeResponse = new ServiceTypeResponseList();
         serviceTypeResponse.setServiceTypeResponses(serviceProviderRequestHandler.getServiceTypes());
@@ -120,4 +121,16 @@ public class ServiceProviderService {
         return ResponseGenerator.generateResponse(serviceTypeResponse);
     }
 
+    @GET
+    @Path("/list/{service_provider_type_id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getServiceProviders(@PathParam("service_provider_type_id") int service_provider_type_id) {
+        ServiceProviderRequestHandler serviceProviderRequestHandler = new ServiceProviderRequestHandler();
+        ServiceProviderResponseList serviceTypeResponse = new ServiceProviderResponseList();
+        serviceTypeResponse.setServiceProviderResponses(serviceProviderRequestHandler.getServiceProvider(service_provider_type_id));
+        serviceTypeResponse.setMessageType("SUCCESS");
+        serviceTypeResponse.setMessage("list of service providers.");
+        return ResponseGenerator.generateResponse(serviceTypeResponse);
+    }
 }

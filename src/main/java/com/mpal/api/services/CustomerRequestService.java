@@ -2,18 +2,13 @@ package com.mpal.api.services;
 
 import com.mpal.bo.request.customer.CreateCustomerRequestBO;
 import com.mpal.bo.request.customer.UpdateCustomerRequestBO;
+import com.mpal.exceptions.RequestException.RequestNotFoundException;
 import com.mpal.exceptions.userServiceExceptions.UserNotFoundException;
 import com.mpal.requestHandlers.CustomerRequestHandler;
-import com.mpal.requestHandlers.UserRequestHandler;
 import com.mpal.rest.request.customer.CustomerRequest;
 import com.mpal.rest.request.customer.UpdateCustomerRequest;
-import com.mpal.rest.response.customer.CreateCustomerRequestResponse;
-import com.mpal.rest.response.customer.GetRequestResponse;
-import com.mpal.rest.response.customer.RequestResponseList;
-import com.mpal.rest.response.customer.UpdateCustomerResponse;
-import com.mpal.rest.response.user.GetUserResponse;
+import com.mpal.rest.response.customer.*;
 import com.mpal.rest.response.user.LoginResponse;
-import com.mpal.rest.response.user.UserResponseList;
 import com.mpal.rest.util.ResponseGenerator;
 
 import javax.ws.rs.*;
@@ -87,13 +82,13 @@ public class CustomerRequestService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getRequestListByToken(@PathParam("token") String token) {
         CustomerRequestHandler customerRequestHandler = new CustomerRequestHandler();
-        List<RequestResponseList> response = new ArrayList<RequestResponseList>();
+        ReqeustListResponse response = new ReqeustListResponse();
         try {
-            response = customerRequestHandler.getRequestListByToken(token);
-        } catch (UserNotFoundException e) {
-            LoginResponse loginResponse = new LoginResponse();
-            loginResponse.setMessage(e.getMessage());
-            return ResponseGenerator.generateResponse(loginResponse);
+            response.setRequests(customerRequestHandler.getRequestListByToken(token));
+            response.setMessageType("SUCCESS");
+            response.setMessage("Requests are available.");
+        } catch (RequestNotFoundException e) {
+            response.setMessageType("Failure");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -106,13 +101,13 @@ public class CustomerRequestService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getRequestListByCustomer(@PathParam("customer_id") int customer_id) {
         CustomerRequestHandler customerRequestHandler = new CustomerRequestHandler();
-        List<RequestResponseList> response = new ArrayList<RequestResponseList>();
+        ReqeustListResponse response = new ReqeustListResponse();
         try {
-            response = customerRequestHandler.getRequestListByCustomer(customer_id);
-        } catch (UserNotFoundException e) {
-            LoginResponse loginResponse = new LoginResponse();
-            loginResponse.setMessage(e.getMessage());
-            return ResponseGenerator.generateResponse(loginResponse);
+            response.setRequests(customerRequestHandler.getRequestListByCustomer(customer_id));
+            response.setMessageType("SUCCESS");
+            response.setMessage("Requests are available.");
+        } catch (RequestNotFoundException e) {
+            response.setMessageType("FAILURE");
         }
         return ResponseGenerator.generateResponse(response);
     }
@@ -123,13 +118,13 @@ public class CustomerRequestService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getRequestListByMechanic(@PathParam("mechanic_id") int mechanic_id ) {
         CustomerRequestHandler customerRequestHandler = new CustomerRequestHandler();
-        List<RequestResponseList> response = new ArrayList<RequestResponseList>();
+        ReqeustListResponse response = new ReqeustListResponse();
         try {
-            response = customerRequestHandler.getRequestListByMechanic(mechanic_id );
-        } catch (UserNotFoundException e) {
-            LoginResponse loginResponse = new LoginResponse();
-            loginResponse.setMessage(e.getMessage());
-            return ResponseGenerator.generateResponse(loginResponse);
+            response.setRequests(customerRequestHandler.getRequestListByMechanic(mechanic_id ));
+            response.setMessageType("SUCCESS");
+            response.setMessage("Requests are available.");
+        } catch (RequestNotFoundException e) {
+            response.setMessageType("FAILURE");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -144,16 +139,15 @@ public class CustomerRequestService {
         //if (sessionId != null && RequestValidation.isRequestValid(sessionId)) {
         CustomerRequestHandler customerRequestHandler = new CustomerRequestHandler();
         Object response = null;
+        GetRequestResponse requsetResponse=new GetRequestResponse();
         try {
-                GetRequestResponse requsetResponse = customerRequestHandler.getRequestByToken(token);
+                requsetResponse = customerRequestHandler.getRequestByToken(token);
                 requsetResponse.setMessageType("SUCCESS");
                 return ResponseGenerator.generateResponse(requsetResponse);
         } catch (SQLException e) {
             e.printStackTrace();
-        } catch (UserNotFoundException e) {
-            LoginResponse loginResponse = new LoginResponse();
-            loginResponse.setMessageType("FAILURE");
-            loginResponse.setMessage("Invalid User");
+        } catch (RequestNotFoundException e) {
+            requsetResponse.setMessageType("FAILURE");
         }
         return ResponseGenerator.generateResponse(response);
     } /*else {

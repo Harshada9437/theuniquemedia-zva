@@ -3,12 +3,13 @@ package com.mpal.dao.serviceprovider;
 import com.mpal.bo.request.serviceprovider.UpdateServiceProviderBO;
 import com.mpal.dao.UtilClasses.ConnectionPool;
 import com.mpal.dto.serviceprovider.ServiceProviderDTO;
+import com.mpal.dto.user.UsersDTO;
+import com.mpal.exceptions.userServiceExceptions.UserNotFoundException;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by System2 on 8/12/2016.
@@ -73,7 +74,7 @@ public class ServiceProviderDAO {
     }
 
     public Boolean updateServiceProvider(UpdateServiceProviderBO updateServiceProviderRequestBO) throws SQLException,
-    IOException{
+            IOException {
 
         boolean isCreated = false;
         PreparedStatement preparedStatement = null;
@@ -125,9 +126,52 @@ public class ServiceProviderDAO {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        }
-        System.out.println("isCreated:::" + isCreated);
-        return isCreated;
+            return isCreated;
 
+        }
     }
+
+    public List<ServiceProviderDTO> getAllServiceProviderByTypeId(int service_provider_type_id) throws SQLException, UserNotFoundException {
+            Connection connection = null;
+            Statement statement = null;
+            ServiceProviderDTO serviceProviderDTO = null;
+            List<ServiceProviderDTO> ServiceProviderDTOList = new ArrayList<ServiceProviderDTO>();
+            try {
+                connection = new ConnectionPool().getConnection();
+                statement = connection.createStatement();
+                StringBuilder query = new StringBuilder(
+                        "SELECT * FROM service_provider where service_provider_type_id = ").append(service_provider_type_id);
+                ResultSet resultSet = statement.executeQuery(query.toString()
+                        .trim());
+
+                serviceProviderDTO = new ServiceProviderDTO();
+                while (resultSet.next()) {
+                    serviceProviderDTO.setId(resultSet.getInt("id"));
+                    serviceProviderDTO.setName(resultSet.getString("name"));
+                    serviceProviderDTO.setAddress(resultSet.getString("address"));
+                    serviceProviderDTO.setCity(resultSet.getString("city"));
+                    serviceProviderDTO.setState(resultSet.getString("state"));
+                    serviceProviderDTO.setMobileNo(resultSet.getString("mobile_no"));
+                    serviceProviderDTO.setPhoneNo(resultSet.getString("phone_no"));
+                    serviceProviderDTO.setLat(resultSet.getString("lat"));
+                    serviceProviderDTO.setLog(resultSet.getString("log"));
+                    serviceProviderDTO.setOpeningTime(resultSet.getString("opening_time"));
+                    serviceProviderDTO.setClosingTime(resultSet.getString("closing_time"));
+                    serviceProviderDTO.setServiceProviderId(resultSet.getInt("service_provider_type_id"));
+                    serviceProviderDTO.setStatus(resultSet.getString("status"));
+                    ServiceProviderDTOList.add(serviceProviderDTO);
+                }
+            } catch (SQLException sqlException) {
+                sqlException.printStackTrace();
+            } finally {
+                try {
+                    statement.close();
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return ServiceProviderDTOList;
+        }
 }

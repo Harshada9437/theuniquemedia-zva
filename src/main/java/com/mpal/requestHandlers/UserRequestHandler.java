@@ -38,9 +38,9 @@ public class UserRequestHandler {
 			isProcessed = false;
 		}
 
-		if (isProcessed && userId!=null) {
+		/*if (isProcessed && userId!=null) {
 			EmailService.sendNewUserEmail(registrationRequestBO.getEmail(), userId);
-		}
+		}*/
 
 		return userId;
 	}

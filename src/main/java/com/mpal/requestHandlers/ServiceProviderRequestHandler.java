@@ -6,6 +6,7 @@ import com.mpal.dao.serviceprovider.ServiceProviderDAO;
 import com.mpal.dao.serviceprovider.ServiceProviderTypesDAO;
 import com.mpal.dto.serviceprovider.ServiceProviderDTO;
 import com.mpal.dto.serviceprovider.ServiceProviderTypesDTO;
+import com.mpal.rest.response.serviceprovider.ServiceProviderResponse;
 import com.mpal.rest.response.serviceprovider.ServiceTypeResponse;
 
 import java.io.IOException;
@@ -18,7 +19,7 @@ import java.util.List;
  */
 public class ServiceProviderRequestHandler {
 
-    public boolean create_service_provider(ServiceProviderBO serviceProviderBO) {
+    public boolean createServiceProvider(ServiceProviderBO serviceProviderBO) {
 
         Boolean isProcessed = Boolean.TRUE;
         String msg="notcreated";
@@ -88,6 +89,7 @@ public class ServiceProviderRequestHandler {
                 ServiceTypeResponse getServiceTypeResponse = new ServiceTypeResponse();
                 getServiceTypeResponse.setId(serviceProviderTypesDTO.getId());
                 getServiceTypeResponse.setType(serviceProviderTypesDTO.getType());
+                getServiceTypeResponse.setStatus(serviceProviderTypesDTO.getStatus());
                 getServiceTypesResponses.add(getServiceTypeResponse);
             }
         } catch (SQLException sq) {
@@ -97,4 +99,34 @@ public class ServiceProviderRequestHandler {
         return getServiceTypesResponses;
     }
 
+    public List<ServiceProviderResponse> getServiceProvider(int service_provider_type_id) {
+        ServiceProviderDAO serviceProviderDAO = new ServiceProviderDAO();
+        List<ServiceProviderResponse> getServiceProviderResponses = new ArrayList<ServiceProviderResponse>();
+        try {
+            List<ServiceProviderDTO>  serviceProviderDTOList = serviceProviderDAO
+                    .getAllServiceProviderByTypeId(service_provider_type_id);
+
+            for (com.mpal.dto.serviceprovider.ServiceProviderDTO serviceProviderDTO : serviceProviderDTOList) {
+                ServiceProviderResponse getServiceResponse = new ServiceProviderResponse();
+                getServiceResponse.setId(serviceProviderDTO.getId());
+                getServiceResponse.setName(serviceProviderDTO.getName());
+                getServiceResponse.setAddress(serviceProviderDTO.getAddress());
+                getServiceResponse.setCity(serviceProviderDTO.getCity());
+                getServiceResponse.setState(serviceProviderDTO.getState());
+                getServiceResponse.setMobileNo(serviceProviderDTO.getMobileNo());
+                getServiceResponse.setPhoneNo(serviceProviderDTO.getPhoneNo());
+                getServiceResponse.setLat(serviceProviderDTO.getLat());
+                getServiceResponse.setLog(serviceProviderDTO.getLog());
+                getServiceResponse.setOpeningTime(serviceProviderDTO.getOpeningTime());
+                getServiceResponse.setClosingTime(serviceProviderDTO.getClosingTime());
+                getServiceResponse.setServiceProviderId(serviceProviderDTO.getServiceProviderId());
+                getServiceResponse.setStatus(serviceProviderDTO.getStatus());
+                getServiceProviderResponses.add(getServiceResponse);
+            }
+        } catch (SQLException sq) {
+            sq.printStackTrace();
+        }
+
+        return getServiceProviderResponses;
+    }
 }

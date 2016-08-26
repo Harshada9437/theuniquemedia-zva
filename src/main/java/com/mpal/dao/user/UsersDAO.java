@@ -338,7 +338,7 @@ public class UsersDAO {
                 usersDTO.setMobile(resultSet.getString("mobile"));
                 usersDTO.setEmail(resultSet.getString("email"));
                 usersDTO.setGender(resultSet.getString("gender"));
-                usersDTO.setDOB(resultSet.getString("DOB"));
+                usersDTO.setDOB(resultSet.getString("dob"));
                 usersDTO.setLatitude(resultSet.getString("latitude"));
                 usersDTO.setLongitude(resultSet.getString("longitude"));
                 usersDTO.setPassword(resultSet.getString("password"));
