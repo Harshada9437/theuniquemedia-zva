@@ -336,7 +336,7 @@ public class UserRequestHandler {
 			return userList;
 		}
 
-    public Boolean assignAutomobile(AssignAutomobilesRequestBO assignAutomobilesRequestBO) throws SQLException,IOException {
+	public Boolean assignAutomobile(AssignAutomobilesRequestBO assignAutomobilesRequestBO) throws SQLException {
 
 		Boolean isCreated = Boolean.FALSE;
 		List<AutomobilesInfo> automobileInfoList = assignAutomobilesRequestBO.getAutomobileInfoList();
@@ -378,7 +378,7 @@ public class UserRequestHandler {
 		return isCreated;
 	}
 
-	public Boolean assignServices(AssignServicesRequestBO assignServicesRequestBO) throws SQLException, IOException {
+	public Boolean assignServices(AssignServicesRequestBO assignServicesRequestBO) throws SQLException {
 		Boolean isCreated = Boolean.FALSE;
 		List<ServiceInfo> serviceInfoList = assignServicesRequestBO.getServiceInfoList();
 		Iterator<ServiceInfo> serviceInfoIterator = serviceInfoList.iterator();
@@ -419,27 +419,23 @@ public class UserRequestHandler {
 		return isCreated;
 	}
 
-    public List<MechanicResponse> getMechanicsList(int service_id, int automobile_detail_id) throws SQLException, IOException {
+	public List<MechanicResponse> getMechanicsList(int service_id, int automobile_detail_id) throws SQLException {
 			UsersDAO usersDAO = new UsersDAO();
 			List<MechanicResponse> mechanicList = new ArrayList<MechanicResponse>();
 			try {
 				mechanicList = getMechanicResponseListFromDTOs(usersDAO.getMechanicByServiceId(service_id,automobile_detail_id));
 			} catch (SQLException s) {
 				s.printStackTrace();
-			} catch (IOException s) {
-				s.printStackTrace();
 			}
 			return mechanicList;
 		}
 
-    public List<UserAutomobileMapResponseList> getUserAutomobileMapList(int userId)  throws SQLException, IOException {
+	public List<UserAutomobileMapResponseList> getUserAutomobileMapList(int userId) throws SQLException {
 		List<UserAutomobileMapResponseList> userList = null;
 		try {
 			UserAutomobileMapDAO userAutomobileMapDAO = new UserAutomobileMapDAO();
 			userList = getUserMapResponseListFromDTOs(userAutomobileMapDAO.getUsersAutomobileMapList(userId));
 		} catch (SQLException s) {
-			s.printStackTrace();
-		} catch (IOException s) {
 			s.printStackTrace();
 		}
 		return userList;
@@ -459,14 +455,12 @@ public class UserRequestHandler {
 			return userResponseListResponse;
 		}
 
-	public List<UserServiceMapResponseList> getUserServiceMapList(int userId) throws SQLException, IOException {
+	public List<UserServiceMapResponseList> getUserServiceMapList(int userId) throws SQLException {
 			List<UserServiceMapResponseList> userList = null;
 			try {
 				UserServiceMapDAO userServiceMapDAO = new UserServiceMapDAO();
 				userList = getUserServiceMapResponseListFromDTOs(userServiceMapDAO.getUsersAutomobileMapList(userId));
 			} catch (SQLException s) {
-				s.printStackTrace();
-			} catch (IOException s) {
 				s.printStackTrace();
 			}
 			return userList;

@@ -12,7 +12,7 @@ import java.util.List;
  * Created by System1 on 8/22/2016.
  */
 public class UserAutomobileMapDAO {
-    public List<Integer> getListOfAutomobiles(int userId, String status) throws SQLException, IOException{
+    public List<Integer> getListOfAutomobiles(int userId, String status) throws SQLException {
         List<Integer> automobileDetailsIds = new ArrayList<Integer>();
         Connection connection = null;
         Statement statement = null;
@@ -102,8 +102,7 @@ public class UserAutomobileMapDAO {
         return isInserted;
     }
 
-    public List<UserAutomobileMapDTO> getUsersAutomobileMapList(int userId) throws SQLException,
-            IOException {
+    public List<UserAutomobileMapDTO> getUsersAutomobileMapList(int userId) throws SQLException {
         Connection connection = null;
         Statement statement = null;
         List<UserAutomobileMapDTO> userAutomobileMapResponseList = new ArrayList<UserAutomobileMapDTO>();

@@ -579,7 +579,7 @@ public class UsersDAO {
             return userTypeResponseList;
         }
 
-    public List<MechanicDTO> getMechanicByServiceId(int ReqServiceId, int ReqAutomobileId) throws SQLException, IOException {
+    public List<MechanicDTO> getMechanicByServiceId(int ReqServiceId, int ReqAutomobileId) throws SQLException {
 
         Connection connection = null;
         Statement statement = null;

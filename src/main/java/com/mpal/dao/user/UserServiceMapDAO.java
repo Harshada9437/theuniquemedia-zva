@@ -103,7 +103,7 @@ public class UserServiceMapDAO {
         return isInserted;
     }
 
-    public List<UserServiceMapDTO> getUsersAutomobileMapList(int userId) throws SQLException,IOException {
+    public List<UserServiceMapDTO> getUsersAutomobileMapList(int userId) throws SQLException {
         Connection connection = null;
         Statement statement = null;
         List<UserServiceMapDTO> userAutomobileMapResponseList = new ArrayList<UserServiceMapDTO>();
