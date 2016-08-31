@@ -148,8 +148,7 @@ public class UsersService {
     @Path("/update")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateUser(UpdateUserRequest updateUser/*,@HeaderParam("sessionId") String sessionId*/) {
-        //if (sessionId != null && RequestValidation.isRequestValid(sessionId)) {
+    public Response updateUser(UpdateUserRequest updateUser) {
         UpdaterUserBO updateRequestBO = new UpdaterUserBO();
         updateRequestBO.setId(updateUser.getId());
         updateRequestBO.setName(updateUser.getName());
@@ -172,10 +171,7 @@ public class UsersService {
             updateResponse.setMessage("Unable to update the user");
         }
         return ResponseGenerator.generateResponse(updateResponse);
-    } /*else {
-            return ResponseGenerator.generateResponse(RequestValidation.getUnautheticatedResponse());
-        }
-    }*/
+    }
 
     @GET
     @Path("/userTypes")
@@ -191,8 +187,7 @@ public class UsersService {
     @Path("/userInfo/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getUserById(@PathParam("id") int id/*, @HeaderParam("sessionId") String sessionId*/) {
-        //if (sessionId != null && RequestValidation.isRequestValid(sessionId)) {
+    public Response getUserById(@PathParam("id") int id) {
         UserRequestHandler userRequestHandler = new UserRequestHandler();
         Object response = null;
         try {
@@ -210,18 +205,13 @@ public class UsersService {
             return ResponseGenerator.generateResponse(loginResponse);
         }
         return ResponseGenerator.generateResponse(response);
-    } /*else {
-            return ResponseGenerator.generateResponse(RequestValidation.getUnautheticatedResponse());
-        }*/
-    // }
+    }
 
     @POST
     @Path("/logout")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response logout(LogoutRequest logoutRequest) //@HeaderParam("sessionId") String sessionId)
-    {
-        // if (sessionId != null && RequestValidation.isRequestValid(sessionId)) {
+    public Response logout(LogoutRequest logoutRequest) {
         UserRequestHandler userRequestHandler = new UserRequestHandler();
         Boolean isLoggedOut = userRequestHandler.logout(logoutRequest
                 .getUserId());
@@ -235,9 +225,7 @@ public class UsersService {
             logoutResponse.setMessage("Unable to Log out current user.");
             return ResponseGenerator.generateResponse(logoutResponse);
         }
-        /*} else {
-            return ResponseGenerator.generateResponse(RequestValidation.getUnautheticatedResponse());
-        }*/
+
     }
 
     @GET
@@ -338,10 +326,7 @@ public class UsersService {
     @Path("/{user_type_id}/assignAutomobiles")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response assignMechanicsForAutomobiles(AssignAutomobilesRequest assignAutomobilesRequest, @PathParam("user_type_id") int user_type_id
-
-    /*, @HeaderParam("sessionId") String sessionId*/) throws IOException, SQLException {
-           /* if (sessionId != null && RequestValidation.isRequestValid(sessionId)) {*/
+    public Response assignMechanicsForAutomobiles(AssignAutomobilesRequest assignAutomobilesRequest, @PathParam("user_type_id") int user_type_id) throws SQLException {
         UserRequestHandler userRequestHandler = new UserRequestHandler();
         AssignAutomobilesRequestBO assignAutomobilesRequestBO = new AssignAutomobilesRequestBO();
         assignAutomobilesRequestBO.setAutomobileInfoList(assignAutomobilesRequest.getAutomobilesInfoList());
@@ -355,17 +340,13 @@ public class UsersService {
             assignAutomobilesResponse.setMessage("automobiles cann't be assigned.");
         }
         return ResponseGenerator.generateResponse(assignAutomobilesResponse);
-    }/* else {
-              return ResponseGenerator.generateResponse(RequestValidation.getUnautheticatedResponse());
-           }*/
+    }
 
     @POST
     @Path("/{user_type_id}/assignServices")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response assignMechanicsForServices(AssignServicesRequest assignServicesRequest, @PathParam("user_type_id") int user_type_id
-                                                  /* ,@HeaderParam("sessionId") String sessionId*/) throws IOException, SQLException {
-           /* if (sessionId != null && RequestValidation.isRequestValid(sessionId)) {*/
+    public Response assignMechanicsForServices(AssignServicesRequest assignServicesRequest, @PathParam("user_type_id") int user_type_id) throws SQLException {
         UserRequestHandler userRequestHandler = new UserRequestHandler();
         AssignServicesRequestBO assignServicesRequestBO = new AssignServicesRequestBO();
         assignServicesRequestBO.setServiceInfoList(assignServicesRequest.getServiceInfoList());
@@ -380,16 +361,14 @@ public class UsersService {
         }
 
         return ResponseGenerator.generateResponse(assignServicesResponse);
-    } /*else {
-               return ResponseGenerator.generateResponse(RequestValidation.getUnautheticatedResponse());
-           }*/
+    }
 
     @GET
     @Path("/{user_type_id}/{service_id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getMechanicByByService(@PathParam("user_type_id") int user_type_id, @PathParam("service_id") int service_id,
-                                           @QueryParam("automobileid") int automobile_detail_id) throws SQLException, IOException {
+                                           @QueryParam("automobileid") int automobile_detail_id) throws SQLException {
         UserRequestHandler userRequestHandler = new UserRequestHandler();
         MechanicByServiceResponse mechanicByServiceResponse = new MechanicByServiceResponse();
         try {
@@ -397,8 +376,6 @@ public class UsersService {
             mechanicByServiceResponse.setMessageType("SUCCESS");
             mechanicByServiceResponse.setMessage("Available mechanics.");
         } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
             e.printStackTrace();
         }
         return ResponseGenerator.generateResponse(mechanicByServiceResponse);
@@ -420,8 +397,6 @@ public class UsersService {
             return ResponseGenerator.generateResponse(loginResponse);
         } catch (SQLException e) {
             e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
         return ResponseGenerator.generateResponse(response);
     }
@@ -440,8 +415,6 @@ public class UsersService {
             loginResponse.setMessage(e.getMessage());
             return ResponseGenerator.generateResponse(loginResponse);
         } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
             e.printStackTrace();
         }
         return ResponseGenerator.generateResponse(response);

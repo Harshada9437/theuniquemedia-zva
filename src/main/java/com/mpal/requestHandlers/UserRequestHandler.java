@@ -412,9 +412,6 @@ public class UserRequestHandler {
 		} catch (SQLException s) {
 			s.printStackTrace();
 			isCreated = Boolean.FALSE;
-		} catch (IOException e) {
-			e.printStackTrace();
-			isCreated = Boolean.FALSE;
 		}
 		return isCreated;
 	}

@@ -12,7 +12,7 @@ import java.util.List;
  * Created by System1 on 8/22/2016.
  */
 public class UserServiceMapDAO {
-    public static List<Integer> getListOfServices(int userId, String status) throws SQLException,IOException {
+    public static List<Integer> getListOfServices(int userId, String status) throws SQLException {
         List<Integer> serviceIds = new ArrayList<Integer>();
         Connection connection = null;
         Statement statement = null;
@@ -43,7 +43,7 @@ public class UserServiceMapDAO {
 
     }
 
-    public Boolean updateUserServiceMapping(Integer serviceId, Integer userId, String status) throws SQLException,IOException {
+    public Boolean updateUserServiceMapping(Integer serviceId, Integer userId, String status) throws SQLException {
         Boolean isUpdated = Boolean.FALSE;
         PreparedStatement preparedStatement = null;
         Connection connection = null;
@@ -73,7 +73,7 @@ public class UserServiceMapDAO {
         return isUpdated;
     }
 
-    public Boolean insertUserServiceMapping(Integer serviceId, Integer userId) throws SQLException,IOException {
+    public Boolean insertUserServiceMapping(Integer serviceId, Integer userId) throws SQLException {
         Boolean isInserted = Boolean.FALSE;
         PreparedStatement preparedStatement = null;
         Connection connection = null;
