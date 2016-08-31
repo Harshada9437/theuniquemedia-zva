@@ -12,14 +12,12 @@ import java.util.List;
 import com.mpal.bo.request.user.ChangePasswordBO;
 import com.mpal.bo.request.user.UpdaterUserBO;
 import com.mpal.dao.UtilClasses.ConnectionPool;
-import com.mpal.dto.automobile.AutomobileDTO;
 import com.mpal.dto.user.LoginResponseDTO;
 import com.mpal.dto.user.MechanicDTO;
 import com.mpal.dto.user.UsersDTO;
-import com.mpal.exceptions.AutomobileServiceExceptions.AutomobileNotFoundException;
 import com.mpal.exceptions.userServiceExceptions.UserNotFoundException;
 import com.mpal.rest.response.user.UserLoggedInResponse;
-import com.mpal.rest.response.user.UserResponseList;
+
 
 public class UsersDAO {
 

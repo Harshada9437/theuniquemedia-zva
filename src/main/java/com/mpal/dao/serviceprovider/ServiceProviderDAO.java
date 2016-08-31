@@ -3,7 +3,6 @@ package com.mpal.dao.serviceprovider;
 import com.mpal.bo.request.serviceprovider.UpdateServiceProviderBO;
 import com.mpal.dao.UtilClasses.ConnectionPool;
 import com.mpal.dto.serviceprovider.ServiceProviderDTO;
-import com.mpal.dto.user.UsersDTO;
 import com.mpal.exceptions.userServiceExceptions.UserNotFoundException;
 
 import java.io.IOException;
@@ -171,7 +170,6 @@ public class ServiceProviderDAO {
                     e.printStackTrace();
                 }
             }
-
             return ServiceProviderDTOList;
         }
 }

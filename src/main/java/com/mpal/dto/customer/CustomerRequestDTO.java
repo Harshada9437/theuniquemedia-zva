@@ -1,6 +1,6 @@
 package com.mpal.dto.customer;
 
-public class CreateCustomerRequestDTO {
+public class CustomerRequestDTO {
     private int id;
     private int customerId;
     private int mechanicId;
@@ -97,7 +97,7 @@ public class CreateCustomerRequestDTO {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        CreateCustomerRequestDTO that = (CreateCustomerRequestDTO) o;
+        CustomerRequestDTO that = (CustomerRequestDTO) o;
 
         if (id != that.id) return false;
         if (customerId != that.customerId) return false;
@@ -129,7 +129,7 @@ public class CreateCustomerRequestDTO {
 
     @Override
     public String toString() {
-        return "CreateCustomerRequestDTO{" +
+        return "CustomerRequestDTO{" +
                 "id=" + id +
                 ", customerId=" + customerId +
                 ", mechanicId=" + mechanicId +

@@ -3,20 +3,16 @@ package com.mpal.requestHandlers;
 import com.mpal.bo.request.customer.CreateCustomerRequestBO;
 import com.mpal.bo.request.customer.UpdateCustomerRequestBO;
 import com.mpal.dao.customer.CustomerRequestDAO;
-import com.mpal.dao.user.UsersDAO;
-import com.mpal.dto.customer.CreateCustomerRequestDTO;
-import com.mpal.dto.user.UsersDTO;
-import com.mpal.exceptions.userServiceExceptions.UserNotFoundException;
+import com.mpal.dto.customer.CustomerRequestDTO;
+import com.mpal.dto.customer.RequestDTO;
 import com.mpal.rest.response.customer.GetRequestResponse;
+import com.mpal.rest.response.customer.RequestResponse;
 import com.mpal.rest.response.customer.RequestResponseList;
-import com.mpal.rest.response.user.GetUserResponse;
-import com.mpal.rest.response.user.UserResponseList;
 import com.mpal.util.DateUtil;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -25,22 +21,22 @@ public class CustomerRequestHandler {
 
     public String createCustomerRequest(CreateCustomerRequestBO createCustomerRequestBO) {
         CustomerRequestDAO customerRequestDAO = new CustomerRequestDAO();
-        CreateCustomerRequestDTO createCustomerRequestDTO = buildCreateCustomerRequestDTOFromBO(createCustomerRequestBO);
-        Boolean isCreated = customerRequestDAO.createCustomerRequest(createCustomerRequestDTO);
+        CustomerRequestDTO customerRequestDTO = buildCreateCustomerRequestDTOFromBO(createCustomerRequestBO);
+        Boolean isCreated = customerRequestDAO.createCustomerRequest(customerRequestDTO);
         if (isCreated) {
-            return createCustomerRequestDTO.getToken();
+            return customerRequestDTO.getToken();
         }
         return null;
     }
 
-    private CreateCustomerRequestDTO buildCreateCustomerRequestDTOFromBO(CreateCustomerRequestBO createCustomerRequestBO) {
-        CreateCustomerRequestDTO createCustomerRequestDTO = new CreateCustomerRequestDTO();
-        createCustomerRequestDTO.setAutomobileDetailsId(createCustomerRequestBO.getAutomobileDetailsId());
-        createCustomerRequestDTO.setMechanicId(createCustomerRequestBO.getMechanicId());
-        createCustomerRequestDTO.setCustomerId(createCustomerRequestBO.getCustomerId());
-        createCustomerRequestDTO.setServiceId(createCustomerRequestBO.getServiceId());
-        createCustomerRequestDTO.setToken(generateToken(createCustomerRequestBO));
-        return createCustomerRequestDTO;
+    private CustomerRequestDTO buildCreateCustomerRequestDTOFromBO(CreateCustomerRequestBO createCustomerRequestBO) {
+        CustomerRequestDTO customerRequestDTO = new CustomerRequestDTO();
+        customerRequestDTO.setAutomobileDetailsId(createCustomerRequestBO.getAutomobileDetailsId());
+        customerRequestDTO.setMechanicId(createCustomerRequestBO.getMechanicId());
+        customerRequestDTO.setCustomerId(createCustomerRequestBO.getCustomerId());
+        customerRequestDTO.setServiceId(createCustomerRequestBO.getServiceId());
+        customerRequestDTO.setToken(generateToken(createCustomerRequestBO));
+        return customerRequestDTO;
     }
 
     private String generateToken(CreateCustomerRequestBO createCustomerRequestBO) {
@@ -65,16 +61,15 @@ public class CustomerRequestHandler {
             isProcessed = false;
         }
 
-        //System.out.println("isProcessed:::" + isProcessed);
         return isProcessed;
     }
 
 
-    private List<RequestResponseList> getRequestResponseListFromDTOs(List<CreateCustomerRequestDTO> customerRequestDTO) throws SQLException{
+    private List<RequestResponseList> getRequestResponseListFromDTOs(List<CustomerRequestDTO> customerRequestDTO) throws SQLException{
         List<RequestResponseList> requestResponseListResponse = new ArrayList<RequestResponseList>();
-        Iterator<CreateCustomerRequestDTO> createCustomerRequestDTOIterator = customerRequestDTO.iterator();
+        Iterator<CustomerRequestDTO> createCustomerRequestDTOIterator = customerRequestDTO.iterator();
         while(createCustomerRequestDTOIterator.hasNext()){
-            CreateCustomerRequestDTO createCustomerRequestDTO = createCustomerRequestDTOIterator.next();
+            CustomerRequestDTO createCustomerRequestDTO = createCustomerRequestDTOIterator.next();
             RequestResponseList requestResponseList = new RequestResponseList(createCustomerRequestDTO.getId(),
                     createCustomerRequestDTO.getCustomerId(),
                     createCustomerRequestDTO.getMechanicId(),
@@ -111,7 +106,7 @@ public class CustomerRequestHandler {
             return requestResponse;
         }
 
-    private GetRequestResponse buildRequestResponseFromDTO(CreateCustomerRequestDTO usersDTO) {
+    private GetRequestResponse buildRequestResponseFromDTO(CustomerRequestDTO usersDTO) {
         GetRequestResponse requestResponse = new GetRequestResponse();
         requestResponse.setId(usersDTO.getId());
         requestResponse.setCustomerId(usersDTO.getCustomerId());
@@ -149,5 +144,45 @@ public class CustomerRequestHandler {
         }
         return requestResponse;
     }
+
+    public List<RequestResponse> getRequestList() throws SQLException{
+        CustomerRequestDAO customerRequestDAO = new CustomerRequestDAO();
+        List<RequestResponse> requestResponse=new ArrayList<RequestResponse>();
+        try {
+            requestResponse = getRequestResponseFromDTOs(customerRequestDAO
+                    .getRequestList());
+        }catch (SQLException s) {
+            s.printStackTrace();
+        }
+        return requestResponse;
+    }
+
+    private List<RequestResponse> getRequestResponseFromDTOs(List<RequestDTO> requestDTOs) throws SQLException{
+        List<RequestResponse> requestResponseList = new ArrayList<RequestResponse>();
+        Iterator<RequestDTO> requestDTOIterator = requestDTOs.iterator();
+        while(requestDTOIterator.hasNext()){
+            RequestDTO requestDTO = requestDTOIterator.next();
+            RequestResponse requestResponse = new RequestResponse(
+                    requestDTO.getMechName(),
+                    requestDTO.getMechNo(),
+                    requestDTO.getMechEmail(),
+                    requestDTO.getCustomerName(),
+                    requestDTO.getCustomerNo(),
+                    requestDTO.getCustomerEmail(),
+                    requestDTO.getServiceId(),
+                    requestDTO.getServiceName(),
+                    requestDTO.getMake(),
+                    requestDTO.getModel(),
+                    requestDTO.getId(),
+                    requestDTO.getCreatedDtm(),
+                    requestDTO.getUpdatedDtm(),
+                    requestDTO.getUpdatedBy(),
+                    requestDTO.getToken(),
+                    requestDTO.getStatus());
+            requestResponseList.add(requestResponse);
+        }
+        return requestResponseList;
+    }
+
 }
 

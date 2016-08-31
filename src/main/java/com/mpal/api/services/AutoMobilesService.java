@@ -67,17 +67,6 @@ public class AutoMobilesService {
             automobilecreationResponse.setMessageType(msg);
             automobilecreationResponse.setMessage("AutomobileCreation Failed");
         }
-/*
-        if (automobileRequestHandler.create(automobilesBO)!=false) {
-            automobilecreationResponse.setMessageType("FAILURE");
-            automobilecreationResponse.setMessage("AutomobileCreation Failed");
-
-        } else {
-            automobilecreationResponse.setMessageType("SUCCESS");
-            automobilecreationResponse.setMessage("Created sucessfuly");
-
-        }
-*/
         return ResponseGenerator.generateResponse(automobilecreationResponse);
     }
 

@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by System1 on 8/13/2016.
  */
-public class UserTypeResponseList {
+public class UserResponse {
 
         List<UserResponseList> userResponseList;
         private String message;
@@ -35,12 +35,12 @@ public class UserTypeResponseList {
             this.messageType = messageType;
         }
 
-        @Override
-        public String toString() {
-            return "UserTypesResponse{" +
-                    "userResponseList=" + userResponseList +
-                    ", message='" + message + '\'' +
-                    ", messageType='" + messageType + '\'' +
-                    '}';
-        }
+    @Override
+    public String toString() {
+        return "UserResponse{" +
+                "userResponseList=" + userResponseList +
+                ", message='" + message + '\'' +
+                ", messageType='" + messageType + '\'' +
+                '}';
+    }
 }

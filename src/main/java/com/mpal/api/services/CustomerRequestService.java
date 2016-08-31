@@ -3,20 +3,16 @@ package com.mpal.api.services;
 import com.mpal.bo.request.customer.CreateCustomerRequestBO;
 import com.mpal.bo.request.customer.UpdateCustomerRequestBO;
 import com.mpal.exceptions.RequestException.RequestNotFoundException;
-import com.mpal.exceptions.userServiceExceptions.UserNotFoundException;
 import com.mpal.requestHandlers.CustomerRequestHandler;
 import com.mpal.rest.request.customer.CustomerRequest;
 import com.mpal.rest.request.customer.UpdateCustomerRequest;
 import com.mpal.rest.response.customer.*;
-import com.mpal.rest.response.user.LoginResponse;
 import com.mpal.rest.util.ResponseGenerator;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 @Path("/request")
 public class CustomerRequestService {
@@ -154,5 +150,26 @@ public class CustomerRequestService {
             return ResponseGenerator.generateResponse(RequestValidation.getUnautheticatedResponse());
         }*/
     //}
+
+
+    @GET
+    @Path("/list")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getRequestList( ) {
+        CustomerRequestHandler customerRequestHandler = new CustomerRequestHandler();
+        RequestList response = new RequestList();
+        try {
+            response.setRequest(customerRequestHandler.getRequestList());
+            response.setMessageType("SUCCESS");
+            response.setMessage("Requests are available.");
+        } catch (RequestNotFoundException e) {
+            response.setMessageType("FAILURE");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ResponseGenerator.generateResponse(response);
+    }
+
 }
 

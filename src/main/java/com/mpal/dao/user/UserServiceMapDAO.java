@@ -1,9 +1,7 @@
 package com.mpal.dao.user;
 
 import com.mpal.dao.UtilClasses.ConnectionPool;
-import com.mpal.dto.user.UserAutomobileMapDTO;
 import com.mpal.dto.user.UserServiceMapDTO;
-import com.mpal.dto.user.UsersDTO;
 
 import java.io.IOException;
 import java.sql.*;

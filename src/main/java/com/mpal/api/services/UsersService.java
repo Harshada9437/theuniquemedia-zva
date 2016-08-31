@@ -319,7 +319,7 @@ public class UsersService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUserByTypeList(@PathParam("user_type_id") int user_type_id) throws SQLException, IOException {
         UserRequestHandler userRequestHandler = new UserRequestHandler();
-        UserTypeResponseList userResponseL = new UserTypeResponseList();
+        UserResponse userResponseL = new UserResponse();
         try {
             userResponseL.setUserResponseList(userRequestHandler.getUserByType(user_type_id));
             userResponseL.setMessageType("SUCCESS");
