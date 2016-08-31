@@ -11,16 +11,15 @@ public class ConnectionPool {
     private String password;
 
     public ConnectionPool() {
-		userName = "root";
+		/*userName = "root";
         password = "root";
 		url = "jdbc:mysql://localhost:3306/mpaldb";      //LOCAL SERVER
-		driver = "com.mysql.jdbc.Driver";
-//       /* String host = System.getenv("OPENSHIFT_MYSQL_DB_HOST");
-//        String port = System.getenv("OPENSHIFT_MYSQL_DB_PORT");
-//        userName = System.getenv("OPENSHIFT_MYSQL_DB_USERNAME");    //LIVE SERVER
-//        password = System.getenv("OPENSHIFT_MYSQL_DB_PASSWORD");
-//        url = "jdbc:mysql://"+host+":"+port+"/mpal";
-//        driver = "com.mysql.jdbc.Driver";*/
+		driver = "com.mysql.jdbc.Driver";*/
+       String host = System.getenv("OPENSHIFT_MYSQL_DB_HOST");
+       String port = System.getenv("OPENSHIFT_MYSQL_DB_PORT");
+       userName = System.getenv("OPENSHIFT_MYSQL_DB_USERNAME");    //LIVE SERVER
+      password = System.getenv("OPENSHIFT_MYSQL_DB_PASSWORD");url = "jdbc:mysql://"+host+":"+port+"/mpal";
+       driver = "com.mysql.jdbc.Driver";
     }
 
     public Connection getConnection() throws SQLException {
