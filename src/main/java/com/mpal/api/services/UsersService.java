@@ -296,7 +296,7 @@ public class UsersService {
             updateResponse.setMessage("Password Updated.");
         } else {
             updateResponse.setMessageType("FAILURE");
-            updateResponse.setMessage("Password Updatation failed.");
+            updateResponse.setMessage("Password Updation failed.");
         }
         return ResponseGenerator.generateResponse(updateResponse);
     }
@@ -315,7 +315,6 @@ public class UsersService {
         } catch (UserNotFoundException e) {
             userResponseL.setMessageType("FAILURE");
             userResponseL.setMessage("Users are not available");
-            /*e.printStackTrace();*/
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -337,7 +336,7 @@ public class UsersService {
             assignAutomobilesResponse.setMessage("automobiles are assigned.");
         } else {
             assignAutomobilesResponse.setMessageType("FAILURE");
-            assignAutomobilesResponse.setMessage("automobiles cann't be assigned.");
+            assignAutomobilesResponse.setMessage("automobiles can't be assigned.");
         }
         return ResponseGenerator.generateResponse(assignAutomobilesResponse);
     }
@@ -357,7 +356,7 @@ public class UsersService {
             assignServicesResponse.setMessage("services are assigned.");
         } else {
             assignServicesResponse.setMessageType("FAILURE");
-            assignServicesResponse.setMessage("services cann't be assigned.");
+            assignServicesResponse.setMessage("services can't be assigned.");
         }
 
         return ResponseGenerator.generateResponse(assignServicesResponse);
