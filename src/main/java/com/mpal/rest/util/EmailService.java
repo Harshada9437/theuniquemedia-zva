@@ -21,30 +21,6 @@ public class EmailService {
 	private static final String FROM = "support@theuniquemedia.in";
 	private static final Session session = getSession();
 
-	/*public static boolean sendNewUserEmail(String to, int userId) {
-		Boolean isProcessed = Boolean.FALSE;
-		try {
-			Message message = new MimeMessage(session);
-
-			message.setFrom(new InternetAddress(FROM));
-
-			message.setRecipients(Message.RecipientType.TO,
-					InternetAddress.parse(to));
-
-			message.setSubject("Please confirm Your Email to MPAL");
-
-			message.setText("Welcome! Thanks for signing up.Please follow this link to activate your email address \n\nhttp://automobiles.mpal.com/app/#/user/confirm?id="+userId+"\n\nRegards,\nmpal");
-
-			Transport.send(message);
-
-			isProcessed = Boolean.TRUE;
-
-		} catch (MessagingException e) {
-			throw new RuntimeException(e);
-		}
-		return isProcessed;
-	}*/
-
 	public static Boolean sendForgotPasswordEmail(String to, String UserPassword) {
 		Boolean isProcessed = Boolean.FALSE;
 
@@ -56,7 +32,7 @@ public class EmailService {
 			message.setRecipients(Message.RecipientType.TO,
 					InternetAddress.parse(to));
 
-			message.setSubject("MPAL Password");
+			message.setSubject("Eauction Password");
 
 			message.setText("Your Password is : \"" + UserPassword + "\"");
 
@@ -95,7 +71,7 @@ public class EmailService {
 	}
 
 	private static Boolean sendAcknowledgementEmail(String to,
-			List<String> recipents) {
+													List<String> recipents) {
 		Boolean isProcessed = Boolean.FALSE;
 
 		try {
@@ -108,7 +84,7 @@ public class EmailService {
 
 			message.setSubject("Notification Email is send");
 
-			message.setText("Notification Email is send to following Recipient : \n"
+			message.setText("Notification Email is send to following Recipents : \n"
 					+ recipents.toString());
 
 			Transport.send(message);
@@ -127,6 +103,7 @@ public class EmailService {
 				InternetAddress.parse(to));
 		Transport.send(message);
 	}
+
 
 	private static Session getSession() {
 		if (session == null) {

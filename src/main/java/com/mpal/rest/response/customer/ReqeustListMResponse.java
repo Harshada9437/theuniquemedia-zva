@@ -3,18 +3,18 @@ package com.mpal.rest.response.customer;
 import java.util.List;
 
 /**
- * Created by System1 on 8/26/2016.
+ * Created by System1 on 8/31/2016.
  */
-public class ReqeustListResponse {
-    private List<RequestResponse> requests;
+public class ReqeustListMResponse {
+    private List<RequestMResponse> requests;
     private String messageType;
     private String message;
 
-    public List<RequestResponse> getRequests() {
+    public List<RequestMResponse> getRequests() {
         return requests;
     }
 
-    public void setRequests(List<RequestResponse> requests) {
+    public void setRequests(List<RequestMResponse> requests) {
         this.requests = requests;
     }
 
@@ -36,7 +36,7 @@ public class ReqeustListResponse {
 
     @Override
     public String toString() {
-        return "ReqeustListResponse{" +
+        return "ReqeustListMResponse{" +
                 "requests=" + requests +
                 ", messageType='" + messageType + '\'' +
                 ", message='" + message + '\'' +

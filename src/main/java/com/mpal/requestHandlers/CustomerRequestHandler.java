@@ -4,10 +4,10 @@ import com.mpal.bo.request.customer.CreateCustomerRequestBO;
 import com.mpal.bo.request.customer.UpdateCustomerRequestBO;
 import com.mpal.dao.customer.CustomerRequestDAO;
 import com.mpal.dto.customer.CustomerRequestDTO;
+import com.mpal.dto.customer.RequestCDTO;
 import com.mpal.dto.customer.RequestDTO;
-import com.mpal.rest.response.customer.GetRequestResponse;
-import com.mpal.rest.response.customer.RequestResponse;
-import com.mpal.rest.response.customer.RequestResponseList;
+import com.mpal.dto.customer.RequestMDTO;
+import com.mpal.rest.response.customer.*;
 import com.mpal.util.DateUtil;
 
 import java.io.IOException;
@@ -85,11 +85,11 @@ public class CustomerRequestHandler {
         return requestResponseListResponse;
     }
 
-    public List<RequestResponseList> getRequestListByCustomer(int customer_id) {
-            List<RequestResponseList> customerList = new ArrayList<RequestResponseList>();
+    public List<RequestCResponse> getRequestListByCustomer(int customer_id) {
+            List<RequestCResponse> customerList = new ArrayList<RequestCResponse>();
             try {
                 CustomerRequestDAO customerRequestDAO = new CustomerRequestDAO();
-                customerList = getRequestResponseListFromDTOs(customerRequestDAO.getRequestListByCustomer(customer_id));
+                customerList = getRequestCResponseListFromDTOs(customerRequestDAO.getRequestListByCustomer(customer_id));
             } catch (SQLException s) {
                 s.printStackTrace();
             } catch (IOException s) {
@@ -97,6 +97,30 @@ public class CustomerRequestHandler {
             }
             return customerList;
         }
+
+    private List<RequestCResponse> getRequestCResponseListFromDTOs(List<RequestCDTO> requestDTOs) {
+        List<RequestCResponse> requestResponseList = new ArrayList<RequestCResponse>();
+        Iterator<RequestCDTO> requestDTOIterator = requestDTOs.iterator();
+        while(requestDTOIterator.hasNext()){
+            RequestCDTO requestDTO = requestDTOIterator.next();
+            RequestCResponse requestResponse = new RequestCResponse(
+                    requestDTO.getMechName(),
+                    requestDTO.getMechNo(),
+                    requestDTO.getMechEmail(),
+                    requestDTO.getServiceId(),
+                    requestDTO.getServiceName(),
+                    requestDTO.getMake(),
+                    requestDTO.getModel(),
+                    requestDTO.getId(),
+                    requestDTO.getCreatedDtm(),
+                    requestDTO.getUpdatedDtm(),
+                    requestDTO.getUpdatedBy(),
+                    requestDTO.getToken(),
+                    requestDTO.getStatus());
+            requestResponseList.add(requestResponse);
+        }
+        return requestResponseList;
+    }
 
     public GetRequestResponse getRequestByToken(String token) throws SQLException
     {
@@ -121,11 +145,11 @@ public class CustomerRequestHandler {
         return requestResponse;
     }
 
-    public List<RequestResponseList> getRequestListByMechanic(int mechanic_id) throws SQLException {
+    public List<RequestMResponse> getRequestListByMechanic(int mechanic_id) throws SQLException {
         CustomerRequestDAO customerRequestDAO = new CustomerRequestDAO();
-        List<RequestResponseList> requestResponse=new ArrayList<RequestResponseList>();
+        List<RequestMResponse> requestResponse=new ArrayList<RequestMResponse>();
         try {
-            requestResponse = getRequestResponseListFromDTOs(customerRequestDAO
+            requestResponse = getRequestMResponseFromDTOs(customerRequestDAO
                     .getRequestByMechanic(mechanic_id));
         }catch (SQLException s) {
             s.printStackTrace();
@@ -133,11 +157,11 @@ public class CustomerRequestHandler {
         return requestResponse;
     }
 
-    public List<RequestResponseList> getRequestListByToken(String token) throws SQLException{
+    public List<RequestResponse> getRequestListByToken(String token) throws SQLException{
         CustomerRequestDAO customerRequestDAO = new CustomerRequestDAO();
-        List<RequestResponseList> requestResponse=new ArrayList<RequestResponseList>();
+        List<RequestResponse> requestResponse=new ArrayList<RequestResponse>();
         try {
-            requestResponse = getRequestResponseListFromDTOs(customerRequestDAO
+            requestResponse = getRequestResponseFromDTOs(customerRequestDAO
                     .getRequestListByToken(token));
         }catch (SQLException s) {
             s.printStackTrace();
@@ -166,6 +190,30 @@ public class CustomerRequestHandler {
                     requestDTO.getMechName(),
                     requestDTO.getMechNo(),
                     requestDTO.getMechEmail(),
+                    requestDTO.getCustomerName(),
+                    requestDTO.getCustomerNo(),
+                    requestDTO.getCustomerEmail(),
+                    requestDTO.getServiceId(),
+                    requestDTO.getServiceName(),
+                    requestDTO.getMake(),
+                    requestDTO.getModel(),
+                    requestDTO.getId(),
+                    requestDTO.getCreatedDtm(),
+                    requestDTO.getUpdatedDtm(),
+                    requestDTO.getUpdatedBy(),
+                    requestDTO.getToken(),
+                    requestDTO.getStatus());
+            requestResponseList.add(requestResponse);
+        }
+        return requestResponseList;
+    }
+
+    private List<RequestMResponse> getRequestMResponseFromDTOs(List<RequestMDTO> requestDTOs) throws SQLException{
+        List<RequestMResponse> requestResponseList = new ArrayList<RequestMResponse>();
+        Iterator<RequestMDTO> requestDTOIterator = requestDTOs.iterator();
+        while(requestDTOIterator.hasNext()){
+            RequestMDTO requestDTO = requestDTOIterator.next();
+            RequestMResponse requestResponse = new RequestMResponse(
                     requestDTO.getCustomerName(),
                     requestDTO.getCustomerNo(),
                     requestDTO.getCustomerEmail(),

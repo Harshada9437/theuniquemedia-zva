@@ -97,7 +97,7 @@ public class CustomerRequestService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getRequestListByCustomer(@PathParam("customer_id") int customer_id) {
         CustomerRequestHandler customerRequestHandler = new CustomerRequestHandler();
-        ReqeustListResponse response = new ReqeustListResponse();
+        ReqeustListCResponse response = new ReqeustListCResponse();
         try {
             response.setRequests(customerRequestHandler.getRequestListByCustomer(customer_id));
             response.setMessageType("SUCCESS");
@@ -114,7 +114,7 @@ public class CustomerRequestService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getRequestListByMechanic(@PathParam("mechanic_id") int mechanic_id ) {
         CustomerRequestHandler customerRequestHandler = new CustomerRequestHandler();
-        ReqeustListResponse response = new ReqeustListResponse();
+        ReqeustListMResponse response = new ReqeustListMResponse();
         try {
             response.setRequests(customerRequestHandler.getRequestListByMechanic(mechanic_id ));
             response.setMessageType("SUCCESS");
