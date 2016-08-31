@@ -5,7 +5,6 @@ import com.mpal.dao.UtilClasses.ConnectionPool;
 import com.mpal.dto.serviceprovider.ServiceProviderDTO;
 import com.mpal.exceptions.userServiceExceptions.UserNotFoundException;
 
-import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,8 +14,7 @@ import java.util.List;
  */
 public class ServiceProviderDAO {
 
-    public Integer insertServiceProvider(ServiceProviderDTO serviceProviderDTO) throws SQLException,
-            IOException {
+    public Integer insertServiceProvider(ServiceProviderDTO serviceProviderDTO) throws SQLException {
         PreparedStatement preparedStatement = null;
         Connection connection = null;
         try {
@@ -72,8 +70,7 @@ public class ServiceProviderDAO {
         return null;
     }
 
-    public Boolean updateServiceProvider(UpdateServiceProviderBO updateServiceProviderRequestBO) throws SQLException,
-            IOException {
+    public Boolean updateServiceProvider(UpdateServiceProviderBO updateServiceProviderRequestBO) throws SQLException {
 
         boolean isCreated = false;
         PreparedStatement preparedStatement = null;

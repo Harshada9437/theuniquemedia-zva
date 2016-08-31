@@ -1,6 +1,5 @@
 package com.mpal.dao.user;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,8 +20,7 @@ import com.mpal.rest.response.user.UserLoggedInResponse;
 
 public class UsersDAO {
 
-    public Integer insertUser(UsersDTO usersDTO) throws SQLException,
-            IOException {
+    public Integer insertUser(UsersDTO usersDTO) throws SQLException {
         PreparedStatement preparedStatement = null;
         Connection connection = null;
         try {
@@ -145,8 +143,7 @@ public class UsersDAO {
         return isProcessed;
     }
 
-    public Boolean updateUser(UpdaterUserBO updateUserBO) throws SQLException,
-            IOException {
+    public Boolean updateUser(UpdaterUserBO updateUserBO) throws SQLException {
         boolean isCreated = false;
         PreparedStatement preparedStatement = null;
         Connection connection = null;
@@ -231,7 +228,7 @@ public class UsersDAO {
     }
 
     public Boolean updateVerifiedUser(int userId)
-            throws SQLException, IOException {
+            throws SQLException {
         boolean isUpdated = false;
         PreparedStatement preparedStatement = null;
         Connection connection = null;
@@ -363,8 +360,7 @@ public class UsersDAO {
         return usersDTO;
     }
 
-    public List<UsersDTO> getUsersList() throws SQLException,
-            IOException {
+    public List<UsersDTO> getUsersList() throws SQLException {
         Connection connection = null;
         Statement statement = null;
         List<UsersDTO> userResponseList = new ArrayList<UsersDTO>();
@@ -407,8 +403,7 @@ public class UsersDAO {
         return userResponseList;
     }
 
-    public List<UserLoggedInResponse> getUserLoggedIn() throws SQLException,
-            IOException {
+    public List<UserLoggedInResponse> getUserLoggedIn() throws SQLException {
         Connection connection = null;
         Statement statement = null;
         List<UserLoggedInResponse> userLoggedinList = new ArrayList<UserLoggedInResponse>();
@@ -496,7 +491,7 @@ public class UsersDAO {
     }
 
     public String getSessionIdForUserId(
-            int userId) throws SQLException, IOException,
+            int userId) throws SQLException,
             UserNotFoundException {
         Connection connection = null;
         Statement statement = null;

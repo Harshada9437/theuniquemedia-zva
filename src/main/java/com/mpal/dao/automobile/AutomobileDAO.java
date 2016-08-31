@@ -6,7 +6,6 @@ import com.mpal.dto.automobile.AutomobileDTO;
 import com.mpal.exceptions.AutomobileServiceExceptions.AutomobileNotFoundException;
 import com.mpal.exceptions.userServiceExceptions.UserNotFoundException;
 
-import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +15,7 @@ import java.util.List;
  */
 public class AutomobileDAO {
 
-    public List<AutomobileDTO> getAutomobilesList() throws SQLException,
-            IOException {
+    public List<AutomobileDTO> getAutomobilesList() throws SQLException {
         Connection connection = null;
         Statement statement = null;
         List<AutomobileDTO> automobileResponseList = new ArrayList<AutomobileDTO>();
@@ -89,8 +87,7 @@ public class AutomobileDAO {
         return automobileTypeResponseList;
     }
 
-    public Integer insertAutomobile(AutomobileDTO automobileDTO) throws SQLException,
-            IOException {
+    public Integer insertAutomobile(AutomobileDTO automobileDTO) throws SQLException {
         PreparedStatement preparedStatement = null;
         Connection connection = null;
         try {
@@ -210,9 +207,7 @@ public class AutomobileDAO {
     }
 
 
-
-    public Boolean updateAutomobile(UpdateAutomobileBO updateAutomobileBO) throws SQLException,
-            IOException {
+    public Boolean updateAutomobile(UpdateAutomobileBO updateAutomobileBO) throws SQLException {
         boolean isCreated = false;
         PreparedStatement preparedStatement = null;
         Connection connection = null;

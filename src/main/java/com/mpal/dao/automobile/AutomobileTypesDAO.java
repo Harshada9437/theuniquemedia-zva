@@ -8,7 +8,6 @@ import com.mpal.dao.UtilClasses.ConnectionPool;
 import com.mpal.dto.automobile.AutomobileTypesDTO;
 import com.mpal.exceptions.AutomobileServiceExceptions.AutomobileNotFoundException;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -49,38 +48,5 @@ public class AutomobileTypesDAO implements IAutomobileTypesDAO {
             }
         }
         return automobileTypesDTOList;
-    }
-
-    public int getAutomobileIdByType(String type) throws SQLException, IOException
-    {
-        Connection connection = null;
-        Statement statement = null;
-        int id=0;
-        try {
-            connection = new ConnectionPool().getConnection();
-            statement = connection.createStatement();
-            StringBuilder query = new StringBuilder( "SELECT id FROM automobile_types where type = \"")
-                    .append(type).append("\"");
-            ResultSet resultSet = statement.executeQuery(query.toString());
-            int index = 1;
-            while (resultSet.next()) {
-                 id= resultSet.getInt("id");
-                index++;
-            }
-            if (index == 1) {
-                throw new AutomobileNotFoundException("Invalid automobile");
-            }
-
-        } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
-        } finally {
-            try {
-                statement.close();
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return id;
     }
 }

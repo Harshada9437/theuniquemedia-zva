@@ -3,7 +3,6 @@ package com.mpal.dao.user;
 import com.mpal.dao.UtilClasses.ConnectionPool;
 import com.mpal.dto.user.UserServiceMapDTO;
 
-import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;

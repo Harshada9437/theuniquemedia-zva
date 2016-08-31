@@ -65,12 +65,8 @@ public class CustomerRequestService {
             updatecustomerResponse.setMessagetype("FAILURE");
             updatecustomerResponse.setMessage("Unable to update the Customer Request");
         }
-        //System.out.println(updatecustomerRequestBO);
         return ResponseGenerator.generateResponse(updatecustomerResponse);
-    } /*else {
-            return ResponseGenerator.generateResponse(RequestValidation.getUnautheticatedResponse());
-        }
-    }*/
+    }
 
     @GET
     @Path("/list/byToken/{token}")
@@ -131,8 +127,7 @@ public class CustomerRequestService {
     @Path("/requestInfo/{token}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getUserById(@PathParam("token") String token/*, @HeaderParam("sessionId") String sessionId*/) {
-        //if (sessionId != null && RequestValidation.isRequestValid(sessionId)) {
+    public Response getUserById(@PathParam("token") String token) {
         CustomerRequestHandler customerRequestHandler = new CustomerRequestHandler();
         Object response = null;
         GetRequestResponse requsetResponse=new GetRequestResponse();
@@ -146,10 +141,7 @@ public class CustomerRequestService {
             requsetResponse.setMessageType("FAILURE");
         }
         return ResponseGenerator.generateResponse(response);
-    } /*else {
-            return ResponseGenerator.generateResponse(RequestValidation.getUnautheticatedResponse());
-        }*/
-    //}
+    }
 
 
     @GET

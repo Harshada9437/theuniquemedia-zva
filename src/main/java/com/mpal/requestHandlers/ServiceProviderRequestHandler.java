@@ -9,7 +9,6 @@ import com.mpal.dto.serviceprovider.ServiceProviderTypesDTO;
 import com.mpal.rest.response.serviceprovider.ServiceProviderResponse;
 import com.mpal.rest.response.serviceprovider.ServiceTypeResponse;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,12 +29,6 @@ public class ServiceProviderRequestHandler {
             serviceProviderDAO.insertServiceProvider(buildServiceProviderDTOFromBO(serviceProviderBO));
         } catch (SQLException sq) {
             isProcessed = false;
-        } catch (IOException sqlException) {
-            isProcessed = false;
-        }
-
-        if (isProcessed=false) {
-            //EmailService.sendNewUserEmail(registrationRequestBO.getEmail(), userId);
         }
 
         return isProcessed;
@@ -62,16 +55,13 @@ public class ServiceProviderRequestHandler {
         return ServiceProviderDTO;
     }
 
-    public boolean updateServiceProvider(UpdateServiceProviderBO updateServiceProviderRequestBO) throws SQLException,
-    IOException{
+    public boolean updateServiceProvider(UpdateServiceProviderBO updateServiceProviderRequestBO) throws SQLException {
 
         Boolean isProcessed = Boolean.FALSE;
         ServiceProviderDAO serviceProviderDAO = new ServiceProviderDAO();
         try {
             isProcessed = serviceProviderDAO.updateServiceProvider(updateServiceProviderRequestBO);
         } catch (SQLException sq) {
-            isProcessed = false;
-        } catch (IOException sqlException) {
             isProcessed = false;
         }
         return isProcessed;

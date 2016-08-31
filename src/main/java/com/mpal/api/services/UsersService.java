@@ -1,6 +1,5 @@
 package com.mpal.api.services;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -305,7 +304,7 @@ public class UsersService {
     @Path("/list/{user_type_id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getUserByTypeList(@PathParam("user_type_id") int user_type_id) throws SQLException, IOException {
+    public Response getUserByTypeList(@PathParam("user_type_id") int user_type_id) throws SQLException {
         UserRequestHandler userRequestHandler = new UserRequestHandler();
         UserResponse userResponseL = new UserResponse();
         try {

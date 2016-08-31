@@ -9,7 +9,6 @@ import com.mpal.dto.customer.RequestMDTO;
 import com.mpal.exceptions.RequestException.RequestNotFoundException;
 import com.mpal.util.DateUtil;
 
-import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,8 +57,7 @@ public class CustomerRequestDAO {
         return isCreated;
     }
 
-    public Boolean updateCustomerRequest(UpdateCustomerRequestBO updateCustomerRequestBO, String token) throws SQLException,
-            IOException {
+    public Boolean updateCustomerRequest(UpdateCustomerRequestBO updateCustomerRequestBO, String token) throws SQLException {
         boolean isCreated = false;
         PreparedStatement preparedStatement = null;
         Connection connection = null;
@@ -104,8 +102,7 @@ public class CustomerRequestDAO {
     }
 
 
-    public List<RequestCDTO> getRequestListByCustomer(int customer_id) throws SQLException,
-            IOException {
+    public List<RequestCDTO> getRequestListByCustomer(int customer_id) throws SQLException {
         Connection connection = null;
         Statement statement = null;
         List<RequestCDTO> requestResponseList = new ArrayList<RequestCDTO>();

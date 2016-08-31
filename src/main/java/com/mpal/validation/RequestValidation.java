@@ -2,9 +2,7 @@ package com.mpal.validation;
 
 import com.mpal.dao.user.UsersDAO;
 import com.mpal.exceptions.userServiceExceptions.UserNotFoundException;
-import com.mpal.rest.response.requestAuth.RequestAuthenticationResponse;
 
-import java.io.IOException;
 import java.sql.SQLException;
 
 public class RequestValidation {
@@ -19,20 +17,11 @@ public class RequestValidation {
         }catch (SQLException e){
             e.printStackTrace();
             return Boolean.FALSE;
-        }catch (IOException e){
-            e.printStackTrace();
-            return Boolean.FALSE;
         }catch (UserNotFoundException e){
             e.printStackTrace();
             return Boolean.FALSE;
         }
 
         return isValidRequest;
-    }
-
-    public static RequestAuthenticationResponse getUnautheticatedResponse(){
-        RequestAuthenticationResponse requestAuthenticationResponse = new RequestAuthenticationResponse();
-        requestAuthenticationResponse.setFailureMessage("Unauthorized access");
-        return requestAuthenticationResponse;
     }
 }

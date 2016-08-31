@@ -3,7 +3,6 @@ package com.mpal.dao.user;
 import com.mpal.dao.UtilClasses.ConnectionPool;
 import com.mpal.dto.user.UserAutomobileMapDTO;
 
-import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -72,7 +71,7 @@ public class UserAutomobileMapDAO {
         return isUpdated;
     }
 
-    public Boolean insertUserAutomobileMapping(int automobileDetailsId, int userId) throws SQLException,IOException {
+    public Boolean insertUserAutomobileMapping(int automobileDetailsId, int userId) throws SQLException {
         Boolean isInserted = Boolean.FALSE;
         PreparedStatement preparedStatement = null;
         Connection connection = null;

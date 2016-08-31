@@ -1,6 +1,5 @@
 package com.mpal.requestHandlers;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,36 +24,25 @@ import com.mpal.validation.UsersValidation;
 public class UserRequestHandler {
 
 	public Integer register(RegistrationRequestBO registrationRequestBO) {
-
-		Boolean isProcessed = Boolean.TRUE;
 		Integer userId=null;
 		UsersDAO usersDAO = new UsersDAO();
 		try {
 			userId = usersDAO
 					.insertUser(buildUsersDTOFromBO(registrationRequestBO));
 		} catch (SQLException sq) {
-			isProcessed = false;
-		} catch (IOException sqlException) {
-			isProcessed = false;
-		}
-
-		/*if (isProcessed && userId!=null) {
-			EmailService.sendNewUserEmail(registrationRequestBO.getEmail(), userId);
-		}*/
+            sq.printStackTrace();
+        }
 
 		return userId;
 	}
 
 	public Boolean verifyPhoneNumber(String mobile) {
-
 		Boolean isProcessed = Boolean.FALSE;
 		UsersDAO usersDAO = new UsersDAO();
-		//String msg="unique";
 		try {
 			isProcessed = usersDAO.getValidationForPhoneNumber(mobile);
 		} catch (SQLException sq) {
 			isProcessed = false;
-			//msg="mobile Number is already used";
 		}
 		return isProcessed;
 	}
@@ -93,8 +81,6 @@ public class UserRequestHandler {
 			isProcessed = usersDAO.updateVerifiedUser(userId);
 		} catch (SQLException sq) {
 			isProcessed = false;
-		} catch (IOException sqlException) {
-			isProcessed = false;
 		}
 		return isProcessed;
 	}
@@ -106,8 +92,6 @@ public class UserRequestHandler {
 		try {
 			isProcessed = usersDAO.updateUser(updateRequestBO);
 		} catch (SQLException sq) {
-			isProcessed = false;
-		} catch (IOException sqlException) {
 			isProcessed = false;
 		}
 		return isProcessed;
@@ -230,8 +214,6 @@ public class UserRequestHandler {
 			userList = getUserResponseListFromDTOs(usersDAO.getUsersList());
 		} catch (SQLException s) {
 			s.printStackTrace();
-		} catch (IOException s) {
-			s.printStackTrace();
 		}
 		return userList;
 	}
@@ -305,8 +287,6 @@ public class UserRequestHandler {
 			userList = usersDAO.getUserLoggedIn();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 		return userList;
 	}
@@ -370,9 +350,6 @@ public class UserRequestHandler {
 			}
 		} catch (SQLException s) {
 			s.printStackTrace();
-			isCreated = Boolean.FALSE;
-		} catch (IOException e) {
-			e.printStackTrace();
 			isCreated = Boolean.FALSE;
 		}
 		return isCreated;

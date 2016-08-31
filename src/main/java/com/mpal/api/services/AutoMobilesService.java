@@ -19,7 +19,6 @@ import com.mpal.rest.util.ResponseGenerator;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
 import java.sql.SQLException;
 
 @Path("/automobile")
@@ -29,7 +28,7 @@ public class AutoMobilesService {
     @Path("/list/{automobile_type_id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAutomobileList(@PathParam("automobile_type_id") int automobile_type_id) throws SQLException, IOException {
+    public Response getAutomobileList(@PathParam("automobile_type_id") int automobile_type_id) throws SQLException {
         AutomobileRequestHandler automobileRequestHandler = new AutomobileRequestHandler();
         AutomobileResponseList automobileResponseL= new AutomobileResponseList();
         try {

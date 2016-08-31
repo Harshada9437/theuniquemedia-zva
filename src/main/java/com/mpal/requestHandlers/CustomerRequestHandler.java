@@ -10,7 +10,6 @@ import com.mpal.dto.customer.RequestMDTO;
 import com.mpal.rest.response.customer.*;
 import com.mpal.util.DateUtil;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -57,33 +56,11 @@ public class CustomerRequestHandler {
             isProcessed = customerRequestDAO.updateCustomerRequest(updaterCustomerRequestBO,token);
         } catch (SQLException sq) {
             isProcessed = false;
-        } catch (IOException sqlException) {
-            isProcessed = false;
         }
 
         return isProcessed;
     }
 
-
-    private List<RequestResponseList> getRequestResponseListFromDTOs(List<CustomerRequestDTO> customerRequestDTO) throws SQLException{
-        List<RequestResponseList> requestResponseListResponse = new ArrayList<RequestResponseList>();
-        Iterator<CustomerRequestDTO> createCustomerRequestDTOIterator = customerRequestDTO.iterator();
-        while(createCustomerRequestDTOIterator.hasNext()){
-            CustomerRequestDTO createCustomerRequestDTO = createCustomerRequestDTOIterator.next();
-            RequestResponseList requestResponseList = new RequestResponseList(createCustomerRequestDTO.getId(),
-                    createCustomerRequestDTO.getCustomerId(),
-                    createCustomerRequestDTO.getMechanicId(),
-                    createCustomerRequestDTO.getAutomobileDetailsId(),
-                    createCustomerRequestDTO.getServiceId(),
-                    createCustomerRequestDTO.getCreatedDtm(),
-                    createCustomerRequestDTO.getUpdatedDtm(),
-                    createCustomerRequestDTO.getUpdatedBy(),
-                    createCustomerRequestDTO.getToken(),
-                    createCustomerRequestDTO.getStatus());
-                    requestResponseListResponse.add(requestResponseList);
-        }
-        return requestResponseListResponse;
-    }
 
     public List<RequestCResponse> getRequestListByCustomer(int customer_id) {
             List<RequestCResponse> customerList = new ArrayList<RequestCResponse>();
@@ -92,10 +69,9 @@ public class CustomerRequestHandler {
                 customerList = getRequestCResponseListFromDTOs(customerRequestDAO.getRequestListByCustomer(customer_id));
             } catch (SQLException s) {
                 s.printStackTrace();
-            } catch (IOException s) {
-                s.printStackTrace();
             }
-            return customerList;
+
+        return customerList;
         }
 
     private List<RequestCResponse> getRequestCResponseListFromDTOs(List<RequestCDTO> requestDTOs) {

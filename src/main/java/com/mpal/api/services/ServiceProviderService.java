@@ -15,7 +15,6 @@ import com.mpal.rest.util.ResponseGenerator;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
 import java.sql.SQLException;
 
 /**
@@ -74,10 +73,7 @@ public class ServiceProviderService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
 
-    public Response UpdateServiceProvider(UpdateServiceProviderRequest updateServiceProvider/*,@HeaderParam("sessionId") String sessionId*/) throws IOException, SQLException {
-        //if (sessionId != null && RequestValidation.isRequestValid(sessionId)) {
-
-
+    public Response UpdateServiceProvider(UpdateServiceProviderRequest updateServiceProvider) throws SQLException {
         UpdateServiceProviderBO updateserviceProviderRequestBO = new UpdateServiceProviderBO();
 
         updateserviceProviderRequestBO.setName(updateServiceProvider.getName());
@@ -103,10 +99,7 @@ public class ServiceProviderService {
             updateServiceProviderResponse.setMessage("Unable to update the ServiceProvider");
         }
         return ResponseGenerator.generateResponse(updateServiceProviderResponse);
-    } /*else {
-            return ResponseGenerator.generateResponse(RequestValidation.getUnautheticatedResponse());
-        }
-    }*/
+    }
 
     @GET
     @Path("/types")
