@@ -525,7 +525,7 @@ public class UsersDAO {
         return sessionId;
     }
 
-    public List<UsersDTO> getUserByTypeId(int user_type_id) throws SQLException, UserNotFoundException
+    public List<UsersDTO> getUserByTypeId(int uerTypeId) throws SQLException, UserNotFoundException
         {
             Connection connection = null;
             Statement statement = null;
@@ -535,7 +535,7 @@ public class UsersDAO {
                 statement = connection.createStatement();
                 StringBuilder query = new StringBuilder(
                         "SELECT * FROM users where user_type_id = \"")
-                        .append(user_type_id).append("\"");
+                        .append(uerTypeId).append("\"");
                 ResultSet resultSet = statement.executeQuery(query.toString()
                         .trim());
                 int index = 1;

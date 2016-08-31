@@ -15,6 +15,7 @@ import com.mpal.dao.user.UsersDAO;
 import com.mpal.dto.user.*;
 import com.mpal.exceptions.AutomobileServiceExceptions.AutomobileNotFoundException;
 import com.mpal.exceptions.userServiceExceptions.UserNotFoundException;
+import com.mpal.exceptions.userServiceExceptions.UserTypeNotFoundException;
 import com.mpal.rest.request.user.AutomobilesInfo;
 import com.mpal.rest.request.user.ServiceInfo;
 import com.mpal.rest.response.user.*;
@@ -302,18 +303,21 @@ public class UserRequestHandler {
 		return isProcessed;
 	}
 
-    public List<UserResponseList> getUserByType(int user_type_id) throws SQLException,
-				UserNotFoundException {
-			UsersDAO usersDAO = new UsersDAO();
-			List<UserResponseList> userList = new ArrayList<UserResponseList>();
+    public List<UserResponseList> getUserByType(int userTypeId) throws SQLException, UserTypeNotFoundException {
+        UsersDAO usersDAO = new UsersDAO();
 			try {
-				userList = getUserResponseListFromDTOs(usersDAO.getUserByTypeId(user_type_id));
+                UserTypesDAO userTypesDAO = new UserTypesDAO();
+                UserTypesDTO userTypesDTO = userTypesDAO.getUserTypesDetails(userTypeId);
+                if (userTypesDTO == null) {
+                    throw new UserTypeNotFoundException("Invalid user type id");
+                } else {
+                    return getUserResponseListFromDTOs(usersDAO.getUserByTypeId(userTypeId));
+                }
+
 			} catch (SQLException s) {
 				s.printStackTrace();
-			} catch (AutomobileNotFoundException s) {
-				s.printStackTrace();
-			}
-			return userList;
+                throw s;
+            }
 		}
 
 	public Boolean assignAutomobile(AssignAutomobilesRequestBO assignAutomobilesRequestBO) throws SQLException {

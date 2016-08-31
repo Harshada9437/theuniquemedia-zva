@@ -39,5 +39,32 @@ public class UserTypesDAO implements IUserTypesDAO {
 			}
 		}
 		return userTypesDTOList;
-	}
+             }
+
+    public UserTypesDTO getUserTypesDetails(int userTypeId) throws SQLException {
+        Connection connection = null;
+        Statement statement = null;
+        UserTypesDTO userTypesDTO = null;
+        try {
+            connection = new ConnectionPool().getConnection();
+            statement = connection.createStatement();
+            StringBuilder query = new StringBuilder("SELECT * FROM user_types where id = " + userTypeId);
+            ResultSet resultSet = statement.executeQuery(query.toString());
+            while (resultSet.next()) {
+                userTypesDTO.setId(resultSet.getInt(1));
+                userTypesDTO.setType(resultSet.getString(2));
+                userTypesDTO.setStatus(resultSet.getString(3));
+            }
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        } finally {
+            try {
+                statement.close();
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return userTypesDTO;
+    }
 }

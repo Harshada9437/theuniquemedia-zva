@@ -10,6 +10,7 @@ import javax.ws.rs.core.Response;
 import com.mpal.bo.request.user.*;
 import com.mpal.dao.user.UsersDAO;
 import com.mpal.dto.user.UsersDTO;
+import com.mpal.exceptions.userServiceExceptions.UserTypeNotFoundException;
 import com.mpal.rest.request.user.AssignAutomobilesRequest;
 import com.mpal.rest.response.user.*;
 import com.mpal.bo.response.LoginResponseBO;
@@ -304,18 +305,19 @@ public class UsersService {
     @Path("/list/{user_type_id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getUserByTypeList(@PathParam("user_type_id") int user_type_id) throws SQLException {
+    public Response getUserByTypeList(@PathParam("user_type_id") int userTypeId) throws SQLException {
         UserRequestHandler userRequestHandler = new UserRequestHandler();
         UserResponse userResponseL = new UserResponse();
         try {
-            userResponseL.setUserResponseList(userRequestHandler.getUserByType(user_type_id));
+            userResponseL.setUserResponseList(userRequestHandler.getUserByType(userTypeId));
             userResponseL.setMessageType("SUCCESS");
             userResponseL.setMessage("Users are available");
-        } catch (UserNotFoundException e) {
+        } catch (UserTypeNotFoundException e) {
             userResponseL.setMessageType("FAILURE");
-            userResponseL.setMessage("Users are not available");
+            userResponseL.setMessage("INVALID USER TYPE");
         } catch (SQLException e) {
-            e.printStackTrace();
+            userResponseL.setMessageType("FAILURE");
+            userResponseL.setMessage("FAILURE IN GETTING USER LIST");
         }
         return ResponseGenerator.generateResponse(userResponseL);
     }
