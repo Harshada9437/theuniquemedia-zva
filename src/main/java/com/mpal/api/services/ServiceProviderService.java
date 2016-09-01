@@ -2,6 +2,7 @@ package com.mpal.api.services;
 
 import com.mpal.bo.request.serviceprovider.ServiceProviderBO;
 import com.mpal.bo.request.serviceprovider.UpdateServiceProviderBO;
+import com.mpal.exceptions.ServiceExceptions.ServiceProviderTypeNotFoundException;
 import com.mpal.requestHandlers.ServiceProviderRequestHandler;
 
 import com.mpal.rest.request.serviceprovider.UpdateServiceProviderRequest;
@@ -110,7 +111,7 @@ public class ServiceProviderService {
         ServiceTypeResponseList serviceTypeResponse = new ServiceTypeResponseList();
         serviceTypeResponse.setServiceTypeResponses(serviceProviderRequestHandler.getServiceTypes());
         serviceTypeResponse.setMessageType("SUCCESS");
-        serviceTypeResponse.setMessage("list of service types.");
+        serviceTypeResponse.setMessage("list of service provider types.");
         return ResponseGenerator.generateResponse(serviceTypeResponse);
     }
 
@@ -118,12 +119,19 @@ public class ServiceProviderService {
     @Path("/list/{service_provider_type_id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getServiceProviders(@PathParam("service_provider_type_id") int service_provider_type_id) {
+    public Response getServiceProviders(@PathParam("service_provider_type_id") int serviceProviderTypeId)throws SQLException,ServiceProviderTypeNotFoundException {
         ServiceProviderRequestHandler serviceProviderRequestHandler = new ServiceProviderRequestHandler();
         ServiceProviderResponseList serviceTypeResponse = new ServiceProviderResponseList();
-        serviceTypeResponse.setServiceProviderResponses(serviceProviderRequestHandler.getServiceProvider(service_provider_type_id));
-        serviceTypeResponse.setMessageType("SUCCESS");
-        serviceTypeResponse.setMessage("list of service providers.");
+        try {
+            serviceTypeResponse.setServiceProviderResponses(serviceProviderRequestHandler.getServiceProvider(serviceProviderTypeId));
+            serviceTypeResponse.setMessageType("SUCCESS");
+            serviceTypeResponse.setMessage("list of service providers.");
+        }catch (SQLException e){
+            e.printStackTrace();
+        }catch (ServiceProviderTypeNotFoundException e){
+            serviceTypeResponse.setMessageType("FAILURE");
+            serviceTypeResponse.setMessage("Invalid service provider type id.");
+        }
         return ResponseGenerator.generateResponse(serviceTypeResponse);
     }
 }

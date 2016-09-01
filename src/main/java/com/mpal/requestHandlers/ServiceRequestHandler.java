@@ -12,7 +12,7 @@ import java.util.List;
  * Created by System1 on 8/31/2016.
  */
 public class ServiceRequestHandler {
-    public List<ServiceResponse> getService() {
+    public List<ServiceResponse> getService() throws SQLException{
 
         ServiceDAO serviceDAO = new ServiceDAO();
         List<ServiceResponse> getServiceTypesResponses = new ArrayList<ServiceResponse>();

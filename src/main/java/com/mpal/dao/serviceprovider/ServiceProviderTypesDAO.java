@@ -2,7 +2,7 @@ package com.mpal.dao.serviceprovider;
 
 import com.mpal.dao.UtilClasses.ConnectionPool;
 import com.mpal.dto.serviceprovider.ServiceProviderTypesDTO;
-import com.mpal.exceptions.ServiceExceptions.ServiceNotFoundException;
+import com.mpal.exceptions.ServiceExceptions.ServiceProviderTypeNotFoundException;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -37,7 +37,7 @@ public class ServiceProviderTypesDAO implements IServiceProviderTypesDAO {
                 serviceProviderTypesDTOList.add(serviceProviderTypesDTO);
             }
             if (index == 1) {
-                throw new ServiceNotFoundException("Invalid service");
+                throw new ServiceProviderTypeNotFoundException("Invalid service provider type");
             }
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();

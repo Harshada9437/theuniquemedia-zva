@@ -17,26 +17,15 @@ import java.util.List;
 
 public class AutomobileRequestHandler {
 
-    public List<AutomobileResponse> getAutomobileByTypeId(int automobile_type_id) throws SQLException,
+    public List<AutomobileResponse> getAutomobileByTypeId(int automobileTypeId) throws SQLException,
             AutomobileNotFoundException {
         AutomobileDAO automobileDAO = new AutomobileDAO();
         List<AutomobileResponse> automobileList = new ArrayList<AutomobileResponse>();
         try {
-            automobileList = getAutomobileResponseListFromDTOs(automobileDAO.getAutomobileByTypeId(automobile_type_id));
+            automobileList = getAutomobileResponseListFromDTOs(automobileDAO.getAutomobileByTypeId(automobileTypeId));
         } catch (SQLException s) {
             s.printStackTrace();
         } catch (AutomobileNotFoundException s) {
-            s.printStackTrace();
-        }
-        return automobileList;
-    }
-
-    public List<AutomobileResponse> getAutomobilesList() {
-        List<AutomobileResponse> automobileList = null;
-        try {
-            AutomobileDAO automobileDAO = new AutomobileDAO();
-            automobileList = getAutomobileResponseListFromDTOs(automobileDAO.getAutomobilesList());
-        } catch (SQLException s) {
             s.printStackTrace();
         }
         return automobileList;
@@ -52,7 +41,7 @@ public class AutomobileRequestHandler {
         return automobileDTO;
     }
 
-    private List<AutomobileResponse> getAutomobileResponseListFromDTOs(List<AutomobileDTO> atomobileDTOs) throws SQLException {
+    private List<AutomobileResponse> getAutomobileResponseListFromDTOs(List<AutomobileDTO> atomobileDTOs) {
         List<AutomobileResponse> automobileResponseListResponse = new ArrayList<AutomobileResponse>();
         Iterator<AutomobileDTO> automobilesDTOIterator = atomobileDTOs.iterator();
         while (automobilesDTOIterator.hasNext()) {
@@ -70,7 +59,7 @@ public class AutomobileRequestHandler {
     }
 
 
-    public String create(AutomobilesBO automobileBO) {
+    public String create(AutomobilesBO automobileBO) throws SQLException {
         String msg = "created";
         AutomobileDAO automobileDAO = new AutomobileDAO();
         try {
@@ -86,7 +75,8 @@ public class AutomobileRequestHandler {
 
         return msg;
     }
-    public Boolean updateAutomobile(UpdateAutomobileBO updateRequestBO) {
+
+    public Boolean updateAutomobile(UpdateAutomobileBO updateRequestBO) throws SQLException {
         Boolean isProcessed = Boolean.FALSE;
         AutomobileDAO automobileDAO = new AutomobileDAO();
         try {
@@ -97,7 +87,7 @@ public class AutomobileRequestHandler {
         return isProcessed;
     }
 
-    public List<AutomobileTypeResponse> getAutomobileTypes() {
+    public List<AutomobileTypeResponse> getAutomobileTypes() throws SQLException{
         AutomobileTypesDAO automobileTypesDAO = new AutomobileTypesDAO();
         List<AutomobileTypeResponse> getAutomobileTypesResponses = new ArrayList<AutomobileTypeResponse>();
         try {

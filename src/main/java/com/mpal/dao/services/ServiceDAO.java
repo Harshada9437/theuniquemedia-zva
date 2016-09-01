@@ -1,7 +1,6 @@
 package com.mpal.dao.services;
 
 import com.mpal.dao.UtilClasses.ConnectionPool;
-import com.mpal.dto.serviceprovider.ServiceProviderTypesDTO;
 import com.mpal.dto.services.ServiceDTO;
 import com.mpal.exceptions.ServiceExceptions.ServiceNotFoundException;
 

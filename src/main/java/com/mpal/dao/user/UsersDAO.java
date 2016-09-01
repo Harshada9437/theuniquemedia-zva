@@ -79,7 +79,6 @@ public class UsersDAO {
         Connection connection = null;
         Statement statement = null;
         Boolean isProcessed = Boolean.FALSE;
-        //String numberUsed = null;
         try {
 
             connection = new ConnectionPool().getConnection();
@@ -92,8 +91,6 @@ public class UsersDAO {
             while (resultSet.next()) {
 
                 isProcessed = true;
-                //numberUsed = resultSet.getString("mobile");
-
             }
         }catch (SQLException sqlException){
             sqlException.printStackTrace();

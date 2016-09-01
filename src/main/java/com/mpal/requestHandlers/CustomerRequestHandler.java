@@ -18,12 +18,16 @@ import java.util.List;
 
 public class CustomerRequestHandler {
 
-    public String createCustomerRequest(CreateCustomerRequestBO createCustomerRequestBO) {
+    public String createCustomerRequest(CreateCustomerRequestBO createCustomerRequestBO) throws SQLException {
         CustomerRequestDAO customerRequestDAO = new CustomerRequestDAO();
-        CustomerRequestDTO customerRequestDTO = buildCreateCustomerRequestDTOFromBO(createCustomerRequestBO);
-        Boolean isCreated = customerRequestDAO.createCustomerRequest(customerRequestDTO);
-        if (isCreated) {
-            return customerRequestDTO.getToken();
+        try {
+            CustomerRequestDTO customerRequestDTO = buildCreateCustomerRequestDTOFromBO(createCustomerRequestBO);
+            Boolean isCreated = customerRequestDAO.createCustomerRequest(customerRequestDTO);
+            if (isCreated) {
+                return customerRequestDTO.getToken();
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
         }
         return null;
     }
@@ -48,7 +52,7 @@ public class CustomerRequestHandler {
         return token;
     }
 
-    public Boolean updateCustomerRequest(UpdateCustomerRequestBO updaterCustomerRequestBO, String token) {
+    public Boolean updateCustomerRequest(UpdateCustomerRequestBO updaterCustomerRequestBO, String token) throws SQLException{
 
         Boolean isProcessed = Boolean.FALSE;
         CustomerRequestDAO customerRequestDAO = new CustomerRequestDAO();
@@ -62,11 +66,11 @@ public class CustomerRequestHandler {
     }
 
 
-    public List<RequestCResponse> getRequestListByCustomer(int customer_id) {
+    public List<RequestCResponse> getRequestListByCustomer(int customerId)throws SQLException {
             List<RequestCResponse> customerList = new ArrayList<RequestCResponse>();
             try {
                 CustomerRequestDAO customerRequestDAO = new CustomerRequestDAO();
-                customerList = getRequestCResponseListFromDTOs(customerRequestDAO.getRequestListByCustomer(customer_id));
+                customerList = getRequestCResponseListFromDTOs(customerRequestDAO.getRequestListByCustomer(customerId));
             } catch (SQLException s) {
                 s.printStackTrace();
             }
@@ -121,12 +125,12 @@ public class CustomerRequestHandler {
         return requestResponse;
     }
 
-    public List<RequestMResponse> getRequestListByMechanic(int mechanic_id) throws SQLException {
+    public List<RequestMResponse> getRequestListByMechanic(int mechanicId) throws SQLException {
         CustomerRequestDAO customerRequestDAO = new CustomerRequestDAO();
         List<RequestMResponse> requestResponse=new ArrayList<RequestMResponse>();
         try {
             requestResponse = getRequestMResponseFromDTOs(customerRequestDAO
-                    .getRequestByMechanic(mechanic_id));
+                    .getRequestByMechanic(mechanicId));
         }catch (SQLException s) {
             s.printStackTrace();
         }
@@ -207,6 +211,5 @@ public class CustomerRequestHandler {
         }
         return requestResponseList;
     }
-
 }
 

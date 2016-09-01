@@ -4,7 +4,6 @@ import com.mpal.bo.request.automobile.UpdateAutomobileBO;
 import com.mpal.dao.UtilClasses.ConnectionPool;
 import com.mpal.dto.automobile.AutomobileDTO;
 import com.mpal.exceptions.AutomobileServiceExceptions.AutomobileNotFoundException;
-import com.mpal.exceptions.userServiceExceptions.UserNotFoundException;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -71,7 +70,7 @@ public class AutomobileDAO {
                 automobileTypeResponseList.add(automobileDTO);
             }
             if (index == 1) {
-                throw new AutomobileNotFoundException("Invalid automobile");
+                throw new AutomobileNotFoundException("Invalid automobile type.");
             }
 
         } catch (SQLException sqlException) {
@@ -134,15 +133,12 @@ public class AutomobileDAO {
     }
 
 
-    public String getValidationForModel(String model) throws SQLException,
-            UserNotFoundException {
+    public String getValidationForModel(String model) throws SQLException{
         Connection connection = null;
         Statement statement = null;
         String modelUsed = null;
 
-
         try {
-
             connection = new ConnectionPool().getConnection();
             statement = connection.createStatement();
             StringBuilder query1 = new StringBuilder(
@@ -169,8 +165,7 @@ public class AutomobileDAO {
         return modelUsed;
     }
 
-    public String getValidationForCompany(String company) throws SQLException,
-            UserNotFoundException {
+    public String getValidationForCompany(String company) throws SQLException{
         Connection connection = null;
         Statement statement = null;
 
@@ -241,10 +236,6 @@ public class AutomobileDAO {
                 e.printStackTrace();
             }
         }
-        System.out.println("isCreated:::" + isCreated);
         return isCreated;
     }
-
-
-
 }

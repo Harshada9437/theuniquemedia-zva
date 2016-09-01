@@ -10,6 +10,7 @@ import javax.ws.rs.core.Response;
 import com.mpal.bo.request.user.*;
 import com.mpal.dao.user.UsersDAO;
 import com.mpal.dto.user.UsersDTO;
+import com.mpal.exceptions.ServiceExceptions.ServiceNotFoundException;
 import com.mpal.exceptions.userServiceExceptions.UserTypeNotFoundException;
 import com.mpal.rest.request.user.AssignAutomobilesRequest;
 import com.mpal.rest.response.user.*;
@@ -32,7 +33,7 @@ public class UsersService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/login")
-    public Response login(LoginRequest loginRequest) {
+    public Response login(LoginRequest loginRequest)throws SQLException,UserNotFoundException {
         LoginRequestBO loginRequestBO = new LoginRequestBO();
         loginRequestBO.setEmail(loginRequest.getEmail());
 
@@ -83,7 +84,7 @@ public class UsersService {
     @Path("/register")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response registerUser(RegistrationRequest registrationRequest) {
+    public Response registerUser(RegistrationRequest registrationRequest) throws SQLException {
         RegistrationRequestBO registrationRequestBO = new RegistrationRequestBO();
         registrationRequestBO.setUserTypeId(registrationRequest.getUserTypeId());
         registrationRequestBO.setName(registrationRequest.getName());
@@ -132,7 +133,7 @@ public class UsersService {
     @Path("/confirm")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response confirmUser(@QueryParam("id") int id) {
+    public Response confirmUser(@QueryParam("id") int id) throws SQLException {
         UserRequestHandler userRequestHandler = new UserRequestHandler();
         RegistrationResponse registrationResponse = new RegistrationResponse();
         if (userRequestHandler.verifyUser(id)) {
@@ -148,7 +149,7 @@ public class UsersService {
     @Path("/update")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateUser(UpdateUserRequest updateUser) {
+    public Response updateUser(UpdateUserRequest updateUser) throws SQLException {
         UpdaterUserBO updateRequestBO = new UpdaterUserBO();
         updateRequestBO.setId(updateUser.getId());
         updateRequestBO.setName(updateUser.getName());
@@ -176,10 +177,16 @@ public class UsersService {
     @GET
     @Path("/userTypes")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getUserTypes() {
+    public Response getUserTypes() throws SQLException {
         UserRequestHandler userRequestHandler = new UserRequestHandler();
         UserTypesResponse userTypesResponse = new UserTypesResponse();
-        userTypesResponse.setGetTypesResponseList(userRequestHandler.getUserTypes());
+        try {
+            userTypesResponse.setGetTypesResponseList(userRequestHandler.getUserTypes());
+            userTypesResponse.setMessageType("SUCCESS");
+            userTypesResponse.setMessage("Available user types.");
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
         return ResponseGenerator.generateResponse(userTypesResponse);
     }
 
@@ -187,7 +194,7 @@ public class UsersService {
     @Path("/userInfo/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getUserById(@PathParam("id") int id) {
+    public Response getUserById(@PathParam("id") int id) throws SQLException,UserNotFoundException{
         UserRequestHandler userRequestHandler = new UserRequestHandler();
         Object response = null;
         try {
@@ -211,7 +218,7 @@ public class UsersService {
     @Path("/logout")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response logout(LogoutRequest logoutRequest) {
+    public Response logout(LogoutRequest logoutRequest) throws SQLException {
         UserRequestHandler userRequestHandler = new UserRequestHandler();
         Boolean isLoggedOut = userRequestHandler.logout(logoutRequest
                 .getUserId());
@@ -232,7 +239,7 @@ public class UsersService {
     @Path("/list")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getUserList() {
+    public Response getUserList() throws SQLException{
         UserRequestHandler userRequestHandler = new UserRequestHandler();
         List<UserResponseList> response = null;
         try {
@@ -241,6 +248,8 @@ public class UsersService {
             LoginResponse loginResponse = new LoginResponse();
             loginResponse.setMessage(e.getMessage());
             return ResponseGenerator.generateResponse(loginResponse);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return ResponseGenerator.generateResponse(response);
     }
@@ -248,7 +257,7 @@ public class UsersService {
     @GET
     @Path("/loggedIn")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getUserLoggedIn() {
+    public Response getUserLoggedIn() throws SQLException {
         UserRequestHandler userRequestHandler = new UserRequestHandler();
         List<UserLoggedInResponse> response = null;
         try {
@@ -257,6 +266,8 @@ public class UsersService {
             LoginResponse loginResponse = new LoginResponse();
             loginResponse.setMessage(e.getMessage());
             return ResponseGenerator.generateResponse(loginResponse);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return ResponseGenerator.generateResponse(response);
     }
@@ -265,7 +276,7 @@ public class UsersService {
     @Path("/forgot/{emailId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response forgotPassword(@PathParam("emailId") String emailId) {
+    public Response forgotPassword(@PathParam("emailId") String emailId) throws SQLException {
         UserRequestHandler userRequestHandler = new UserRequestHandler();
         Boolean mailSent = userRequestHandler.forgotPassword(emailId);
         LoginResponse loginResponse = new LoginResponse();
@@ -309,7 +320,7 @@ public class UsersService {
         UserRequestHandler userRequestHandler = new UserRequestHandler();
         UserResponse userResponseL = new UserResponse();
         try {
-            userResponseL.setUserResponseList(userRequestHandler.getUserByType(userTypeId));
+            userResponseL.setUserResponseList(userRequestHandler.getUserByTypeId(userTypeId));
             userResponseL.setMessageType("SUCCESS");
             userResponseL.setMessage("Users are available");
         } catch (UserTypeNotFoundException e) {
@@ -326,7 +337,7 @@ public class UsersService {
     @Path("/{user_type_id}/assignAutomobiles")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response assignMechanicsForAutomobiles(AssignAutomobilesRequest assignAutomobilesRequest, @PathParam("user_type_id") int user_type_id) throws SQLException {
+    public Response assignMechanicsForAutomobiles(AssignAutomobilesRequest assignAutomobilesRequest, @PathParam("user_type_id") int userTypeId) throws SQLException {
         UserRequestHandler userRequestHandler = new UserRequestHandler();
         AssignAutomobilesRequestBO assignAutomobilesRequestBO = new AssignAutomobilesRequestBO();
         assignAutomobilesRequestBO.setAutomobileInfoList(assignAutomobilesRequest.getAutomobilesInfoList());
@@ -346,7 +357,7 @@ public class UsersService {
     @Path("/{user_type_id}/assignServices")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response assignMechanicsForServices(AssignServicesRequest assignServicesRequest, @PathParam("user_type_id") int user_type_id) throws SQLException {
+    public Response assignMechanicsForServices(AssignServicesRequest assignServicesRequest, @PathParam("user_type_id") int userTypeId) throws SQLException {
         UserRequestHandler userRequestHandler = new UserRequestHandler();
         AssignServicesRequestBO assignServicesRequestBO = new AssignServicesRequestBO();
         assignServicesRequestBO.setServiceInfoList(assignServicesRequest.getServiceInfoList());
@@ -367,16 +378,20 @@ public class UsersService {
     @Path("/{user_type_id}/{service_id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getMechanicByByService(@PathParam("user_type_id") int user_type_id, @PathParam("service_id") int service_id,
-                                           @QueryParam("automobileid") int automobile_detail_id) throws SQLException {
+    public Response getMechanicByByService(@PathParam("user_type_id") int userTypeId, @PathParam("service_id") int serviceId,
+                                           @QueryParam("automobile_details_id") int automobileDetailsId) throws SQLException,ServiceNotFoundException{
         UserRequestHandler userRequestHandler = new UserRequestHandler();
         MechanicByServiceResponse mechanicByServiceResponse = new MechanicByServiceResponse();
         try {
-            mechanicByServiceResponse.setMechanicsList(userRequestHandler.getMechanicsList(service_id, automobile_detail_id));
+            mechanicByServiceResponse.setMechanicsList(userRequestHandler.getMechanicsList(serviceId, automobileDetailsId));
             mechanicByServiceResponse.setMessageType("SUCCESS");
             mechanicByServiceResponse.setMessage("Available mechanics.");
         } catch (SQLException e) {
             e.printStackTrace();
+        }catch (ServiceNotFoundException e)
+        {
+            mechanicByServiceResponse.setMessageType("FAILURE");
+            mechanicByServiceResponse.setMessage("Invalid service id.");
         }
         return ResponseGenerator.generateResponse(mechanicByServiceResponse);
     }
@@ -386,7 +401,7 @@ public class UsersService {
     @Path("/{user_type_id}/listAssignedAutomobiles/{user_id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getUserAutomobileMapList(@PathParam("user_type_id") int userTypeId,@PathParam("user_id") int userId) {
+    public Response getUserAutomobileMapList(@PathParam("user_type_id") int userTypeId,@PathParam("user_id") int userId) throws SQLException,UserNotFoundException {
         UserRequestHandler userRequestHandler = new UserRequestHandler();
         List<UserAutomobileMapResponseList> response = null;
         try {
@@ -405,7 +420,7 @@ public class UsersService {
     @Path("/{user_type_id}/listAssignedServices/{user_id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getUserServiceMapList(@PathParam("user_type_id") int userTypeId,@PathParam("user_id") int userId) {
+    public Response getUserServiceMapList(@PathParam("user_type_id") int userTypeId,@PathParam("user_id") int userId) throws SQLException,UserNotFoundException{
         UserRequestHandler userRequestHandler = new UserRequestHandler();
         List<UserServiceMapResponseList> response = null;
         try {

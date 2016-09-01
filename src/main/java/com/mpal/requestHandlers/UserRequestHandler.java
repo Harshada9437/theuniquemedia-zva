@@ -13,7 +13,6 @@ import com.mpal.dao.user.UserServiceMapDAO;
 import com.mpal.dao.user.UserTypesDAO;
 import com.mpal.dao.user.UsersDAO;
 import com.mpal.dto.user.*;
-import com.mpal.exceptions.AutomobileServiceExceptions.AutomobileNotFoundException;
 import com.mpal.exceptions.userServiceExceptions.UserNotFoundException;
 import com.mpal.exceptions.userServiceExceptions.UserTypeNotFoundException;
 import com.mpal.rest.request.user.AutomobilesInfo;
@@ -24,7 +23,7 @@ import com.mpal.validation.UsersValidation;
 
 public class UserRequestHandler {
 
-	public Integer register(RegistrationRequestBO registrationRequestBO) {
+	public Integer register(RegistrationRequestBO registrationRequestBO) throws SQLException{
 		Integer userId=null;
 		UsersDAO usersDAO = new UsersDAO();
 		try {
@@ -37,7 +36,7 @@ public class UserRequestHandler {
 		return userId;
 	}
 
-	public Boolean verifyPhoneNumber(String mobile) {
+	public Boolean verifyPhoneNumber(String mobile) throws SQLException {
 		Boolean isProcessed = Boolean.FALSE;
 		UsersDAO usersDAO = new UsersDAO();
 		try {
@@ -48,7 +47,7 @@ public class UserRequestHandler {
 		return isProcessed;
 	}
 
-    public Boolean verifyEmail(String email) {
+    public Boolean verifyEmail(String email) throws SQLException {
 
         Boolean isProcessed = Boolean.FALSE;
         UsersDAO usersDAO = new UsersDAO();
@@ -60,7 +59,7 @@ public class UserRequestHandler {
         return isProcessed;
     }
 
-	public Boolean validUser(int userId) {
+	public Boolean validUser(int userId) throws SQLException {
 
 		Boolean isProcessed = Boolean.FALSE;
 		UsersDAO usersDAO = new UsersDAO();
@@ -74,7 +73,7 @@ public class UserRequestHandler {
 		return isProcessed;
 	}
 
-	public Boolean verifyUser(Integer userId) {
+	public Boolean verifyUser(Integer userId) throws SQLException {
 
 		Boolean isProcessed = Boolean.FALSE;
 		UsersDAO usersDAO = new UsersDAO();
@@ -86,7 +85,7 @@ public class UserRequestHandler {
 		return isProcessed;
 	}
 
-	public Boolean updateUser(UpdaterUserBO updateRequestBO) {
+	public Boolean updateUser(UpdaterUserBO updateRequestBO) throws SQLException{
 
 		Boolean isProcessed = Boolean.FALSE;
 		UsersDAO usersDAO = new UsersDAO();
@@ -102,34 +101,38 @@ public class UserRequestHandler {
 			throws SQLException {
 		UsersValidation usersValidation = new UsersValidation();
 		UsersDAO usersDAO = new UsersDAO();
-		LoginResponseDTO loginResponseDTO = usersDAO
-				.getNamePasswordForLoginValidationForEmailAndStatus(loginRequestBO
-						.getEmail());
 		LoginResponseBO loginResponseBO = new LoginResponseBO();
-		Boolean isValidUser = usersValidation.validateEmailPassword(
-				loginRequestBO, loginResponseDTO);
-		if (isValidUser) {
-			Long sessionId = new Date().getTime();
-			usersDAO.updateSessionId(loginResponseDTO.getId(), sessionId);
-			loginResponseBO.setSessionId(sessionId+"@"+loginResponseDTO.getId());
+		try {
+			LoginResponseDTO loginResponseDTO = usersDAO
+					.getNamePasswordForLoginValidationForEmailAndStatus(loginRequestBO
+							.getEmail());
+			Boolean isValidUser = usersValidation.validateEmailPassword(
+					loginRequestBO, loginResponseDTO);
+			if (isValidUser) {
+				Long sessionId = new Date().getTime();
+				usersDAO.updateSessionId(loginResponseDTO.getId(), sessionId);
+				loginResponseBO.setSessionId(sessionId + "@" + loginResponseDTO.getId());
+				loginResponseBO.setValidUser(isValidUser);
+				loginResponseBO.setId(loginResponseDTO.getId());
+				loginResponseBO.setName(loginResponseDTO.getName());
+				loginResponseBO.setAddress(loginResponseDTO.getAddress());
+				loginResponseBO.setMobile(loginResponseDTO.getMobile());
+				loginResponseBO.setDOB(loginResponseDTO.getDOB());
+				loginResponseBO.setGender(loginResponseDTO.getGender());
+				loginResponseBO.setEmail(loginResponseDTO.getEmail());
+				loginResponseBO.setMobile(loginResponseDTO.getMobile());
+				loginResponseBO.setClientDetailsId(loginResponseDTO.getClientDetailsId());
+				loginResponseBO.setLongitude(loginResponseDTO.getLongitude());
+				loginResponseBO.setLatitude(loginResponseDTO.getLatitude());
+				loginResponseBO.setIsVerified(loginResponseDTO.getIsVerified());
+				loginResponseBO.setStatus(loginResponseDTO.getStatus());
+				loginResponseBO.setUserTypeId(loginResponseDTO.getUserTypeId());
+			}
 			loginResponseBO.setValidUser(isValidUser);
 			loginResponseBO.setId(loginResponseDTO.getId());
-			loginResponseBO.setName(loginResponseDTO.getName());
-			loginResponseBO.setAddress(loginResponseDTO.getAddress());
-			loginResponseBO.setMobile(loginResponseDTO.getMobile());
-			loginResponseBO.setDOB(loginResponseDTO.getDOB());
-			loginResponseBO.setGender(loginResponseDTO.getGender());
-			loginResponseBO.setEmail(loginResponseDTO.getEmail());
-			loginResponseBO.setMobile(loginResponseDTO.getMobile());
-			loginResponseBO.setClientDetailsId(loginResponseDTO.getClientDetailsId());
-			loginResponseBO.setLongitude(loginResponseDTO.getLongitude());
-			loginResponseBO.setLatitude(loginResponseDTO.getLatitude());
-			loginResponseBO.setIsVerified(loginResponseDTO.getIsVerified());
-			loginResponseBO.setStatus(loginResponseDTO.getStatus());
-			loginResponseBO.setUserTypeId(loginResponseDTO.getUserTypeId());
+		}catch (SQLException e){
+			e.printStackTrace();
 		}
-		loginResponseBO.setValidUser(isValidUser);
-		loginResponseBO.setId(loginResponseDTO.getId());
 		return loginResponseBO;
 	}
 
@@ -166,7 +169,7 @@ public class UserRequestHandler {
 		return userResponse;
 	}
 
-	public List<GetTypesResponse> getUserTypes() {
+	public List<GetTypesResponse> getUserTypes() throws SQLException{
 		UserTypesDAO usersTypesDAO = new UserTypesDAO();
 		List<GetTypesResponse> getTypesResponses = new ArrayList<GetTypesResponse>();
 		try {
@@ -191,12 +194,19 @@ public class UserRequestHandler {
 	 public GetUserResponse getUserById(int id) throws SQLException,
 			UserNotFoundException {
 		UsersDAO usersDAO = new UsersDAO();
-		GetUserResponse userResponse = buildUsersResponseFromDTO(usersDAO
-				.getUserById(id));
+		 GetUserResponse userResponse=new GetUserResponse();
+		 try {
+			  userResponse = buildUsersResponseFromDTO(usersDAO
+					 .getUserById(id));
+		 }catch (SQLException e){
+		 	e.printStackTrace();
+		 }catch (UserNotFoundException e){
+		 	e.printStackTrace();
+		 }
 		return userResponse;
 	}
 
-	public Boolean logout(int userId) {
+	public Boolean logout(int userId) throws SQLException{
 		Boolean isLoggedOut = Boolean.FALSE;
 		try {
 			UsersDAO usersDAO = new UsersDAO();
@@ -208,7 +218,7 @@ public class UserRequestHandler {
 		return isLoggedOut;
 	}
 
-	public List<UserResponseList> getUsersList() {
+	public List<UserResponseList> getUsersList() throws SQLException{
 		List<UserResponseList> userList = null;
 		try {
 			UsersDAO usersDAO = new UsersDAO();
@@ -242,7 +252,7 @@ public class UserRequestHandler {
 		return userResponseListResponse;
 	}
 
-	private List<MechanicResponse> getMechanicResponseListFromDTOs(List<MechanicDTO> usersDTOs) throws SQLException{
+	private List<MechanicResponse> getMechanicResponseListFromDTOs(List<MechanicDTO> usersDTOs){
 		List<MechanicResponse> mechanicResponseListResponse = new ArrayList<MechanicResponse>();
 		Iterator<MechanicDTO> usersDTOIterator = usersDTOs.iterator();
 		while(usersDTOIterator.hasNext()){
@@ -263,7 +273,7 @@ public class UserRequestHandler {
 		return mechanicResponseListResponse;
 	}
 
-	public Boolean forgotPassword(String emailId) {
+	public Boolean forgotPassword(String emailId) throws SQLException,UserNotFoundException {
 		Boolean isProcessed = Boolean.FALSE;
 		UsersDAO usersDAO = new UsersDAO();
 		try {
@@ -281,7 +291,7 @@ public class UserRequestHandler {
 		return isProcessed;
 	}
 
-	public List<UserLoggedInResponse> getUserLoggedIn() {
+	public List<UserLoggedInResponse> getUserLoggedIn() throws SQLException {
 		UsersDAO usersDAO = new UsersDAO();
 		List<UserLoggedInResponse> userList = null;
 		try {
@@ -292,7 +302,7 @@ public class UserRequestHandler {
 		return userList;
 	}
 
-	public boolean changePassword(ChangePasswordBO updateRequestBO) {
+	public boolean changePassword(ChangePasswordBO updateRequestBO) throws UserNotFoundException {
 		Boolean isProcessed = Boolean.FALSE;
 		UsersDAO usersDAO = new UsersDAO();
 		try {
@@ -303,22 +313,19 @@ public class UserRequestHandler {
 		return isProcessed;
 	}
 
-    public List<UserResponseList> getUserByType(int userTypeId) throws SQLException, UserTypeNotFoundException {
-        UsersDAO usersDAO = new UsersDAO();
-			try {
-                UserTypesDAO userTypesDAO = new UserTypesDAO();
-                UserTypesDTO userTypesDTO = userTypesDAO.getUserTypesDetails(userTypeId);
-                if (userTypesDTO == null) {
-                    throw new UserTypeNotFoundException("Invalid user type id");
-                } else {
-                    return getUserResponseListFromDTOs(usersDAO.getUserByTypeId(userTypeId));
-                }
-
-			} catch (SQLException s) {
-				s.printStackTrace();
-                throw s;
-            }
+	public List<UserResponseList> getUserByTypeId(int userTypeId) throws SQLException,
+			UserTypeNotFoundException {
+		UsersDAO usersDAO = new UsersDAO();
+		List<UserResponseList> userList = new ArrayList<UserResponseList>();
+		try {
+			userList = getUserResponseListFromDTOs(usersDAO.getUserByTypeId(userTypeId));
+		} catch (SQLException s) {
+			s.printStackTrace();
+		} catch (UserTypeNotFoundException s) {
+			s.printStackTrace();
 		}
+		return userList;
+	}
 
 	public Boolean assignAutomobile(AssignAutomobilesRequestBO assignAutomobilesRequestBO) throws SQLException {
 
@@ -419,7 +426,7 @@ public class UserRequestHandler {
 		return userList;
 	}
 
-	private List<UserAutomobileMapResponseList> getUserMapResponseListFromDTOs(List<UserAutomobileMapDTO> userDTOs) throws SQLException{
+	private List<UserAutomobileMapResponseList> getUserMapResponseListFromDTOs(List<UserAutomobileMapDTO> userDTOs){
 			List<UserAutomobileMapResponseList> userResponseListResponse = new ArrayList<UserAutomobileMapResponseList>();
 			Iterator<UserAutomobileMapDTO> usersDTOIterator = userDTOs.iterator();
 			while(usersDTOIterator.hasNext()){
@@ -444,7 +451,7 @@ public class UserRequestHandler {
 			return userList;
 		}
 
-	private List<UserServiceMapResponseList> getUserServiceMapResponseListFromDTOs(List<UserServiceMapDTO> userDTOs) throws SQLException{
+	private List<UserServiceMapResponseList> getUserServiceMapResponseListFromDTOs(List<UserServiceMapDTO> userDTOs){
 			List<UserServiceMapResponseList> userResponseListResponse = new ArrayList<UserServiceMapResponseList>();
 			Iterator<UserServiceMapDTO> usersDTOIterator = userDTOs.iterator();
 			while(usersDTOIterator.hasNext()){

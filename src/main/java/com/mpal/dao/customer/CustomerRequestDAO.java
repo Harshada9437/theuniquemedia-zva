@@ -17,7 +17,7 @@ import java.util.List;
  * Created by Sumedh on 22-08-2016.
  */
 public class CustomerRequestDAO {
-    public Boolean createCustomerRequest(CustomerRequestDTO customerRequestDTO) {
+    public Boolean createCustomerRequest(CustomerRequestDTO customerRequestDTO) throws SQLException{
         PreparedStatement preparedStatement = null;
         Connection connection = null;
         Boolean isCreated = Boolean.FALSE;
@@ -102,7 +102,7 @@ public class CustomerRequestDAO {
     }
 
 
-    public List<RequestCDTO> getRequestListByCustomer(int customer_id) throws SQLException {
+    public List<RequestCDTO> getRequestListByCustomer(int customerId) throws SQLException {
         Connection connection = null;
         Statement statement = null;
         List<RequestCDTO> requestResponseList = new ArrayList<RequestCDTO>();
@@ -119,7 +119,7 @@ public class CustomerRequestDAO {
                             "   ON s.id=r.service_id\n" +
                             "INNER JOIN automobile_details a\n" +
                             "   ON a.id=r.automobile_details_id\n" +
-                            "where r.customer_id =").append(customer_id);
+                            "where r.customer_id =").append(customerId);
             ResultSet resultSet = statement.executeQuery(query.toString());
 
             while (resultSet.next()) {
@@ -202,7 +202,7 @@ public class CustomerRequestDAO {
         return customerRequestDTO;
     }
 
-    public List<RequestMDTO> getRequestByMechanic(int mechanic_id) throws SQLException {
+    public List<RequestMDTO> getRequestByMechanic(int mechanicId) throws SQLException {
         Connection connection = null;
         Statement statement = null;
         List<RequestMDTO> requestResponseList = new ArrayList<RequestMDTO>();
@@ -221,7 +221,7 @@ public class CustomerRequestDAO {
                             "   ON s.id=r.service_id\n" +
                             "INNER JOIN automobile_details a\n" +
                             "   ON a.id=r.automobile_details_id\n" +
-                            "where r.mechanic_id =").append(mechanic_id);
+                            "where r.mechanic_id =").append(mechanicId);
             ResultSet resultSet = statement.executeQuery(query.toString());
 
             while (resultSet.next()) {

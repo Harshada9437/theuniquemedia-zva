@@ -20,22 +20,26 @@ public class CustomerRequestService {
     @Path("/create")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createRequest(CustomerRequest customerRequest) {
+    public Response createRequest(CustomerRequest customerRequest) throws SQLException {
         CreateCustomerRequestBO createCustomerRequestBO = new CreateCustomerRequestBO();
-        createCustomerRequestBO.setAutomobileDetailsId(customerRequest.getAutomobileDetailsId());
-        createCustomerRequestBO.setCustomerId(customerRequest.getCustomerId());
-        createCustomerRequestBO.setMechanicId(customerRequest.getMechanicId());
-        createCustomerRequestBO.setServiceId(customerRequest.getServiceId());
-
         CustomerRequestHandler customerRequestHandler = new CustomerRequestHandler();
-        String token = customerRequestHandler.createCustomerRequest(createCustomerRequestBO);
         CreateCustomerRequestResponse createCustomerRequestResponse = new CreateCustomerRequestResponse();
-        if (token != null) {
-            createCustomerRequestResponse.setMessage(token);
-            createCustomerRequestResponse.setMessageType("SUCCESS");
-        } else {
-            createCustomerRequestResponse.setMessage("CREATION FAILED");
-            createCustomerRequestResponse.setMessageType("FAILURE");
+        try {
+            createCustomerRequestBO.setAutomobileDetailsId(customerRequest.getAutomobileDetailsId());
+            createCustomerRequestBO.setCustomerId(customerRequest.getCustomerId());
+            createCustomerRequestBO.setMechanicId(customerRequest.getMechanicId());
+            createCustomerRequestBO.setServiceId(customerRequest.getServiceId());
+
+            String token = customerRequestHandler.createCustomerRequest(createCustomerRequestBO);
+            if (token != null) {
+                createCustomerRequestResponse.setMessage(token);
+                createCustomerRequestResponse.setMessageType("SUCCESS");
+            } else {
+                createCustomerRequestResponse.setMessage("CREATION FAILED");
+                createCustomerRequestResponse.setMessageType("FAILURE");
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
         }
         return ResponseGenerator.generateResponse(createCustomerRequestResponse);
     }
@@ -44,26 +48,28 @@ public class CustomerRequestService {
     @Path("/update/{token}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateRequest(UpdateCustomerRequest updateCustomerRequest, @PathParam("token") String token/*,@HeaderParam("sessionId") String sessionId*/) {
-        //if (sessionId != null && RequestValidation.isRequestValid(sessionId)) {
-
-
-        UpdateCustomerRequestBO updatecustomerRequestBO = new UpdateCustomerRequestBO();
-
-        updatecustomerRequestBO.setStatus( updateCustomerRequest.getStatus());
-
-        updatecustomerRequestBO.setUpdatedBy(updateCustomerRequest.getUpdatedBy());
-
+    public Response updateRequest(UpdateCustomerRequest updateCustomerRequest, @PathParam("token") String token)throws SQLException,RequestNotFoundException {
         CustomerRequestHandler customerRequestHandler = new CustomerRequestHandler();
-
         UpdateCustomerResponse updatecustomerResponse = new UpdateCustomerResponse();
+        try {
+            UpdateCustomerRequestBO updatecustomerRequestBO = new UpdateCustomerRequestBO();
 
-        if (customerRequestHandler.updateCustomerRequest(updatecustomerRequestBO,token)) {
-            updatecustomerResponse.setMessagetype("SUCCESS");
-            updatecustomerResponse.setMessage("Customer Request updated successfully");
-        } else {
+            updatecustomerRequestBO.setStatus(updateCustomerRequest.getStatus());
+
+            updatecustomerRequestBO.setUpdatedBy(updateCustomerRequest.getUpdatedBy());
+
+            if (customerRequestHandler.updateCustomerRequest(updatecustomerRequestBO, token)) {
+                updatecustomerResponse.setMessagetype("SUCCESS");
+                updatecustomerResponse.setMessage("Customer Request updated successfully");
+            } else {
+                updatecustomerResponse.setMessagetype("FAILURE");
+                updatecustomerResponse.setMessage("Unable to update the Customer Request");
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }catch (RequestNotFoundException e){
             updatecustomerResponse.setMessagetype("FAILURE");
-            updatecustomerResponse.setMessage("Unable to update the Customer Request");
+            updatecustomerResponse.setMessage("Invalid token.");
         }
         return ResponseGenerator.generateResponse(updatecustomerResponse);
     }
@@ -72,7 +78,7 @@ public class CustomerRequestService {
     @Path("/list/byToken/{token}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getRequestListByToken(@PathParam("token") String token) {
+    public Response getRequestListByToken(@PathParam("token") String token)throws SQLException,RequestNotFoundException {
         CustomerRequestHandler customerRequestHandler = new CustomerRequestHandler();
         ReqeustListResponse response = new ReqeustListResponse();
         try {
@@ -81,6 +87,7 @@ public class CustomerRequestService {
             response.setMessage("Requests are available.");
         } catch (RequestNotFoundException e) {
             response.setMessageType("Failure");
+            response.setMessage("Invalid token.");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -91,15 +98,18 @@ public class CustomerRequestService {
     @Path("/list/byCustomer/{customer_id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getRequestListByCustomer(@PathParam("customer_id") int customer_id) {
+    public Response getRequestListByCustomer(@PathParam("customer_id") int customerId)throws SQLException,RequestNotFoundException {
         CustomerRequestHandler customerRequestHandler = new CustomerRequestHandler();
         ReqeustListCResponse response = new ReqeustListCResponse();
         try {
-            response.setRequests(customerRequestHandler.getRequestListByCustomer(customer_id));
+            response.setRequests(customerRequestHandler.getRequestListByCustomer(customerId));
             response.setMessageType("SUCCESS");
             response.setMessage("Requests are available.");
         } catch (RequestNotFoundException e) {
             response.setMessageType("FAILURE");
+            response.setMessage("Invalid customerId.");
+        }catch (SQLException e) {
+            e.printStackTrace();
         }
         return ResponseGenerator.generateResponse(response);
     }
@@ -108,15 +118,16 @@ public class CustomerRequestService {
     @Path("/list/byMechanic/{mechanic_id }")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getRequestListByMechanic(@PathParam("mechanic_id") int mechanic_id ) {
+    public Response getRequestListByMechanic(@PathParam("mechanic_id") int mechanicId )throws RequestNotFoundException,SQLException {
         CustomerRequestHandler customerRequestHandler = new CustomerRequestHandler();
         ReqeustListMResponse response = new ReqeustListMResponse();
         try {
-            response.setRequests(customerRequestHandler.getRequestListByMechanic(mechanic_id ));
+            response.setRequests(customerRequestHandler.getRequestListByMechanic(mechanicId ));
             response.setMessageType("SUCCESS");
             response.setMessage("Requests are available.");
         } catch (RequestNotFoundException e) {
             response.setMessageType("FAILURE");
+            response.setMessage("Invalid mechanicId.");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -127,7 +138,7 @@ public class CustomerRequestService {
     @Path("/requestInfo/{token}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getUserById(@PathParam("token") String token) {
+    public Response getUserById(@PathParam("token") String token) throws SQLException,RequestNotFoundException{
         CustomerRequestHandler customerRequestHandler = new CustomerRequestHandler();
         Object response = null;
         GetRequestResponse requsetResponse=new GetRequestResponse();
@@ -138,7 +149,8 @@ public class CustomerRequestService {
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (RequestNotFoundException e) {
-            requsetResponse.setMessageType("FAILURE");
+            requsetResponse.setMessageType("Failure");
+            requsetResponse.setMessage("Invalid token.");
         }
         return ResponseGenerator.generateResponse(response);
     }
@@ -148,20 +160,17 @@ public class CustomerRequestService {
     @Path("/list")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getRequestList( ) {
+    public Response getRequestList( )throws SQLException {
         CustomerRequestHandler customerRequestHandler = new CustomerRequestHandler();
-        RequestList response = new RequestList();
+        ReqeustListResponse response = new ReqeustListResponse();
         try {
-            response.setRequest(customerRequestHandler.getRequestList());
+            response.setRequests(customerRequestHandler.getRequestList());
             response.setMessageType("SUCCESS");
             response.setMessage("Requests are available.");
-        } catch (RequestNotFoundException e) {
-            response.setMessageType("FAILURE");
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return ResponseGenerator.generateResponse(response);
     }
-
 }
 

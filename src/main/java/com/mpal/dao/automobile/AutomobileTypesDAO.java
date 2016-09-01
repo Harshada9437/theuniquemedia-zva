@@ -34,9 +34,6 @@ public class AutomobileTypesDAO implements IAutomobileTypesDAO {
                 index++;
                 automobileTypesDTOList.add(automobileTypesDTO);
             }
-            if (index == 1) {
-                throw new AutomobileNotFoundException("Invalid automobile");
-            }
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         } finally {

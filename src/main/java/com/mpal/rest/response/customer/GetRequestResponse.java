@@ -16,6 +16,7 @@ public class GetRequestResponse {
     private String token;
     private String status;
     private String messageType;
+    private String message;
 
     public String getMessageType() {
         return messageType;
@@ -105,6 +106,14 @@ public class GetRequestResponse {
         this.updatedBy = updatedBy;
     }
 
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     @Override
     public String toString() {
         return "GetRequestResponse{" +
@@ -119,6 +128,7 @@ public class GetRequestResponse {
                 ", token='" + token + '\'' +
                 ", status='" + status + '\'' +
                 ", messageType='" + messageType + '\'' +
+                ", message='" + message + '\'' +
                 '}';
     }
 }

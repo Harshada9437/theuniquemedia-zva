@@ -3,7 +3,6 @@ package com.mpal.dao.serviceprovider;
 import com.mpal.bo.request.serviceprovider.UpdateServiceProviderBO;
 import com.mpal.dao.UtilClasses.ConnectionPool;
 import com.mpal.dto.serviceprovider.ServiceProviderDTO;
-import com.mpal.exceptions.userServiceExceptions.UserNotFoundException;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -127,7 +126,7 @@ public class ServiceProviderDAO {
         }
     }
 
-    public List<ServiceProviderDTO> getAllServiceProviderByTypeId(int service_provider_type_id) throws SQLException, UserNotFoundException {
+    public List<ServiceProviderDTO> getAllServiceProviderByTypeId(int serviceProviderTypeId) throws SQLException {
             Connection connection = null;
             Statement statement = null;
             ServiceProviderDTO serviceProviderDTO = null;
@@ -136,7 +135,7 @@ public class ServiceProviderDAO {
                 connection = new ConnectionPool().getConnection();
                 statement = connection.createStatement();
                 StringBuilder query = new StringBuilder(
-                        "SELECT * FROM service_provider where service_provider_type_id = ").append(service_provider_type_id);
+                        "SELECT * FROM service_provider where service_provider_type_id = ").append(serviceProviderTypeId);
                 ResultSet resultSet = statement.executeQuery(query.toString()
                         .trim());
 

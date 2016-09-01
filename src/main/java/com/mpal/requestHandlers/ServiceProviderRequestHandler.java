@@ -18,11 +18,9 @@ import java.util.List;
  */
 public class ServiceProviderRequestHandler {
 
-    public boolean createServiceProvider(ServiceProviderBO serviceProviderBO) {
+    public boolean createServiceProvider(ServiceProviderBO serviceProviderBO) throws SQLException {
 
         Boolean isProcessed = Boolean.TRUE;
-        String msg="notcreated";
-        Integer automobileId=null;
 
         ServiceProviderDAO serviceProviderDAO = new ServiceProviderDAO();
         try {
@@ -67,7 +65,7 @@ public class ServiceProviderRequestHandler {
         return isProcessed;
     }
 
-    public List<ServiceTypeResponse> getServiceTypes() {
+    public List<ServiceTypeResponse> getServiceTypes() throws SQLException {
 
         ServiceProviderTypesDAO serviceProviderTypesDAO = new ServiceProviderTypesDAO();
         List<ServiceTypeResponse> getServiceTypesResponses = new ArrayList<ServiceTypeResponse>();
@@ -89,12 +87,12 @@ public class ServiceProviderRequestHandler {
         return getServiceTypesResponses;
     }
 
-    public List<ServiceProviderResponse> getServiceProvider(int service_provider_type_id) {
+    public List<ServiceProviderResponse> getServiceProvider(int serviceProviderTypeId) throws SQLException {
         ServiceProviderDAO serviceProviderDAO = new ServiceProviderDAO();
         List<ServiceProviderResponse> getServiceProviderResponses = new ArrayList<ServiceProviderResponse>();
         try {
             List<ServiceProviderDTO>  serviceProviderDTOList = serviceProviderDAO
-                    .getAllServiceProviderByTypeId(service_provider_type_id);
+                    .getAllServiceProviderByTypeId(serviceProviderTypeId);
 
             for (com.mpal.dto.serviceprovider.ServiceProviderDTO serviceProviderDTO : serviceProviderDTOList) {
                 ServiceProviderResponse getServiceResponse = new ServiceProviderResponse();
