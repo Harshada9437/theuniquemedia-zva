@@ -13,7 +13,7 @@ public class GetTypesResponse {
 		this.type = type;
 	}
 
-	public String gatStatus() {
+	public String getStatus() {
 		return status;
 	}
 

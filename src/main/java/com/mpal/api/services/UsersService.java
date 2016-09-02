@@ -13,6 +13,7 @@ import com.mpal.dto.user.UsersDTO;
 import com.mpal.exceptions.ServiceExceptions.ServiceNotFoundException;
 import com.mpal.exceptions.userServiceExceptions.UserTypeNotFoundException;
 import com.mpal.rest.request.user.AssignAutomobilesRequest;
+import com.mpal.rest.response.FailureResponse;
 import com.mpal.rest.response.user.*;
 import com.mpal.bo.response.LoginResponseBO;
 import com.mpal.exceptions.userServiceExceptions.UserNotFoundException;
@@ -206,10 +207,10 @@ public class UsersService {
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (UserNotFoundException e) {
-            LoginResponse loginResponse = new LoginResponse();
-            loginResponse.setMessageType("FAILURE");
-            loginResponse.setMessage("Invalid User");
-            return ResponseGenerator.generateResponse(loginResponse);
+            FailureResponse failureResponse = new FailureResponse();
+            failureResponse.setMessageType("FAILURE");
+            failureResponse.setMessage("Invalid User");
+            return ResponseGenerator.generateResponse(failureResponse);
         }
         return ResponseGenerator.generateResponse(response);
     }
@@ -316,7 +317,7 @@ public class UsersService {
     @Path("/list/{user_type_id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getUserByTypeList(@PathParam("user_type_id") int userTypeId) throws SQLException {
+    public Response getUserByTypeList(@PathParam("user_type_id") int userTypeId) throws SQLException,UserTypeNotFoundException {
         UserRequestHandler userRequestHandler = new UserRequestHandler();
         UserResponse userResponseL = new UserResponse();
         try {
@@ -326,9 +327,11 @@ public class UsersService {
         } catch (UserTypeNotFoundException e) {
             userResponseL.setMessageType("FAILURE");
             userResponseL.setMessage("INVALID USER TYPE");
-        } catch (SQLException e) {
-            userResponseL.setMessageType("FAILURE");
-            userResponseL.setMessage("FAILURE IN GETTING USER LIST");
+        } catch (UserNotFoundException e){
+            userResponseL.setMessageType("SUCCESS");
+            userResponseL.setMessage("Users are not available for this type");
+        } catch(SQLException e) {
+           e.printStackTrace();
         }
         return ResponseGenerator.generateResponse(userResponseL);
     }
@@ -407,9 +410,10 @@ public class UsersService {
         try {
             response = userRequestHandler.getUserAutomobileMapList(userId);
         } catch (UserNotFoundException e) {
-            LoginResponse loginResponse = new LoginResponse();
-            loginResponse.setMessage(e.getMessage());
-            return ResponseGenerator.generateResponse(loginResponse);
+            FailureResponse failureResponse = new FailureResponse();
+            failureResponse.setMessageType("FAILURE");
+            failureResponse.setMessage("Invalid User");
+            return ResponseGenerator.generateResponse(failureResponse);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -426,9 +430,10 @@ public class UsersService {
         try {
             response = userRequestHandler.getUserServiceMapList(userId);
         } catch (UserNotFoundException e) {
-            LoginResponse loginResponse = new LoginResponse();
-            loginResponse.setMessage(e.getMessage());
-            return ResponseGenerator.generateResponse(loginResponse);
+            FailureResponse failureResponse = new FailureResponse();
+            failureResponse.setMessageType("FAILURE");
+            failureResponse.setMessage("Invalid User");
+            return ResponseGenerator.generateResponse(failureResponse);
         } catch (SQLException e) {
             e.printStackTrace();
         }

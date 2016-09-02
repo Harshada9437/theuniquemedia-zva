@@ -17,15 +17,12 @@ import java.util.List;
 
 public class AutomobileRequestHandler {
 
-    public List<AutomobileResponse> getAutomobileByTypeId(int automobileTypeId) throws SQLException,
-            AutomobileNotFoundException {
+    public List<AutomobileResponse> getAutomobileByTypeId(int automobileTypeId) throws SQLException{
         AutomobileDAO automobileDAO = new AutomobileDAO();
         List<AutomobileResponse> automobileList = new ArrayList<AutomobileResponse>();
         try {
             automobileList = getAutomobileResponseListFromDTOs(automobileDAO.getAutomobileByTypeId(automobileTypeId));
         } catch (SQLException s) {
-            s.printStackTrace();
-        } catch (AutomobileNotFoundException s) {
             s.printStackTrace();
         }
         return automobileList;

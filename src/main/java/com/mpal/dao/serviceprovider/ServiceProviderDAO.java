@@ -3,6 +3,8 @@ package com.mpal.dao.serviceprovider;
 import com.mpal.bo.request.serviceprovider.UpdateServiceProviderBO;
 import com.mpal.dao.UtilClasses.ConnectionPool;
 import com.mpal.dto.serviceprovider.ServiceProviderDTO;
+import com.mpal.exceptions.ServiceExceptions.ServiceProviderNotFoundException;
+import com.mpal.exceptions.ServiceExceptions.ServiceProviderTypeNotFoundException;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -132,14 +134,17 @@ public class ServiceProviderDAO {
             ServiceProviderDTO serviceProviderDTO = null;
             List<ServiceProviderDTO> ServiceProviderDTOList = new ArrayList<ServiceProviderDTO>();
             try {
+                ServiceProviderTypesDAO serviceProviderTypesDAO=new ServiceProviderTypesDAO();
                 connection = new ConnectionPool().getConnection();
                 statement = connection.createStatement();
+                int typeId=serviceProviderTypesDAO.getServiceProviderTypesDetails(serviceProviderTypeId);
                 StringBuilder query = new StringBuilder(
                         "SELECT * FROM service_provider where service_provider_type_id = ").append(serviceProviderTypeId);
                 ResultSet resultSet = statement.executeQuery(query.toString()
                         .trim());
 
                 serviceProviderDTO = new ServiceProviderDTO();
+                int index=1;
                 while (resultSet.next()) {
                     serviceProviderDTO.setId(resultSet.getInt("id"));
                     serviceProviderDTO.setName(resultSet.getString("name"));
@@ -154,10 +159,14 @@ public class ServiceProviderDAO {
                     serviceProviderDTO.setClosingTime(resultSet.getString("closing_time"));
                     serviceProviderDTO.setServiceProviderId(resultSet.getInt("service_provider_type_id"));
                     serviceProviderDTO.setStatus(resultSet.getString("status"));
+                    index++;
                     ServiceProviderDTOList.add(serviceProviderDTO);
                 }
+                if(index==1){
+                    throw new ServiceProviderNotFoundException("Invalid ServiceProvider type");
+                }
             } catch (SQLException sqlException) {
-                sqlException.printStackTrace();
+               sqlException.printStackTrace();
             } finally {
                 try {
                     statement.close();

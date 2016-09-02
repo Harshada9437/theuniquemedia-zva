@@ -6,7 +6,7 @@ package com.mpal.dao.automobile;
 
 import com.mpal.dao.UtilClasses.ConnectionPool;
 import com.mpal.dto.automobile.AutomobileTypesDTO;
-import com.mpal.exceptions.AutomobileServiceExceptions.AutomobileNotFoundException;
+import com.mpal.exceptions.AutomobileServiceExceptions.AutomobileTypeNotFoundException;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -45,5 +45,35 @@ public class AutomobileTypesDAO implements IAutomobileTypesDAO {
             }
         }
         return automobileTypesDTOList;
+    }
+
+    public Integer getAutomobileTypesDetails(int automobileTypeId) throws SQLException {
+        Connection connection = null;
+        Statement statement = null;
+        int typeId=0;
+        try {
+            connection = new ConnectionPool().getConnection();
+            statement = connection.createStatement();
+            StringBuilder query = new StringBuilder("SELECT id FROM automobile_types where id = " + automobileTypeId);
+            ResultSet resultSet = statement.executeQuery(query.toString());
+            int index=1;
+            while (resultSet.next()) {
+                typeId=resultSet.getInt(1);
+                index++;
+            }
+            if(index==1){
+                throw new AutomobileTypeNotFoundException("Invalid type id");
+            }
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        } finally {
+            try {
+                statement.close();
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return typeId;
     }
 }

@@ -7,6 +7,7 @@ package com.mpal.api.services;
 import com.mpal.bo.request.automobile.AutomobilesBO;
 import com.mpal.bo.request.automobile.UpdateAutomobileBO;
 import com.mpal.exceptions.AutomobileServiceExceptions.AutomobileNotFoundException;
+import com.mpal.exceptions.AutomobileServiceExceptions.AutomobileTypeNotFoundException;
 import com.mpal.requestHandlers.AutomobileRequestHandler;
 import com.mpal.rest.request.automobile.AutomobileRequest;
 import com.mpal.rest.request.automobile.UpdateAutomobileRequest;
@@ -35,10 +36,13 @@ public class AutoMobilesService {
             automobileResponseL.setAutomobileResponses(automobileRequestHandler.getAutomobileByTypeId(automobileTypeId));
                 automobileResponseL.setMessageType("SUCCESS");
                 automobileResponseL.setMessage("Automobiles are available");
-        }catch (AutomobileNotFoundException e) {
+        } catch (AutomobileTypeNotFoundException e) {
             automobileResponseL.setMessageType("FAILURE");
-            automobileResponseL.setMessage("Invalid Automobile Type id.");
-        } catch (SQLException e) {
+            automobileResponseL.setMessage("INVALID AUTOMOBILE TYPE");
+        } catch (AutomobileNotFoundException e){
+            automobileResponseL.setMessageType("SUCCESS");
+            automobileResponseL.setMessage("Automobiles are not available for this type");
+        } catch(SQLException e) {
             e.printStackTrace();
         }
         return ResponseGenerator.generateResponse(automobileResponseL);

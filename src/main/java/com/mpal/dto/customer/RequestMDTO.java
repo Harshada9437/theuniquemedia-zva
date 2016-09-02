@@ -14,7 +14,7 @@ public class RequestMDTO {
     private int id;
     private String createdDtm;
     private String updatedDtm;
-    private int updatedBy;
+    private String updatedBy;
     private String token;
     private String status;
 
@@ -98,11 +98,11 @@ public class RequestMDTO {
         this.updatedDtm = updatedDtm;
     }
 
-    public int getUpdatedBy() {
+    public String getUpdatedBy() {
         return updatedBy;
     }
 
-    public void setUpdatedBy(int updatedBy) {
+    public void setUpdatedBy(String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
@@ -131,7 +131,6 @@ public class RequestMDTO {
 
         if (serviceId != that.serviceId) return false;
         if (id != that.id) return false;
-        if (updatedBy != that.updatedBy) return false;
         if (customerName != null ? !customerName.equals(that.customerName) : that.customerName != null) return false;
         if (customerNo != null ? !customerNo.equals(that.customerNo) : that.customerNo != null) return false;
         if (customerEmail != null ? !customerEmail.equals(that.customerEmail) : that.customerEmail != null)
@@ -141,6 +140,7 @@ public class RequestMDTO {
         if (model != null ? !model.equals(that.model) : that.model != null) return false;
         if (createdDtm != null ? !createdDtm.equals(that.createdDtm) : that.createdDtm != null) return false;
         if (updatedDtm != null ? !updatedDtm.equals(that.updatedDtm) : that.updatedDtm != null) return false;
+        if (updatedBy != null ? !updatedBy.equals(that.updatedBy) : that.updatedBy != null) return false;
         if (token != null ? !token.equals(that.token) : that.token != null) return false;
         return status != null ? status.equals(that.status) : that.status == null;
 
@@ -158,7 +158,7 @@ public class RequestMDTO {
         result = 31 * result + id;
         result = 31 * result + (createdDtm != null ? createdDtm.hashCode() : 0);
         result = 31 * result + (updatedDtm != null ? updatedDtm.hashCode() : 0);
-        result = 31 * result + updatedBy;
+        result = 31 * result + (updatedBy != null ? updatedBy.hashCode() : 0);
         result = 31 * result + (token != null ? token.hashCode() : 0);
         result = 31 * result + (status != null ? status.hashCode() : 0);
         return result;

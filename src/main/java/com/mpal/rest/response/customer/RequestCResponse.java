@@ -14,11 +14,11 @@ public class RequestCResponse {
     private int id;
     private String createdDtm;
     private String updatedDtm;
-    private int updatedBy;
+    private String updatedBy;
     private String token;
     private String status;
 
-    public RequestCResponse(String mechName, String mechNo, String mechEmail, int serviceId, String serviceName, String make, String model, int id, String createdDtm, String updatedDtm, int updatedBy, String token, String status) {
+    public RequestCResponse(String mechName, String mechNo, String mechEmail, int serviceId, String serviceName, String make, String model, int id, String createdDtm, String updatedDtm, String updatedBy, String token, String status) {
         this.mechName = mechName;
         this.mechNo = mechNo;
         this.mechEmail = mechEmail;
@@ -74,7 +74,7 @@ public class RequestCResponse {
         return updatedDtm;
     }
 
-    public int getUpdatedBy() {
+    public String getUpdatedBy() {
         return updatedBy;
     }
 

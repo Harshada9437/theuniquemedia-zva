@@ -2,6 +2,7 @@ package com.mpal.dao.user;
 
 import com.mpal.dao.UtilClasses.ConnectionPool;
 import com.mpal.dto.user.UserAutomobileMapDTO;
+import com.mpal.exceptions.userServiceExceptions.UserNotFoundException;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -112,13 +113,18 @@ public class UserAutomobileMapDAO {
                     .append(userId);
             ResultSet resultSet = statement.executeQuery(query.toString());
 
+            int index=1;
             while (resultSet.next()) {
                 UserAutomobileMapDTO userAutomobileMapDTO = new UserAutomobileMapDTO();
                 userAutomobileMapDTO.setId(resultSet.getInt("id"));
                 userAutomobileMapDTO.setUserId(resultSet.getInt("user_id"));
                 userAutomobileMapDTO.setAutomobileDetailsId( resultSet.getInt("automobile_details_id"));
                 userAutomobileMapDTO.setStatus( resultSet.getString("status"));
+                index++;
                 userAutomobileMapResponseList.add(userAutomobileMapDTO);
+            }
+            if(index==1){
+                throw new UserNotFoundException("Invalid User.");
             }
 
         } catch (SQLException sqlException) {

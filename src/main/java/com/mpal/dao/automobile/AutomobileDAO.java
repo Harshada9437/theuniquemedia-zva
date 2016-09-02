@@ -52,8 +52,10 @@ public class AutomobileDAO {
         Statement statement = null;
         List<AutomobileDTO> automobileTypeResponseList=new ArrayList<AutomobileDTO>();
         try {
+            AutomobileTypesDAO automobileTypesDAO=new AutomobileTypesDAO();
             connection = new ConnectionPool().getConnection();
             statement = connection.createStatement();
+            int typeId=automobileTypesDAO.getAutomobileTypesDetails(automobileTypeId);
             StringBuilder query = new StringBuilder(
                     "SELECT * FROM automobile_details where automobile_type_id = ").append(automobileTypeId);
             ResultSet resultSet = statement.executeQuery(query.toString()

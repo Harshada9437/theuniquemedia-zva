@@ -2,6 +2,7 @@ package com.mpal.api.services;
 
 import com.mpal.bo.request.serviceprovider.ServiceProviderBO;
 import com.mpal.bo.request.serviceprovider.UpdateServiceProviderBO;
+import com.mpal.exceptions.ServiceExceptions.ServiceProviderNotFoundException;
 import com.mpal.exceptions.ServiceExceptions.ServiceProviderTypeNotFoundException;
 import com.mpal.requestHandlers.ServiceProviderRequestHandler;
 
@@ -30,7 +31,7 @@ public class ServiceProviderService {
     @Path("/create")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response CreateServiceProvider(ServiceProviderRequest serviceRequest) {
+    public Response CreateServiceProvider(ServiceProviderRequest serviceRequest) throws SQLException {
 
 
         ServiceProviderBO serviceProviderBO = new ServiceProviderBO();
@@ -56,13 +57,14 @@ public class ServiceProviderService {
         ServiceProviderCreationResponse serviceProvidercreationResponse = new ServiceProviderCreationResponse();
 
         if (serviceproviderRequestHandler.createServiceProvider(serviceProviderBO)!=false) {
+            serviceProvidercreationResponse.setMessageType("SUCCESS");
+            serviceProvidercreationResponse.setMessage("Serviceprovider Created sucessfuly");
 
+
+        } else {
             serviceProvidercreationResponse.setMessageType("FAILURE");
             serviceProvidercreationResponse.setMessage("ServiceproviderCreation Failed");
 
-        } else {
-            serviceProvidercreationResponse.setMessageType("SUCCESS");
-            serviceProvidercreationResponse.setMessage("Serviceprovider Created sucessfuly");
 
         }
 
@@ -106,7 +108,7 @@ public class ServiceProviderService {
     @Path("/types")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getServiceTypes() {
+    public Response getServiceTypes() throws SQLException {
         ServiceProviderRequestHandler serviceProviderRequestHandler = new ServiceProviderRequestHandler();
         ServiceTypeResponseList serviceTypeResponse = new ServiceTypeResponseList();
         serviceTypeResponse.setServiceTypeResponses(serviceProviderRequestHandler.getServiceTypes());
@@ -124,11 +126,15 @@ public class ServiceProviderService {
         ServiceProviderResponseList serviceTypeResponse = new ServiceProviderResponseList();
         try {
             serviceTypeResponse.setServiceProviderResponses(serviceProviderRequestHandler.getServiceProvider(serviceProviderTypeId));
-            serviceTypeResponse.setMessageType("SUCCESS");
-            serviceTypeResponse.setMessage("list of service providers.");
+                serviceTypeResponse.setMessageType("SUCCESS");
+                serviceTypeResponse.setMessage("list of service providers.");
         }catch (SQLException e){
-            e.printStackTrace();
-        }catch (ServiceProviderTypeNotFoundException e){
+           e.printStackTrace();
+        }catch (ServiceProviderNotFoundException e){
+            serviceTypeResponse.setMessageType("SUCCESS");
+            serviceTypeResponse.setMessage("No service providers are available for this type.");
+        }
+        catch (ServiceProviderTypeNotFoundException e){
             serviceTypeResponse.setMessageType("FAILURE");
             serviceTypeResponse.setMessage("Invalid service provider type id.");
         }

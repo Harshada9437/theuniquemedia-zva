@@ -17,11 +17,11 @@ public class RequestResponse {
     private int id;
     private String createdDtm;
     private String updatedDtm;
-    private int updatedBy;
+    private String updatedBy;
     private String token;
     private String status;
 
-    public RequestResponse(String mechName, String mechNo, String mechEmail, String customerName, String customerNo, String customerEmail, int serviceId, String serviceName, String make, String model, int id, String createdDtm, String updatedDtm, int updatedBy, String token, String status) {
+    public RequestResponse(String mechName, String mechNo, String mechEmail, String customerName, String customerNo, String customerEmail, int serviceId, String serviceName, String make, String model, int id, String createdDtm, String updatedDtm, String updatedBy, String token, String status) {
         this.mechName = mechName;
         this.mechNo = mechNo;
         this.mechEmail = mechEmail;
@@ -144,11 +144,11 @@ public class RequestResponse {
         this.updatedDtm = updatedDtm;
     }
 
-    public int getUpdatedBy() {
+    public String getUpdatedBy() {
         return updatedBy;
     }
 
-    public void setUpdatedBy(int updatedBy) {
+    public void setUpdatedBy(String updatedBy) {
         this.updatedBy = updatedBy;
     }
 

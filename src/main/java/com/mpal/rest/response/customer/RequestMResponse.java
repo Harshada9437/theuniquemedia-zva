@@ -14,11 +14,11 @@ public class RequestMResponse {
     private int id;
     private String createdDtm;
     private String updatedDtm;
-    private int updatedBy;
+    private String updatedBy;
     private String token;
     private String status;
 
-    public RequestMResponse(String customerName, String customerNo, String customerEmail, int serviceId, String serviceName, String make, String model, int id, String createdDtm, String updatedDtm, int updatedBy, String token, String status) {
+    public RequestMResponse(String customerName, String customerNo, String customerEmail, int serviceId, String serviceName, String make, String model, int id, String createdDtm, String updatedDtm, String updatedBy, String token, String status) {
         this.customerName = customerName;
         this.customerNo = customerNo;
         this.customerEmail = customerEmail;
@@ -74,7 +74,7 @@ public class RequestMResponse {
         return updatedDtm;
     }
 
-    public int getUpdatedBy() {
+    public String getUpdatedBy() {
         return updatedBy;
     }
 

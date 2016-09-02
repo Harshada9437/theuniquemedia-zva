@@ -10,6 +10,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.sql.SQLException;
 
 /**
  * Created by System1 on 8/31/2016.
@@ -20,7 +21,7 @@ public class Services {
     @Path("/list")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getServiceTypes() {
+    public Response getServiceTypes() throws SQLException {
         ServiceRequestHandler serviceRequestHandler = new ServiceRequestHandler();
         ServiceResponseList serviceResponse = new ServiceResponseList();
         serviceResponse.setServices(serviceRequestHandler.getService());

@@ -51,4 +51,34 @@ public class ServiceProviderTypesDAO implements IServiceProviderTypesDAO {
         }
         return serviceProviderTypesDTOList;
     }
+
+    public Integer getServiceProviderTypesDetails(int serviceProviderTypeId) throws SQLException {
+        Connection connection = null;
+        Statement statement = null;
+        int typeId=0;
+        try {
+            connection = new ConnectionPool().getConnection();
+            statement = connection.createStatement();
+            StringBuilder query = new StringBuilder("SELECT id FROM service_provider_type where id = " + serviceProviderTypeId);
+            ResultSet resultSet = statement.executeQuery(query.toString());
+            int index=1;
+            while (resultSet.next()) {
+                typeId=resultSet.getInt(1);
+                index++;
+            }
+            if(index==1){
+                throw new ServiceProviderTypeNotFoundException("Invalid service provider type");
+            }
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        } finally {
+            try {
+                statement.close();
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return typeId;
+    }
 }

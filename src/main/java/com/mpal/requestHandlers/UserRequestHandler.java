@@ -191,16 +191,13 @@ public class UserRequestHandler {
 
 	}
 
-	 public GetUserResponse getUserById(int id) throws SQLException,
-			UserNotFoundException {
+	 public GetUserResponse getUserById(int id) throws SQLException{
 		UsersDAO usersDAO = new UsersDAO();
 		 GetUserResponse userResponse=new GetUserResponse();
 		 try {
 			  userResponse = buildUsersResponseFromDTO(usersDAO
 					 .getUserById(id));
 		 }catch (SQLException e){
-		 	e.printStackTrace();
-		 }catch (UserNotFoundException e){
 		 	e.printStackTrace();
 		 }
 		return userResponse;
@@ -313,15 +310,12 @@ public class UserRequestHandler {
 		return isProcessed;
 	}
 
-	public List<UserResponseList> getUserByTypeId(int userTypeId) throws SQLException,
-			UserTypeNotFoundException {
+	public List<UserResponseList> getUserByTypeId(int userTypeId) throws SQLException{
 		UsersDAO usersDAO = new UsersDAO();
 		List<UserResponseList> userList = new ArrayList<UserResponseList>();
 		try {
 			userList = getUserResponseListFromDTOs(usersDAO.getUserByTypeId(userTypeId));
 		} catch (SQLException s) {
-			s.printStackTrace();
-		} catch (UserTypeNotFoundException s) {
 			s.printStackTrace();
 		}
 		return userList;

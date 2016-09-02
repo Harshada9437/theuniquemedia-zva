@@ -137,18 +137,6 @@ public class CustomerRequestHandler {
         return requestResponse;
     }
 
-    public List<RequestResponse> getRequestListByToken(String token) throws SQLException{
-        CustomerRequestDAO customerRequestDAO = new CustomerRequestDAO();
-        List<RequestResponse> requestResponse=new ArrayList<RequestResponse>();
-        try {
-            requestResponse = getRequestResponseFromDTOs(customerRequestDAO
-                    .getRequestListByToken(token));
-        }catch (SQLException s) {
-            s.printStackTrace();
-        }
-        return requestResponse;
-    }
-
     public List<RequestResponse> getRequestList() throws SQLException{
         CustomerRequestDAO customerRequestDAO = new CustomerRequestDAO();
         List<RequestResponse> requestResponse=new ArrayList<RequestResponse>();

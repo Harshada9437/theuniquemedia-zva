@@ -13,8 +13,13 @@ import com.mpal.bo.request.user.UpdaterUserBO;
 import com.mpal.dao.UtilClasses.ConnectionPool;
 import com.mpal.dto.user.LoginResponseDTO;
 import com.mpal.dto.user.MechanicDTO;
+import com.mpal.dto.user.UserTypesDTO;
 import com.mpal.dto.user.UsersDTO;
+import com.mpal.exceptions.ServiceExceptions.ServiceNotFoundException;
+import com.mpal.exceptions.ServiceExceptions.ServiceProviderNotFoundException;
+import com.mpal.exceptions.ServiceExceptions.ServiceProviderTypeNotFoundException;
 import com.mpal.exceptions.userServiceExceptions.UserNotFoundException;
+import com.mpal.exceptions.userServiceExceptions.UserTypeNotFoundException;
 import com.mpal.rest.response.user.UserLoggedInResponse;
 
 
@@ -308,7 +313,7 @@ public class UsersDAO {
         return loginResponseDTO;
     }
 
-    public UsersDTO getUserById(int id) throws SQLException, UserNotFoundException {
+    public UsersDTO getUserById(int id) throws SQLException {
         Connection connection = null;
         Statement statement = null;
         UsersDTO usersDTO = null;
@@ -522,42 +527,43 @@ public class UsersDAO {
         return sessionId;
     }
 
-    public List<UsersDTO> getUserByTypeId(int uerTypeId) throws SQLException, UserNotFoundException
+    public List<UsersDTO> getUserByTypeId(int userTypeId) throws SQLException, UserTypeNotFoundException
         {
             Connection connection = null;
             Statement statement = null;
             List<UsersDTO> userTypeResponseList=new ArrayList<UsersDTO>();
             try {
-                connection = new ConnectionPool().getConnection();
-                statement = connection.createStatement();
-                StringBuilder query = new StringBuilder(
-                        "SELECT * FROM users where user_type_id = \"")
-                        .append(uerTypeId).append("\"");
-                ResultSet resultSet = statement.executeQuery(query.toString()
-                        .trim());
-                int index = 1;
-                while (resultSet.next()) {
-                    UsersDTO usersDTO = new UsersDTO();
-                    usersDTO.setId(resultSet.getInt("id"));
-                    usersDTO.setName(resultSet.getString("name"));
-                    usersDTO.setAddress(resultSet.getString("address"));
-                    usersDTO.setMobile(resultSet.getString("mobile"));
-                    usersDTO.setEmail(resultSet.getString("email"));
-                    usersDTO.setGender(resultSet.getString("gender"));
-                    usersDTO.setDOB(resultSet.getString("DOB"));
-                    usersDTO.setLatitude(resultSet.getString("latitude"));
-                    usersDTO.setLongitude(resultSet.getString("longitude"));
-                    usersDTO.setUserTypeId(resultSet.getInt("user_type_id"));
-                    usersDTO.setClientDetailsId(resultSet.getInt("client_details_id"));
-                    usersDTO.setStatus(resultSet.getString("status"));
-                    usersDTO.setIsVerified(resultSet.getString("isVerified"));
-                    index++;
-                    userTypeResponseList.add(usersDTO);
-                }
-                if (index == 1) {
-                    throw new UserNotFoundException("Invalid user");
-                }
-
+                    UserTypesDAO userTypesDAO=new UserTypesDAO();
+                    connection = new ConnectionPool().getConnection();
+                    statement = connection.createStatement();
+                    int typeId=userTypesDAO.getUserTypesDetails(userTypeId);
+                    StringBuilder query = new StringBuilder(
+                            "SELECT * FROM users where user_type_id =")
+                            .append(userTypeId);
+                    ResultSet resultSet = statement.executeQuery(query.toString()
+                            .trim());
+                    int index = 1;
+                    while (resultSet.next()) {
+                        UsersDTO usersDTO = new UsersDTO();
+                        usersDTO.setId(resultSet.getInt("id"));
+                        usersDTO.setName(resultSet.getString("name"));
+                        usersDTO.setAddress(resultSet.getString("address"));
+                        usersDTO.setMobile(resultSet.getString("mobile"));
+                        usersDTO.setEmail(resultSet.getString("email"));
+                        usersDTO.setGender(resultSet.getString("gender"));
+                        usersDTO.setDOB(resultSet.getString("DOB"));
+                        usersDTO.setLatitude(resultSet.getString("latitude"));
+                        usersDTO.setLongitude(resultSet.getString("longitude"));
+                        usersDTO.setUserTypeId(resultSet.getInt("user_type_id"));
+                        usersDTO.setClientDetailsId(resultSet.getInt("client_details_id"));
+                        usersDTO.setStatus(resultSet.getString("status"));
+                        usersDTO.setIsVerified(resultSet.getString("isVerified"));
+                        index++;
+                        userTypeResponseList.add(usersDTO);
+                    }
+                    if (index == 1) {
+                        throw new UserNotFoundException("Invalid user");
+                    }
             } catch (SQLException sqlException) {
                 sqlException.printStackTrace();
             } finally {
@@ -602,7 +608,7 @@ public class UsersDAO {
                 mechanicResponseList.add(mechanicDTO);
             }
             if (index == 1) {
-                throw new UserNotFoundException("Invalid user");
+                throw new ServiceNotFoundException("Invalid service");
             }
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();

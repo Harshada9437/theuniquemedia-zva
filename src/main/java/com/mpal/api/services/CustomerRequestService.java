@@ -75,26 +75,6 @@ public class CustomerRequestService {
     }
 
     @GET
-    @Path("/list/byToken/{token}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getRequestListByToken(@PathParam("token") String token)throws SQLException,RequestNotFoundException {
-        CustomerRequestHandler customerRequestHandler = new CustomerRequestHandler();
-        ReqeustListResponse response = new ReqeustListResponse();
-        try {
-            response.setRequests(customerRequestHandler.getRequestListByToken(token));
-            response.setMessageType("SUCCESS");
-            response.setMessage("Requests are available.");
-        } catch (RequestNotFoundException e) {
-            response.setMessageType("Failure");
-            response.setMessage("Invalid token.");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return ResponseGenerator.generateResponse(response);
-    }
-
-    @GET
     @Path("/list/byCustomer/{customer_id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -106,8 +86,8 @@ public class CustomerRequestService {
             response.setMessageType("SUCCESS");
             response.setMessage("Requests are available.");
         } catch (RequestNotFoundException e) {
-            response.setMessageType("FAILURE");
-            response.setMessage("Invalid customerId.");
+            response.setMessageType("SUCCESS");
+            response.setMessage("Requests are not available.");
         }catch (SQLException e) {
             e.printStackTrace();
         }
@@ -126,8 +106,8 @@ public class CustomerRequestService {
             response.setMessageType("SUCCESS");
             response.setMessage("Requests are available.");
         } catch (RequestNotFoundException e) {
-            response.setMessageType("FAILURE");
-            response.setMessage("Invalid mechanicId.");
+            response.setMessageType("SUCCESS");
+            response.setMessage("Requests are not available.");
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -110,18 +110,23 @@ public class CustomerRequestDAO {
             connection = new ConnectionPool().getConnection();
             statement = connection.createStatement();
             StringBuilder query = new StringBuilder(
-                    "SELECT u.name as mech_name, u.mobile as mech_no, u.email as mech_email,s.id as service_id,s.service_name as service_name,a.company as make,a.model as model," +
-                            "r.id,r.token,r.status,r.created_dtm,r.updated_dtm,r.updated_by\n" +
+                    "SELECT u1.name as mech_name, u1.mobile as mech_no,  u1.email as mech_email\n" +
+                            ",s.id as service_id,s.service_name as service_name \n" +
+                            ",a.company as make,a.model as model,\n" +
+                            "r.id,r.token,r.status,r.created_dtm,r.updated_dtm,u3.name as updated_by\n" +
                             "FROM request r\n" +
-                            "INNER JOIN users u\n" +
-                            "   ON u.id = r.mechanic_id\n" +
+                            "INNER JOIN users u1\n" +
+                            "   ON u1.id = r.customer_id\n" +
                             "INNER JOIN services s\n" +
                             "   ON s.id=r.service_id\n" +
                             "INNER JOIN automobile_details a\n" +
                             "   ON a.id=r.automobile_details_id\n" +
+                            "INNER JOIN users u3\n" +
+                            "\tON u3.id=r.updated_by\n" +
                             "where r.customer_id =").append(customerId);
             ResultSet resultSet = statement.executeQuery(query.toString());
 
+            int index = 1;
             while (resultSet.next()) {
                 RequestCDTO customerRequestDTO = new RequestCDTO();
                 customerRequestDTO.setMechName(resultSet.getString("mech_name"));
@@ -136,12 +141,15 @@ public class CustomerRequestDAO {
                 customerRequestDTO.setCreatedDtm(create_date);
                 String update_date = DateUtil.getDateStringFromTimeStamp(resultSet.getTimestamp("updated_dtm"));
                 customerRequestDTO.setUpdatedDtm(update_date);
-                customerRequestDTO.setUpdatedBy(resultSet.getInt("updated_by"));
+                customerRequestDTO.setUpdatedBy(resultSet.getString("updated_by"));
                 customerRequestDTO.setToken(resultSet.getString("token"));
                 customerRequestDTO.setStatus(resultSet.getString("status"));
+                index++;
                 requestResponseList.add(customerRequestDTO);
             }
-
+            if (index == 1) {
+                throw new RequestNotFoundException("Empty list");
+            }
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         } finally {
@@ -169,7 +177,7 @@ public class CustomerRequestDAO {
                     .trim());
 
             customerRequestDTO = new CustomerRequestDTO();
-            int index = 1;
+
             while (resultSet.next()) {
                 customerRequestDTO.setId(resultSet.getInt("id"));
                 customerRequestDTO.setMechanicId(resultSet.getInt("mechanic_id"));
@@ -181,11 +189,6 @@ public class CustomerRequestDAO {
                 customerRequestDTO.setUpdatedBy(resultSet.getInt("updated_by"));
                 customerRequestDTO.setToken(resultSet.getString("token"));
                 customerRequestDTO.setStatus(resultSet.getString("status"));
-                index++;
-            }
-
-            if (index == 1) {
-                throw new RequestNotFoundException("Invalid request");
             }
 
         } catch (SQLException sqlException) {
@@ -213,7 +216,7 @@ public class CustomerRequestDAO {
                     "SELECT u1.name as customer_name, u1.mobile as customer_no,  u1.email as customer_email\n" +
                             ",s.id as service_id,s.service_name as service_name \n" +
                             ",a.company as make,a.model as model,\n" +
-                            "r.id,r.token,r.status,r.created_dtm,r.updated_dtm,r.updated_by\n" +
+                            "r.id,r.token,r.status,r.created_dtm,r.updated_dtm,u3.name as updated_by\n" +
                             "FROM request r\n" +
                             "INNER JOIN users u1\n" +
                             "   ON u1.id = r.customer_id\n" +
@@ -221,9 +224,11 @@ public class CustomerRequestDAO {
                             "   ON s.id=r.service_id\n" +
                             "INNER JOIN automobile_details a\n" +
                             "   ON a.id=r.automobile_details_id\n" +
+                            "INNER JOIN users u3\n" +
+                            "\tON u3.id=r.updated_by\n" +
                             "where r.mechanic_id =").append(mechanicId);
             ResultSet resultSet = statement.executeQuery(query.toString());
-
+            int index=1;
             while (resultSet.next()) {
                 RequestMDTO customerRequestDTO = new RequestMDTO();
                 customerRequestDTO.setCustomerName(resultSet.getString("customer_name"));
@@ -238,12 +243,15 @@ public class CustomerRequestDAO {
                 customerRequestDTO.setCreatedDtm(create_date);
                 String update_date = DateUtil.getDateStringFromTimeStamp(resultSet.getTimestamp("updated_dtm"));
                 customerRequestDTO.setUpdatedDtm(update_date);
-                customerRequestDTO.setUpdatedBy(resultSet.getInt("updated_by"));
+                customerRequestDTO.setUpdatedBy(resultSet.getString("updated_by"));
                 customerRequestDTO.setToken(resultSet.getString("token"));
                 customerRequestDTO.setStatus(resultSet.getString("status"));
+                index++;
                 requestResponseList.add(customerRequestDTO);
             }
-
+            if(index==1){
+                throw new RequestNotFoundException("Empty list");
+            }
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         } finally {
@@ -255,67 +263,6 @@ public class CustomerRequestDAO {
             }
         }
 
-        return requestResponseList;
-    }
-
-    public List<RequestDTO> getRequestListByToken(String token) throws SQLException {
-        Connection connection = null;
-        Statement statement = null;
-        List<RequestDTO> requestResponseList = new ArrayList<RequestDTO>();
-        try {
-            connection = new ConnectionPool().getConnection();
-            statement = connection.createStatement();
-            StringBuilder query = new StringBuilder(
-                    "SELECT u.name as mech_name, u.mobile as mech_no, u.email as mech_email,\n" +
-                            " u1.name as customer_name, u1.mobile as customer_no,  u1.email as customer_email\n" +
-                            ",s.id as service_id,s.service_name as service_name \n" +
-                            ",a.company as make,a.model as model,\n" +
-                            "r.id,r.token,r.status,r.created_dtm,r.updated_dtm,r.updated_by\n" +
-                            "FROM request r\n" +
-                            "INNER JOIN users u\n" +
-                            "   ON u.id = r.mechanic_id\n" +
-                            "INNER JOIN users u1\n" +
-                            "   ON u1.id = r.customer_id\n" +
-                            "INNER JOIN services s\n" +
-                            "   ON s.id=r.service_id\n" +
-                            "INNER JOIN automobile_details a\n" +
-                            "   ON a.id=r.automobile_details_id\n" +
-                            "where r.token=\"").append(token).append("\"");
-            ResultSet resultSet = statement.executeQuery(query.toString());
-
-            while (resultSet.next()) {
-                RequestDTO customerRequestDTO = new RequestDTO();
-                customerRequestDTO.setMechName(resultSet.getString("mech_name"));
-                customerRequestDTO.setMechNo(resultSet.getString("mech_no"));
-                customerRequestDTO.setMechEmail(resultSet.getString("mech_email"));
-                customerRequestDTO.setCustomerName(resultSet.getString("customer_name"));
-                customerRequestDTO.setCustomerNo(resultSet.getString("customer_no"));
-                customerRequestDTO.setCustomerEmail(resultSet.getString("customer_email"));
-                customerRequestDTO.setServiceId(resultSet.getInt("service_id"));
-                customerRequestDTO.setServiceName(resultSet.getString("service_name"));
-                customerRequestDTO.setMake(resultSet.getString("make"));
-                customerRequestDTO.setModel(resultSet.getString("model"));
-                customerRequestDTO.setId(resultSet.getInt("id"));
-                String create_date = DateUtil.getDateStringFromTimeStamp(resultSet.getTimestamp("created_dtm"));
-                customerRequestDTO.setCreatedDtm(create_date);
-                String update_date = DateUtil.getDateStringFromTimeStamp(resultSet.getTimestamp("updated_dtm"));
-                customerRequestDTO.setUpdatedDtm(update_date);
-                customerRequestDTO.setUpdatedBy(resultSet.getInt("updated_by"));
-                customerRequestDTO.setToken(resultSet.getString("token"));
-                customerRequestDTO.setStatus(resultSet.getString("status"));
-                requestResponseList.add(customerRequestDTO);
-            }
-
-        } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
-        } finally {
-            try {
-                statement.close();
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
         return requestResponseList;
     }
 
@@ -330,7 +277,7 @@ public class CustomerRequestDAO {
                         " u1.name as customer_name, u1.mobile as customer_no,  u1.email as customer_email\n" +
                         ",s.id as service_id,s.service_name as service_name \n" +
                         ",a.company as make,a.model as model,\n" +
-                        "r.id,r.token,r.status,r.created_dtm,r.updated_dtm,r.updated_by\n" +
+                        "r.id,r.token,r.status,r.created_dtm,r.updated_dtm,u3.name as updated_by\n" +
                         "FROM request r\n" +
                         "INNER JOIN users u\n" +
                         "   ON u.id = r.mechanic_id\n" +
@@ -339,7 +286,9 @@ public class CustomerRequestDAO {
                         "INNER JOIN services s\n" +
                         "   ON s.id=r.service_id\n" +
                         "INNER JOIN automobile_details a\n" +
-                        "   ON a.id=r.automobile_details_id;";
+                        "   ON a.id=r.automobile_details_id\n" +
+                        "INNER JOIN users u3\n" +
+                        "\tON u3.id=r.updated_by;";
                 ResultSet resultSet = statement.executeQuery(query.toString());
 
                 while (resultSet.next()) {
@@ -359,7 +308,7 @@ public class CustomerRequestDAO {
                     requestDTO.setCreatedDtm(create_date);
                     String update_date = DateUtil.getDateStringFromTimeStamp(resultSet.getTimestamp("updated_dtm"));
                     requestDTO.setUpdatedDtm(update_date);
-                    requestDTO.setUpdatedBy(resultSet.getInt("updated_by"));
+                    requestDTO.setUpdatedBy(resultSet.getString("updated_by"));
                     requestDTO.setToken(resultSet.getString("token"));
                     requestDTO.setStatus(resultSet.getString("status"));
                     requestResponseList.add(requestDTO);

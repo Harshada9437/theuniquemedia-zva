@@ -1,22 +1,11 @@
-package com.mpal.rest.response.customer;
-
-import java.util.List;
+package com.mpal.rest.response;
 
 /**
- * Created by System1 on 8/31/2016.
+ * Created by System1 on 9/1/2016.
  */
-public class RequestList {
-    private List<RequestResponse> request;
+public class FailureResponse {
     private String messageType;
     private String message;
-
-    public List<RequestResponse> getRequest() {
-        return request;
-    }
-
-    public void setRequest(List<RequestResponse> request) {
-        this.request = request;
-    }
 
     public String getMessageType() {
         return messageType;
@@ -36,9 +25,8 @@ public class RequestList {
 
     @Override
     public String toString() {
-        return "RequestList{" +
-                "request=" + request +
-                ", messageType='" + messageType + '\'' +
+        return "FailureResponse{" +
+                "messageType='" + messageType + '\'' +
                 ", message='" + message + '\'' +
                 '}';
     }
