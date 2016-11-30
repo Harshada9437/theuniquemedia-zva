@@ -2,9 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Mpal</title>
 </head>
 <body>
-Find page
+<div id="maindiv">Loading...</div>
+<script>
+    var hash = window.location.hash;
+    if(hash != "" && hash.indexOf("/confirm?id")>=0 ){
+        document.getElementById("mainiv").innerHTML = "Thank you for visiting, your email address has been verified";
+    }
+</script>
 </body>
 </html>

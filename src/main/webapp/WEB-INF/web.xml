@@ -3,23 +3,23 @@
  "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
 <web-app>
-  <display-name>MpalApi</display-name>
+  <display-area>MpalApi</display-area>
   <servlet>
-    <servlet-name>jersey-serlvet</servlet-name>
+    <servlet-area>jersey-serlvet</servlet-area>
     <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
     <init-param>
-      <param-name>com.sun.jersey.config.property.packages</param-name>
-      <param-value>com.mpal.api.services</param-value>
+      <param-area>com.sun.jersey.config.property.packages</param-area>
+      <param-value>com.zva.api.cities</param-value>
     </init-param>
     <init-param>
-      <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
+      <param-area>com.sun.jersey.api.json.POJOMappingFeature</param-area>
       <param-value>true</param-value>
     </init-param>
     <load-on-startup>1</load-on-startup>
   </servlet>
 
   <servlet-mapping>
-    <servlet-name>jersey-serlvet</servlet-name>
+    <servlet-area>jersey-serlvet</servlet-area>
     <url-pattern>/rest/*</url-pattern>
   </servlet-mapping>
 </web-app>
